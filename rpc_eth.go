@@ -326,7 +326,7 @@ type RpcEthTransactionByHashOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - txhash: Transaction hash (e.g., "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44")
+//   - txHash: Transaction hash (e.g., "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -352,9 +352,9 @@ type RpcEthTransactionByHashOpts struct {
 //   - Equivalent to eth_getTransactionByHash JSON-RPC method
 //   - Returns nil if transaction not found
 //   - All values are in hex format
-func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txhash string, opts *RpcEthTransactionByHashOpts) (*RespEthTxInfo, error) {
+func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string, opts *RpcEthTransactionByHashOpts) (*RespEthTxInfo, error) {
 	params := map[string]string{
-		"txhash": txhash,
+		"txhash": txHash,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -633,7 +633,7 @@ type RpcEthTransactionReceiptOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - txhash: Hash of the transaction
+//   - txHash: Hash of the transaction
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -659,9 +659,9 @@ type RpcEthTransactionReceiptOpts struct {
 //   - Returns nil if transaction not found
 //   - Status is "0x1" for success, "0x0" for failure
 //   - Only applicable for post Byzantium Fork transactions
-func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txhash string, opts *RpcEthTransactionReceiptOpts) (*RespEthTxReceiptInfo, error) {
+func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txHash string, opts *RpcEthTransactionReceiptOpts) (*RespEthTxReceiptInfo, error) {
 	params := map[string]string{
-		"txhash": txhash,
+		"txhash": txHash,
 	}
 
 	var onLimitExceeded *RateLimitBehavior

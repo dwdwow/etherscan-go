@@ -33,7 +33,7 @@ type GetBlockAndUncleRewardsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - blockno: The block number to check block rewards for
+//   - blockNo: The block number to check block rewards for
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -66,9 +66,9 @@ type GetBlockAndUncleRewardsOpts struct {
 //   - BlockReward is in wei (smallest unit)
 //   - UncleInclusionReward is the reward for including uncle blocks
 //   - Useful for analyzing miner economics and network health
-func (c *HTTPClient) GetBlockAndUncleRewards(ctx context.Context, blockno int64, opts *GetBlockAndUncleRewardsOpts) (*RespBlockReward, error) {
+func (c *HTTPClient) GetBlockAndUncleRewards(ctx context.Context, blockNo int64, opts *GetBlockAndUncleRewardsOpts) (*RespBlockReward, error) {
 	params := map[string]string{
-		"blockno": strconv.FormatInt(blockno, 10),
+		"blockno": strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -122,7 +122,7 @@ type GetBlockTransactionsCountOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - blockno: The block number to get transaction count for
+//   - blockNo: The block number to get transaction count for
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -149,9 +149,9 @@ type GetBlockTransactionsCountOpts struct {
 //   - Only supported on Ethereum mainnet (chainid=1)
 //   - Returns detailed breakdown of different transaction types
 //   - Useful for analyzing block activity and transaction volume
-func (c *HTTPClient) GetBlockTransactionsCount(ctx context.Context, blockno int64, opts *GetBlockTransactionsCountOpts) (*RespBlockTxsCountByBlockNo, error) {
+func (c *HTTPClient) GetBlockTransactionsCount(ctx context.Context, blockNo int64, opts *GetBlockTransactionsCountOpts) (*RespBlockTxsCountByBlockNo, error) {
 	params := map[string]string{
-		"blockno": strconv.FormatInt(blockno, 10),
+		"blockno": strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -208,7 +208,7 @@ type GetBlockCountdownTimeOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - blockno: The future block number to estimate countdown for
+//   - blockNo: The future block number to estimate countdown for
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -239,9 +239,9 @@ type GetBlockCountdownTimeOpts struct {
 //   - Only works for future blocks (block number > current block)
 //   - Estimate is based on current network block time
 //   - Useful for planning transactions and operations
-func (c *HTTPClient) GetBlockCountdownTime(ctx context.Context, blockno int64, opts *GetBlockCountdownTimeOpts) (*RespEstimateBlockCountdownTimeByBlockNo, error) {
+func (c *HTTPClient) GetBlockCountdownTime(ctx context.Context, blockNo int64, opts *GetBlockCountdownTimeOpts) (*RespEstimateBlockCountdownTimeByBlockNo, error) {
 	params := map[string]string{
-		"blockno": strconv.FormatInt(blockno, 10),
+		"blockno": strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -374,8 +374,8 @@ type GetDailyAvgBlockSizesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -404,10 +404,10 @@ type GetDailyAvgBlockSizesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 //   - Block size is returned in bytes
-func (c *HTTPClient) GetDailyAvgBlockSizes(ctx context.Context, startdate, enddate string, opts *GetDailyAvgBlockSizesOpts) ([]RespDailyAvgBlockSize, error) {
+func (c *HTTPClient) GetDailyAvgBlockSizes(ctx context.Context, startDate, endDate string, opts *GetDailyAvgBlockSizesOpts) ([]RespDailyAvgBlockSize, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 

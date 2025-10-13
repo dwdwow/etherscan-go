@@ -292,7 +292,7 @@ type GetContractExecutionStatusOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - txhash: The transaction hash to check the execution status for
+//   - txHash: The transaction hash to check the execution status for
 //     Must be a valid transaction hash (0x... format)
 //   - opts: Optional parameters (can be nil for defaults)
 //
@@ -316,7 +316,7 @@ type GetContractExecutionStatusOpts struct {
 //
 //	// With custom chain
 //	chainID := etherscan.PolygonMainnet
-//	status, err := client.GetContractExecutionStatus(ctx, txhash, &GetContractExecutionStatusOpts{
+//	status, err := client.GetContractExecutionStatus(ctx, txHash, &GetContractExecutionStatusOpts{
 //	    ChainID: &chainID,
 //	})
 //
@@ -325,9 +325,9 @@ type GetContractExecutionStatusOpts struct {
 //   - ErrDescription field: Contains error message if execution failed
 //   - Only applicable to contract transactions (transactions that interact with smart contracts)
 //   - For regular ETH transfers, this endpoint may not provide meaningful results
-func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txhash string, opts *GetContractExecutionStatusOpts) (*RespContractExecutionStatus, error) {
+func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txHash string, opts *GetContractExecutionStatusOpts) (*RespContractExecutionStatus, error) {
 	params := map[string]string{
-		"txhash": txhash,
+		"txhash": txHash,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -381,7 +381,7 @@ type GetTransactionReceiptStatusOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - txhash: The transaction hash to check the receipt status for
+//   - txHash: The transaction hash to check the receipt status for
 //     Must be a valid transaction hash (0x... format)
 //   - opts: Optional parameters (can be nil for defaults)
 //
@@ -405,7 +405,7 @@ type GetTransactionReceiptStatusOpts struct {
 //
 //	// With custom chain
 //	chainID := etherscan.PolygonMainnet
-//	status, err := client.GetTransactionReceiptStatus(ctx, txhash, &GetTransactionReceiptStatusOpts{
+//	status, err := client.GetTransactionReceiptStatus(ctx, txHash, &GetTransactionReceiptStatusOpts{
 //	    ChainID: &chainID,
 //	})
 //
@@ -414,9 +414,9 @@ type GetTransactionReceiptStatusOpts struct {
 //   - Only applicable for post Byzantium Fork transactions (block 4,370,000 on Ethereum)
 //   - This endpoint works for all transaction types (ETH transfers, contract calls, etc.)
 //   - Pre-Byzantium transactions will not have receipt status information
-func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txhash string, opts *GetTransactionReceiptStatusOpts) (*RespCheckTxReceiptStatus, error) {
+func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txHash string, opts *GetTransactionReceiptStatusOpts) (*RespCheckTxReceiptStatus, error) {
 	params := map[string]string{
-		"txhash": txhash,
+		"txhash": txHash,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -623,7 +623,7 @@ type GetInternalTransactionsByHashOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - txhash: The transaction hash to get internal transactions for
+//   - txHash: The transaction hash to get internal transactions for
 //     Must be a valid transaction hash (0x... format)
 //   - opts: Optional parameters (can be nil for defaults)
 //
@@ -646,7 +646,7 @@ type GetInternalTransactionsByHashOpts struct {
 //
 //	// With custom chain
 //	chainID := etherscan.PolygonMainnet
-//	txs, err := client.GetInternalTransactionsByHash(ctx, txhash, &GetInternalTransactionsByHashOpts{
+//	txs, err := client.GetInternalTransactionsByHash(ctx, txHash, &GetInternalTransactionsByHashOpts{
 //	    ChainID: &chainID,
 //	})
 //
@@ -656,9 +656,9 @@ type GetInternalTransactionsByHashOpts struct {
 //   - For simple ETH transfers, this will return an empty list
 //   - Internal transactions show the complete execution trace of a transaction
 //   - All values are returned as strings in Wei
-func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txhash string, opts *GetInternalTransactionsByHashOpts) ([]RespInternalTxByHash, error) {
+func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txHash string, opts *GetInternalTransactionsByHashOpts) ([]RespInternalTxByHash, error) {
 	params := map[string]string{
-		"txhash": txhash,
+		"txhash": txHash,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -729,8 +729,8 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startblock: The starting block number to search from (inclusive)
-//   - endblock: The ending block number to search to (inclusive)
+//   - startBlock: The starting block number to search from (inclusive)
+//   - endBlock: The ending block number to search to (inclusive)
 //   - opts: Optional parameters (can be nil for defaults)
 //
 // Returns:
@@ -754,7 +754,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //	page := 1
 //	offset := 50
 //	sort := "desc"
-//	txs, err := client.GetInternalTransactionsByBlockRange(ctx, startblock, endblock, &GetInternalTransactionsByBlockRangeOpts{
+//	txs, err := client.GetInternalTransactionsByBlockRange(ctx, startBlock, endBlock, &GetInternalTransactionsByBlockRangeOpts{
 //	    Page:   &page,
 //	    Offset: &offset,
 //	    Sort:   &sort,
@@ -767,10 +767,10 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //   - Internal transactions include contract calls, contract creation, and self-destruct operations
 //   - All values are returned as strings in Wei
 //   - TraceID field helps identify which internal transactions belong to the same execution trace
-func (c *HTTPClient) GetInternalTransactionsByBlockRange(ctx context.Context, startblock, endblock int, opts *GetInternalTransactionsByBlockRangeOpts) ([]RespInternalTxByBlockRange, error) {
+func (c *HTTPClient) GetInternalTransactionsByBlockRange(ctx context.Context, startBlock, endBlock int, opts *GetInternalTransactionsByBlockRangeOpts) ([]RespInternalTxByBlockRange, error) {
 	params := map[string]string{
-		"startblock": strconv.Itoa(startblock),
-		"endblock":   strconv.Itoa(endblock),
+		"startblock": strconv.Itoa(startBlock),
+		"endblock":   strconv.Itoa(endBlock),
 		"page":       "1",
 		"offset":     "100",
 		"sort":       "asc",

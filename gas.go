@@ -34,7 +34,7 @@ type GetConfirmationTimeEstimateOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - gasprice: The price paid per unit of gas, in wei
+//   - gasPrice: The price paid per unit of gas, in wei
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -61,9 +61,9 @@ type GetConfirmationTimeEstimateOpts struct {
 //   - Gas price should be in wei (smallest unit)
 //   - Returns estimated time in seconds as string
 //   - Useful for optimizing transaction confirmation times
-func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasprice int64, opts *GetConfirmationTimeEstimateOpts) (string, error) {
+func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasPrice int64, opts *GetConfirmationTimeEstimateOpts) (string, error) {
 	params := map[string]string{
-		"gasprice": strconv.FormatInt(gasprice, 10),
+		"gasprice": strconv.FormatInt(gasPrice, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -201,8 +201,8 @@ type GetDailyAverageGasLimitOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -234,10 +234,10 @@ type GetDailyAverageGasLimitOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network capacity over time
-func (c *HTTPClient) GetDailyAverageGasLimit(ctx context.Context, startdate, enddate string, opts *GetDailyAverageGasLimitOpts) ([]RespDailyAvgGasLimit, error) {
+func (c *HTTPClient) GetDailyAverageGasLimit(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasLimitOpts) ([]RespDailyAvgGasLimit, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -301,8 +301,8 @@ type GetDailyTotalGasUsedOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -334,10 +334,10 @@ type GetDailyTotalGasUsedOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network activity and gas consumption
-func (c *HTTPClient) GetDailyTotalGasUsed(ctx context.Context, startdate, enddate string, opts *GetDailyTotalGasUsedOpts) ([]RespDailyTotalGasUsed, error) {
+func (c *HTTPClient) GetDailyTotalGasUsed(ctx context.Context, startDate, endDate string, opts *GetDailyTotalGasUsedOpts) ([]RespDailyTotalGasUsed, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -401,8 +401,8 @@ type GetDailyAverageGasPriceOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-01-31")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -435,10 +435,10 @@ type GetDailyAverageGasPriceOpts struct {
 //   - Returns empty slice if no data found
 //   - Gas prices are in Gwei
 //   - Useful for analyzing gas price trends and network congestion
-func (c *HTTPClient) GetDailyAverageGasPrice(ctx context.Context, startdate, enddate string, opts *GetDailyAverageGasPriceOpts) ([]RespDailyAvgGasPrice, error) {
+func (c *HTTPClient) GetDailyAverageGasPrice(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasPriceOpts) ([]RespDailyAvgGasPrice, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 

@@ -40,8 +40,8 @@ type GetDailyBlockCountRewardsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -74,10 +74,10 @@ type GetDailyBlockCountRewardsOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network activity over time
-func (c *HTTPClient) GetDailyBlockCountRewards(ctx context.Context, startdate, enddate string, opts *GetDailyBlockCountRewardsOpts) ([]RespDailyBlockCountReward, error) {
+func (c *HTTPClient) GetDailyBlockCountRewards(ctx context.Context, startDate, endDate string, opts *GetDailyBlockCountRewardsOpts) ([]RespDailyBlockCountReward, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -133,8 +133,8 @@ type GetDailyBlockRewardsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -151,10 +151,10 @@ type GetDailyBlockRewardsOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyBlockRewards(ctx context.Context, startdate, enddate string, opts *GetDailyBlockRewardsOpts) ([]RespDailyBlockReward, error) {
+func (c *HTTPClient) GetDailyBlockRewards(ctx context.Context, startDate, endDate string, opts *GetDailyBlockRewardsOpts) ([]RespDailyBlockReward, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -211,8 +211,8 @@ type GetDailyAvgBlockTimeOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -229,10 +229,10 @@ type GetDailyAvgBlockTimeOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyAvgBlockTime(ctx context.Context, startdate, enddate string, opts *GetDailyAvgBlockTimeOpts) ([]RespDailyAvgTimeBlockMined, error) {
+func (c *HTTPClient) GetDailyAvgBlockTime(ctx context.Context, startDate, endDate string, opts *GetDailyAvgBlockTimeOpts) ([]RespDailyAvgTimeBlockMined, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -288,8 +288,8 @@ type GetDailyUncleBlockCountAndRewardsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -306,10 +306,10 @@ type GetDailyUncleBlockCountAndRewardsOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, startdate, enddate string, opts *GetDailyUncleBlockCountAndRewardsOpts) ([]RespDailyUncleBlockCountAndReward, error) {
+func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, startDate, endDate string, opts *GetDailyUncleBlockCountAndRewardsOpts) ([]RespDailyUncleBlockCountAndReward, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -557,8 +557,8 @@ type GetEthHistoricalPricesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -575,10 +575,10 @@ type GetEthHistoricalPricesOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startdate, enddate string, opts *GetEthHistoricalPricesOpts) ([]RespEthHistoricalPrice, error) {
+func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startDate, endDate string, opts *GetEthHistoricalPricesOpts) ([]RespEthHistoricalPrice, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -629,10 +629,10 @@ type GetEthereumNodesSizeOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
-//   - clienttype: Client type (e.g., "geth", "parity")
-//   - syncmode: Sync mode (e.g., "default", "archive")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - clientType: Client type (e.g., "geth", "parity")
+//   - syncMode: Sync mode (e.g., "default", "archive")
 //   - sort: Sort order ("asc" or "desc")
 //   - opts: Optional parameters (can be nil)
 //
@@ -653,12 +653,12 @@ type GetEthereumNodesSizeOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startdate, enddate, clienttype, syncmode, sort string, opts *GetEthereumNodesSizeOpts) ([]RespEtheumNodeSize, error) {
+func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startDate, endDate, clientType, syncMode, sort string, opts *GetEthereumNodesSizeOpts) ([]RespEtheumNodeSize, error) {
 	params := map[string]string{
-		"startdate":  startdate,
-		"enddate":    enddate,
-		"clienttype": clienttype,
-		"syncmode":   syncmode,
+		"startdate":  startDate,
+		"enddate":    endDate,
+		"clienttype": clientType,
+		"syncmode":   syncMode,
 		"sort":       sort,
 	}
 
@@ -777,8 +777,8 @@ type GetDailyTxFeesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -795,10 +795,10 @@ type GetDailyTxFeesOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyTxFees(ctx context.Context, startdate, enddate string, opts *GetDailyTxFeesOpts) ([]RespDailyTxFee, error) {
+func (c *HTTPClient) GetDailyTxFees(ctx context.Context, startDate, endDate string, opts *GetDailyTxFeesOpts) ([]RespDailyTxFee, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -854,8 +854,8 @@ type GetDailyNewAddressesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -872,10 +872,10 @@ type GetDailyNewAddressesOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyNewAddresses(ctx context.Context, startdate, enddate string, opts *GetDailyNewAddressesOpts) ([]RespDailyNewAddress, error) {
+func (c *HTTPClient) GetDailyNewAddresses(ctx context.Context, startDate, endDate string, opts *GetDailyNewAddressesOpts) ([]RespDailyNewAddress, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -931,8 +931,8 @@ type GetDailyNetworkUtilizationsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -949,10 +949,10 @@ type GetDailyNetworkUtilizationsOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyNetworkUtilizations(ctx context.Context, startdate, enddate string, opts *GetDailyNetworkUtilizationsOpts) ([]RespDailyNetworkUtilization, error) {
+func (c *HTTPClient) GetDailyNetworkUtilizations(ctx context.Context, startDate, endDate string, opts *GetDailyNetworkUtilizationsOpts) ([]RespDailyNetworkUtilization, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -1008,8 +1008,8 @@ type GetDailyAvgHashratesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -1026,10 +1026,10 @@ type GetDailyAvgHashratesOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyAvgHashrates(ctx context.Context, startdate, enddate string, opts *GetDailyAvgHashratesOpts) ([]RespDailyAvgHashrate, error) {
+func (c *HTTPClient) GetDailyAvgHashrates(ctx context.Context, startDate, endDate string, opts *GetDailyAvgHashratesOpts) ([]RespDailyAvgHashrate, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -1085,8 +1085,8 @@ type GetDailyTxCountsOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -1103,10 +1103,10 @@ type GetDailyTxCountsOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyTxCounts(ctx context.Context, startdate, enddate string, opts *GetDailyTxCountsOpts) ([]RespDailyTxCount, error) {
+func (c *HTTPClient) GetDailyTxCounts(ctx context.Context, startDate, endDate string, opts *GetDailyTxCountsOpts) ([]RespDailyTxCount, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
@@ -1162,8 +1162,8 @@ type GetDailyAvgDifficultiesOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - startdate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
-//   - enddate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
+//   - startDate: Starting date in yyyy-MM-dd format (e.g., "2019-02-01")
+//   - endDate: Ending date in yyyy-MM-dd format (e.g., "2019-02-28")
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -1180,10 +1180,10 @@ type GetDailyAvgDifficultiesOpts struct {
 // Note:
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
-func (c *HTTPClient) GetDailyAvgDifficulties(ctx context.Context, startdate, enddate string, opts *GetDailyAvgDifficultiesOpts) ([]RespDailyAvgDifficulty, error) {
+func (c *HTTPClient) GetDailyAvgDifficulties(ctx context.Context, startDate, endDate string, opts *GetDailyAvgDifficultiesOpts) ([]RespDailyAvgDifficulty, error) {
 	params := map[string]string{
-		"startdate": startdate,
-		"enddate":   enddate,
+		"startdate": startDate,
+		"enddate":   endDate,
 		"sort":      "asc",
 	}
 

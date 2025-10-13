@@ -28,7 +28,7 @@ type GetERC20TotalSupplyOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -49,9 +49,9 @@ type GetERC20TotalSupplyOpts struct {
 //   - Returns supply in hex format with "0x" prefix
 //   - Value is in the token's smallest unit
 //   - Use token decimals to convert to human-readable format
-func (c *HTTPClient) GetERC20TotalSupply(ctx context.Context, contractaddress string, opts *GetERC20TotalSupplyOpts) (string, error) {
+func (c *HTTPClient) GetERC20TotalSupply(ctx context.Context, contractAddress string, opts *GetERC20TotalSupplyOpts) (string, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -98,7 +98,7 @@ type GetERC20AccountBalanceOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - address: The address to check for token balance
 //   - opts: Optional parameters (can be nil)
 //
@@ -121,9 +121,9 @@ type GetERC20AccountBalanceOpts struct {
 //   - Returns balance in hex format
 //   - Value is in the token's smallest unit
 //   - Use token decimals to convert to human-readable format
-func (c *HTTPClient) GetERC20AccountBalance(ctx context.Context, contractaddress, address string, opts *GetERC20AccountBalanceOpts) (string, error) {
+func (c *HTTPClient) GetERC20AccountBalance(ctx context.Context, contractAddress, address string, opts *GetERC20AccountBalanceOpts) (string, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 		"address":         address,
 	}
 
@@ -171,8 +171,8 @@ type GetERC20HistoricalTotalSupplyOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
-//   - blockno: The block number to check total supply for
+//   - contractAddress: The contract address of the ERC-20 token
+//   - blockNo: The block number to check total supply for
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -194,10 +194,10 @@ type GetERC20HistoricalTotalSupplyOpts struct {
 //   - This endpoint is throttled to 2 calls/second regardless of API Pro tier
 //   - Returns supply in hex format
 //   - Value is in the token's smallest unit
-func (c *HTTPClient) GetERC20HistoricalTotalSupply(ctx context.Context, contractaddress string, blockno int64, opts *GetERC20HistoricalTotalSupplyOpts) (string, error) {
+func (c *HTTPClient) GetERC20HistoricalTotalSupply(ctx context.Context, contractAddress string, blockNo int64, opts *GetERC20HistoricalTotalSupplyOpts) (string, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
-		"blockno":         strconv.FormatInt(blockno, 10),
+		"contractaddress": contractAddress,
+		"blockno":         strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -244,9 +244,9 @@ type GetERC20HistoricalAccountBalanceOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - address: The address to check for token balance
-//   - blockno: The block number to check balance for
+//   - blockNo: The block number to check balance for
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -269,11 +269,11 @@ type GetERC20HistoricalAccountBalanceOpts struct {
 //   - This endpoint is throttled to 2 calls/second regardless of API Pro tier
 //   - Returns balance in hex format
 //   - Value is in the token's smallest unit
-func (c *HTTPClient) GetERC20HistoricalAccountBalance(ctx context.Context, contractaddress, address string, blockno int64, opts *GetERC20HistoricalAccountBalanceOpts) (string, error) {
+func (c *HTTPClient) GetERC20HistoricalAccountBalance(ctx context.Context, contractAddress, address string, blockNo int64, opts *GetERC20HistoricalAccountBalanceOpts) (string, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 		"address":         address,
-		"blockno":         strconv.FormatInt(blockno, 10),
+		"blockno":         strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -328,7 +328,7 @@ type GetERC20HoldersOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -350,9 +350,9 @@ type GetERC20HoldersOpts struct {
 // Note:
 //   - Returns empty slice if no holders found
 //   - Maximum 10000 records per page
-func (c *HTTPClient) GetERC20Holders(ctx context.Context, contractaddress string, opts *GetERC20HoldersOpts) ([]RespERC20HolderInfo, error) {
+func (c *HTTPClient) GetERC20Holders(ctx context.Context, contractAddress string, opts *GetERC20HoldersOpts) ([]RespERC20HolderInfo, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 		"page":            "1",
 		"offset":          "100",
 	}
@@ -408,7 +408,7 @@ type GetERC20HolderCountOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -428,9 +428,9 @@ type GetERC20HolderCountOpts struct {
 // Note:
 //   - Returns count in hex format
 //   - Useful for token distribution analysis
-func (c *HTTPClient) GetERC20HolderCount(ctx context.Context, contractaddress string, opts *GetERC20HolderCountOpts) (string, error) {
+func (c *HTTPClient) GetERC20HolderCount(ctx context.Context, contractAddress string, opts *GetERC20HolderCountOpts) (string, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -477,7 +477,7 @@ type GetTopERC20HoldersOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20 token
+//   - contractAddress: The contract address of the ERC-20 token
 //   - offset: Number of top holders to return (max 1000)
 //   - opts: Optional parameters (can be nil)
 //
@@ -502,13 +502,13 @@ type GetTopERC20HoldersOpts struct {
 //   - This endpoint is throttled to 2 calls/second regardless of API Pro tier
 //   - This beta endpoint is only available on Ethereum mainnet
 //   - Maximum offset is 1000
-func (c *HTTPClient) GetTopERC20Holders(ctx context.Context, contractaddress string, offset int64, opts *GetTopERC20HoldersOpts) ([]RespTopTokenHolder, error) {
+func (c *HTTPClient) GetTopERC20Holders(ctx context.Context, contractAddress string, offset int64, opts *GetTopERC20HoldersOpts) ([]RespTopTokenHolder, error) {
 	if offset > 1000 {
 		return nil, fmt.Errorf("offset cannot exceed 1000")
 	}
 
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 		"offset":          strconv.FormatInt(offset, 10),
 	}
 
@@ -557,7 +557,7 @@ type GetTokenInfoOpts struct {
 //
 // Args:
 //   - ctx: Context for request cancellation and timeout
-//   - contractaddress: The contract address of the ERC-20/ERC-721/ERC-1155 token
+//   - contractAddress: The contract address of the ERC-20/ERC-721/ERC-1155 token
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -580,9 +580,9 @@ type GetTokenInfoOpts struct {
 // Note:
 //   - This endpoint is throttled to 2 calls/second regardless of API Pro tier
 //   - Returns comprehensive token metadata
-func (c *HTTPClient) GetTokenInfo(ctx context.Context, contractaddress string, opts *GetTokenInfoOpts) (*RespTokenInfo, error) {
+func (c *HTTPClient) GetTokenInfo(ctx context.Context, contractAddress string, opts *GetTokenInfoOpts) (*RespTokenInfo, error) {
 	params := map[string]string{
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -826,7 +826,7 @@ type GetAccountNFTInventoriesOpts struct {
 // Args:
 //   - ctx: Context for request cancellation and timeout
 //   - address: The address to check for token inventory
-//   - contractaddress: The ERC-721 token contract address to check for inventory
+//   - contractAddress: The ERC-721 token contract address to check for inventory
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -850,10 +850,10 @@ type GetAccountNFTInventoriesOpts struct {
 //   - This endpoint is throttled to 2 calls/second regardless of API Pro tier
 //   - Returns empty slice if no tokens found
 //   - Maximum 1000 records per page
-func (c *HTTPClient) GetAccountNFTInventories(ctx context.Context, address, contractaddress string, opts *GetAccountNFTInventoriesOpts) ([]RespNFTTokenInventory, error) {
+func (c *HTTPClient) GetAccountNFTInventories(ctx context.Context, address, contractAddress string, opts *GetAccountNFTInventoriesOpts) ([]RespNFTTokenInventory, error) {
 	params := map[string]string{
 		"address":         address,
-		"contractaddress": contractaddress,
+		"contractaddress": contractAddress,
 		"page":            "1",
 		"offset":          "100",
 	}

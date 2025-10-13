@@ -809,7 +809,7 @@ type GetEthBalanceByBlockNumberOpts struct {
 // Args:
 //   - ctx: Context for request cancellation and timeout
 //   - address: Address to get balance for
-//   - blockno: Block number to get balance at
+//   - blockNo: Block number to get balance at
 //   - opts: Optional parameters (can be nil)
 //
 // Returns:
@@ -844,10 +844,10 @@ type GetEthBalanceByBlockNumberOpts struct {
 //   - Balance is returned in wei (smallest unit)
 //   - Returns "0" if address not found or has no balance
 //   - Useful for historical balance analysis and auditing
-func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address string, blockno int64, opts *GetEthBalanceByBlockNumberOpts) (string, error) {
+func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address string, blockNo int64, opts *GetEthBalanceByBlockNumberOpts) (string, error) {
 	params := map[string]string{
 		"address": address,
-		"blockno": strconv.FormatInt(blockno, 10),
+		"blockno": strconv.FormatInt(blockNo, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
