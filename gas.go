@@ -15,7 +15,7 @@ type GetConfirmationTimeEstimateOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -61,15 +61,15 @@ type GetConfirmationTimeEstimateOpts struct {
 //   - Gas price should be in wei (smallest unit)
 //   - Returns estimated time in seconds as string
 //   - Useful for optimizing transaction confirmation times
-func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasprice int, opts *GetConfirmationTimeEstimateOpts) (string, error) {
+func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasprice int64, opts *GetConfirmationTimeEstimateOpts) (string, error) {
 	params := map[string]string{
-		"gasprice": strconv.Itoa(gasprice),
+		"gasprice": strconv.FormatInt(gasprice, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -97,7 +97,7 @@ type GetGasOracleOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -147,7 +147,7 @@ func (c *HTTPClient) GetGasOracle(ctx context.Context, opts *GetGasOracleOpts) (
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -182,7 +182,7 @@ type GetDailyAverageGasLimitOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -247,7 +247,7 @@ func (c *HTTPClient) GetDailyAverageGasLimit(ctx context.Context, startdate, end
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -282,7 +282,7 @@ type GetDailyTotalGasUsedOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -347,7 +347,7 @@ func (c *HTTPClient) GetDailyTotalGasUsed(ctx context.Context, startdate, enddat
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -382,7 +382,7 @@ type GetDailyAverageGasPriceOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -448,7 +448,7 @@ func (c *HTTPClient) GetDailyAverageGasPrice(ctx context.Context, startdate, end
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

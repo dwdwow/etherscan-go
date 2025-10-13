@@ -15,7 +15,7 @@ type GetContractABIOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -84,7 +84,7 @@ func (c *HTTPClient) GetContractABI(ctx context.Context, address string, opts *G
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -112,7 +112,7 @@ type GetContractSourceCodeOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -175,7 +175,7 @@ func (c *HTTPClient) GetContractSourceCode(ctx context.Context, address string, 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -216,7 +216,7 @@ type VerifySourceCodeOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -303,7 +303,7 @@ func (c *HTTPClient) VerifySourceCode(ctx context.Context, sourceCode, contractA
 			params["zksolcVersion"] = *opts.ZksolcVersion
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -335,12 +335,12 @@ type VerifyVyperSourceCodeOpts struct {
 
 	// OptimizationUsed specifies whether optimization was used during compilation
 	// Options: 0 (no optimization) or 1 (optimization used)
-	OptimizationUsed *int
+	OptimizationUsed *int64
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -411,10 +411,10 @@ func (c *HTTPClient) VerifyVyperSourceCode(ctx context.Context, sourceCode, cont
 			params["constructorArguments"] = *opts.ConstructorArguments
 		}
 		if opts.OptimizationUsed != nil {
-			params["optimizationUsed"] = strconv.Itoa(*opts.OptimizationUsed)
+			params["optimizationUsed"] = strconv.FormatInt(*opts.OptimizationUsed, 10)
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -440,7 +440,7 @@ func (c *HTTPClient) VerifyVyperSourceCode(ctx context.Context, sourceCode, cont
 
 // VerifyStylusSourceCodeOpts contains optional parameters for Stylus source code verification
 type VerifyStylusSourceCodeOpts struct {
-	ChainID         *int
+	ChainID         *int64
 	OnLimitExceeded *RateLimitBehavior
 }
 
@@ -456,20 +456,20 @@ type VerifyStylusSourceCodeOpts struct {
 // Example:
 //
 //	guid, err := client.VerifyStylusSourceCode(ctx, githubURL, contractAddr, contractName, compilerVer, 3, nil)
-func (c *HTTPClient) VerifyStylusSourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion string, licenseType int, opts *VerifyStylusSourceCodeOpts) (string, error) {
+func (c *HTTPClient) VerifyStylusSourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion string, licenseType int64, opts *VerifyStylusSourceCodeOpts) (string, error) {
 	params := map[string]string{
 		"sourceCode":      sourceCode,
 		"contractaddress": contractAddress,
 		"contractname":    contractName,
 		"compilerversion": compilerVersion,
-		"licenseType":     strconv.Itoa(licenseType),
+		"licenseType":     strconv.FormatInt(licenseType, 10),
 		"codeformat":      "stylus",
 	}
 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -498,7 +498,7 @@ type CheckSourceCodeVerificationStatusOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -553,7 +553,7 @@ func (c *HTTPClient) CheckSourceCodeVerificationStatus(ctx context.Context, guid
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

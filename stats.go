@@ -21,7 +21,7 @@ type GetDailyBlockCountRewardsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -87,7 +87,7 @@ func (c *HTTPClient) GetDailyBlockCountRewards(ctx context.Context, startdate, e
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -119,7 +119,7 @@ type GetDailyBlockRewardsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -164,7 +164,7 @@ func (c *HTTPClient) GetDailyBlockRewards(ctx context.Context, startdate, enddat
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -196,7 +196,7 @@ type GetDailyAvgBlockTimeOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -242,7 +242,7 @@ func (c *HTTPClient) GetDailyAvgBlockTime(ctx context.Context, startdate, enddat
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -274,7 +274,7 @@ type GetDailyUncleBlockCountAndRewardsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -319,7 +319,7 @@ func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, star
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -349,7 +349,7 @@ func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, star
 
 // GetTotalEthSupplyOpts contains optional parameters
 type GetTotalEthSupplyOpts struct {
-	ChainID         *int
+	ChainID         *int64
 	OnLimitExceeded *RateLimitBehavior
 }
 
@@ -384,7 +384,7 @@ func (c *HTTPClient) GetTotalEthSupply(ctx context.Context, opts *GetTotalEthSup
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -409,7 +409,7 @@ func (c *HTTPClient) GetTotalEthSupply(ctx context.Context, opts *GetTotalEthSup
 
 // GetTotalEth2SupplyOpts contains optional parameters
 type GetTotalEth2SupplyOpts struct {
-	ChainID         *int
+	ChainID         *int64
 	OnLimitExceeded *RateLimitBehavior
 }
 
@@ -444,7 +444,7 @@ func (c *HTTPClient) GetTotalEth2Supply(ctx context.Context, opts *GetTotalEth2S
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -471,7 +471,7 @@ func (c *HTTPClient) GetTotalEth2Supply(ctx context.Context, opts *GetTotalEth2S
 type GetEthPriceOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -511,7 +511,7 @@ func (c *HTTPClient) GetEthPrice(ctx context.Context, opts *GetEthPriceOpts) (*R
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -543,7 +543,7 @@ type GetEthHistoricalPricesOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -588,7 +588,7 @@ func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startdate, endd
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -618,7 +618,7 @@ func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startdate, endd
 
 // GetEthereumNodesSizeOpts contains optional parameters
 type GetEthereumNodesSizeOpts struct {
-	ChainID         *int
+	ChainID         *int64
 	OnLimitExceeded *RateLimitBehavior
 }
 
@@ -665,7 +665,7 @@ func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startdate, enddat
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -693,7 +693,7 @@ func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startdate, enddat
 type GetNodeCountOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -731,7 +731,7 @@ func (c *HTTPClient) GetNodeCount(ctx context.Context, opts *GetNodeCountOpts) (
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -763,7 +763,7 @@ type GetDailyTxFeesOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -808,7 +808,7 @@ func (c *HTTPClient) GetDailyTxFees(ctx context.Context, startdate, enddate stri
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -840,7 +840,7 @@ type GetDailyNewAddressesOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -885,7 +885,7 @@ func (c *HTTPClient) GetDailyNewAddresses(ctx context.Context, startdate, enddat
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -917,7 +917,7 @@ type GetDailyNetworkUtilizationsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -962,7 +962,7 @@ func (c *HTTPClient) GetDailyNetworkUtilizations(ctx context.Context, startdate,
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -994,7 +994,7 @@ type GetDailyAvgHashratesOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -1039,7 +1039,7 @@ func (c *HTTPClient) GetDailyAvgHashrates(ctx context.Context, startdate, enddat
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -1071,7 +1071,7 @@ type GetDailyTxCountsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -1116,7 +1116,7 @@ func (c *HTTPClient) GetDailyTxCounts(ctx context.Context, startdate, enddate st
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -1148,7 +1148,7 @@ type GetDailyAvgDifficultiesOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -1193,7 +1193,7 @@ func (c *HTTPClient) GetDailyAvgDifficulties(ctx context.Context, startdate, end
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

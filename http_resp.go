@@ -217,7 +217,7 @@ type RespGetERC1155TokenTransfers []RespERC1155TokenTransfer
 
 // RespAddressFundedBy represents address funding information
 type RespAddressFundedBy struct {
-	Block          int    `json:"block"`
+	Block          int64    `json:"block"`
 	TimeStamp      string `json:"timeStamp"`
 	FundingAddress string `json:"fundingAddress"`
 	FundingTxn     string `json:"fundingTxn"`
@@ -324,12 +324,12 @@ type RespBlockReward struct {
 
 // RespBlockTxsCountByBlockNo represents transaction count by block number
 type RespBlockTxsCountByBlockNo struct {
-	Block            int `json:"block"`
-	TxsCount         int `json:"txsCount"`
-	InternalTxsCount int `json:"internalTxsCount"`
-	ERC20TxsCount    int `json:"erc20TxsCount"`
-	ERC721TxsCount   int `json:"erc721TxsCount"`
-	ERC1155TxsCount  int `json:"erc1155TxsCount"`
+	Block            int64 `json:"block"`
+	TxsCount         int64 `json:"txsCount"`
+	InternalTxsCount int64 `json:"internalTxsCount"`
+	ERC20TxsCount    int64 `json:"erc20TxsCount"`
+	ERC721TxsCount   int64 `json:"erc721TxsCount"`
+	ERC1155TxsCount  int64 `json:"erc1155TxsCount"`
 }
 
 // RespEstimateBlockCountdownTimeByBlockNo represents estimated block countdown time
@@ -346,7 +346,7 @@ type RespBlockNumber int
 type RespDailyAvgBlockSize struct {
 	UTCDate        string `json:"UTCDate"`
 	UnixTimeStamp  string `json:"unixTimeStamp"`
-	BlockSizeBytes int    `json:"blockSize_bytes"`
+	BlockSizeBytes int64    `json:"blockSize_bytes"`
 }
 
 type RespDailyAvgBlockSizes []RespDailyAvgBlockSize
@@ -355,7 +355,7 @@ type RespDailyAvgBlockSizes []RespDailyAvgBlockSize
 type RespDailyBlockCountReward struct {
 	UTCDate         string `json:"UTCDate"`
 	UnixTimeStamp   string `json:"unixTimeStamp"`
-	BlockCount      int    `json:"blockCount"`
+	BlockCount      int64    `json:"blockCount"`
 	BlockRewardsEth string `json:"blockRewards_Eth"`
 }
 
@@ -383,7 +383,7 @@ type RespDailyAvgTimeBlockMineds []RespDailyAvgTimeBlockMined
 type RespDailyUncleBlockCountAndReward struct {
 	UTCDate              string `json:"UTCDate"`
 	UnixTimeStamp        string `json:"unixTimeStamp"`
-	UncleBlockCount      int    `json:"uncleBlockCount"`
+	UncleBlockCount      int64    `json:"uncleBlockCount"`
 	UncleBlockRewardsEth string `json:"uncleBlockRewards_Eth"`
 }
 
@@ -444,7 +444,7 @@ type RespEventLogsByAddressFilteredByTopics []RespEventLogByAddressFilteredByTop
 // RespJsonRpc represents a generic JSON-RPC response
 type RespJsonRpc[Result any] struct {
 	Jsonrpc string `json:"jsonrpc"`
-	ID      int    `json:"id"`
+	ID      int64    `json:"id"`
 	Result  Result `json:"result"`
 }
 
@@ -748,7 +748,7 @@ type RespDailyTxFees []RespDailyTxFee
 type RespDailyNewAddress struct {
 	UTCDate         string `json:"UTCDate"`
 	UnixTimeStamp   string `json:"unixTimeStamp"`
-	NewAddressCount int    `json:"newAddressCount"`
+	NewAddressCount int64    `json:"newAddressCount"`
 }
 
 type RespDailyNewAddresses []RespDailyNewAddress
@@ -775,7 +775,7 @@ type RespDailyAvgHashrates []RespDailyAvgHashrate
 type RespDailyTxCount struct {
 	UTCDate          string `json:"UTCDate"`
 	UnixTimeStamp    string `json:"unixTimeStamp"`
-	TransactionCount int    `json:"transactionCount"`
+	TransactionCount int64    `json:"transactionCount"`
 }
 
 type RespDailyTxCounts []RespDailyTxCount
@@ -872,25 +872,25 @@ type RespWithdrawalTxs []RespWithdrawalTx
 
 // RespCreditUsage represents credit usage information
 type RespCreditUsage struct {
-	CreditsUsed            int    `json:"creditsUsed"`
-	CreditsAvailable       int    `json:"creditsAvailable"`
-	CreditLimit            int    `json:"creditLimit"`
+	CreditsUsed            int64    `json:"creditsUsed"`
+	CreditsAvailable       int64    `json:"creditsAvailable"`
+	CreditLimit            int64    `json:"creditLimit"`
 	LimitInterval          string `json:"limitInterval"`
 	IntervalExpiryTimespan string `json:"intervalExpiryTimespan"`
 }
 
 // RespSupportedChain represents a supported chain
 type RespSupportedChain struct {
-	Chainname     string `json:"chainname"`
+	ChainName     string `json:"chainname"`
 	ChainID       string `json:"chainid"`
 	BlockExplorer string `json:"blockexplorer"`
 	APIURL        string `json:"apiurl"`
-	Status        int    `json:"status"`
+	Status        int64    `json:"status"`
 }
 
 // RespSupportedChains represents supported chains information
 type RespSupportedChains struct {
-	TotalCount int                  `json:"totalcount"`
+	TotalCount int64                  `json:"totalcount"`
 	Result     []RespSupportedChain `json:"result"`
 }
 
@@ -907,9 +907,9 @@ type RespAddressTag struct {
 	Notes2               string   `json:"notes_2"`
 	Labels               []string `json:"labels"`
 	LabelsSlug           []string `json:"labels_slug"`
-	Reputation           int      `json:"reputation"`
+	Reputation           int64      `json:"reputation"`
 	OtherAttributes      []string `json:"other_attributes"`
-	LastUpdatedTimestamp int      `json:"lastupdatedtimestamp"`
+	LastUpdatedTimestamp int64      `json:"lastupdatedtimestamp"`
 }
 
 type RespAddressTags []RespAddressTag
@@ -920,7 +920,7 @@ type RespLabelMaster struct {
 	LabelSlug            string `json:"labelslug"`
 	ShortDescription     string `json:"shortdescription"`
 	Notes                string `json:"notes"`
-	LastUpdatedTimestamp int    `json:"lastupdatedtimestamp"`
+	LastUpdatedTimestamp int64    `json:"lastupdatedtimestamp"`
 }
 
 type RespLabelMasterlist []RespLabelMaster
@@ -929,7 +929,7 @@ type RespLabelMasterlist []RespLabelMaster
 type RespLatestCSVBatchNumber struct {
 	Nametag              string `json:"nametag"`
 	Batch                string `json:"batch"`
-	LastUpdatedTimestamp int    `json:"lastUpdatedTimestamp"`
+	LastUpdatedTimestamp int64    `json:"lastUpdatedTimestamp"`
 }
 
 type RespLatestCSVBatchNumbers []RespLatestCSVBatchNumber

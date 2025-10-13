@@ -19,7 +19,7 @@ type GetEthBalanceOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -81,7 +81,7 @@ func (c *HTTPClient) GetEthBalance(ctx context.Context, address string, opts *Ge
 			params["tag"] = "latest"
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 	} else {
 		params["tag"] = "latest"
@@ -122,7 +122,7 @@ type GetEthBalancesOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -192,7 +192,7 @@ func (c *HTTPClient) GetEthBalances(ctx context.Context, addresses []string, opt
 			params["tag"] = *opts.Tag
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

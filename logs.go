@@ -14,28 +14,28 @@ type GetEventLogsByAddressOpts struct {
 	// FromBlock is the starting block number to search for logs
 	// If nil, searches from genesis block
 	// Use this to limit the search range and improve performance
-	FromBlock *int
+	FromBlock *int64
 
 	// ToBlock is the ending block number to search for logs
 	// If nil, searches to latest block
 	// Use this to limit the search range and improve performance
-	ToBlock *int
+	ToBlock *int64
 
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int
+	Page *int64
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
 	// Higher values return more results per page but may be slower
-	Offset *int
+	Offset *int64
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -105,19 +105,19 @@ func (c *HTTPClient) GetEventLogsByAddress(ctx context.Context, address string, 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.Itoa(*opts.FromBlock)
+			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
 		}
 		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.Itoa(*opts.ToBlock)
+			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
 		}
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -146,23 +146,23 @@ type GetEventLogsByTopicsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int
+	Page *int64
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
 	// Higher values return more results per page but may be slower
-	Offset *int
+	Offset *int64
 
 	// FromBlock is the starting block number to search for logs
 	// If nil, searches from genesis block
 	// Use this to limit the search range and improve performance
-	FromBlock *int
+	FromBlock *int64
 
 	// ToBlock is the ending block number to search for logs
 	// If nil, searches to latest block
 	// Use this to limit the search range and improve performance
-	ToBlock *int
+	ToBlock *int64
 
 	// Topic0 is the first topic to filter by (event signature)
 	// This is typically the keccak256 hash of the event signature
@@ -214,7 +214,7 @@ type GetEventLogsByTopicsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -290,16 +290,16 @@ func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLog
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.Itoa(*opts.FromBlock)
+			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
 		}
 		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.Itoa(*opts.ToBlock)
+			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
 		}
 		if opts.Topic0 != nil {
 			params["topic0"] = *opts.Topic0
@@ -332,7 +332,7 @@ func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLog
 			params["topic2_3_opr"] = *opts.Topic2_3_Opr
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -360,20 +360,20 @@ func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLog
 type GetEventLogsByAddressFilteredByTopicsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int
+	Page *int64
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
-	Offset *int
+	Offset *int64
 
 	// FromBlock is the starting block number to search for logs
 	// If nil, searches from genesis block
-	FromBlock *int
+	FromBlock *int64
 
 	// ToBlock is the ending block number to search for logs
 	// If nil, searches to latest block
-	ToBlock *int
+	ToBlock *int64
 
 	// Topic0 is the first topic to filter by (event signature)
 	Topic0 *string
@@ -413,7 +413,7 @@ type GetEventLogsByAddressFilteredByTopicsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior
@@ -457,16 +457,16 @@ func (c *HTTPClient) GetEventLogsByAddressFilteredByTopics(ctx context.Context, 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.Itoa(*opts.FromBlock)
+			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
 		}
 		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.Itoa(*opts.ToBlock)
+			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
 		}
 		if opts.Topic0 != nil {
 			params["topic0"] = *opts.Topic0
@@ -499,7 +499,7 @@ func (c *HTTPClient) GetEventLogsByAddressFilteredByTopics(ctx context.Context, 
 			params["topic2_3_opr"] = *opts.Topic2_3_Opr
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

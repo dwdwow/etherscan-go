@@ -39,7 +39,7 @@ var ErrRateLimitExceeded = errors.New("rate limit exceeded")
 //
 // This allows for burst traffic while maintaining an average rate limit over time.
 type RateLimiter struct {
-	limit           int               // Maximum number of calls allowed in the period
+	limit           int64             // Maximum number of calls allowed in the period
 	period          time.Duration     // Time period for the rate limit
 	onLimitExceeded RateLimitBehavior // Behavior when rate limit is exceeded
 	tokens          float64           // Current number of available tokens
@@ -57,7 +57,7 @@ type RateLimiter struct {
 // Returns:
 //   - *RateLimiter: A new rate limiter instance
 //   - error: Error if parameters are invalid
-func NewRateLimiter(limit int, period time.Duration, onLimitExceeded RateLimitBehavior) (*RateLimiter, error) {
+func NewRateLimiter(limit int64, period time.Duration, onLimitExceeded RateLimitBehavior) (*RateLimiter, error) {
 	if limit <= 0 {
 		return nil, errors.New("limit must be positive")
 	}
@@ -95,7 +95,7 @@ func (rl *RateLimiter) refillTokens() {
 // Returns:
 //   - bool: True if tokens were acquired, false otherwise
 //   - error: Error if rate limit is exceeded and behavior is RateLimitRaise
-func (rl *RateLimiter) Acquire(ctx context.Context, tokens int, onLimitExceeded *RateLimitBehavior) (bool, error) {
+func (rl *RateLimiter) Acquire(ctx context.Context, tokens int64, onLimitExceeded *RateLimitBehavior) (bool, error) {
 	behavior := rl.onLimitExceeded
 	if onLimitExceeded != nil {
 		behavior = *onLimitExceeded
@@ -153,7 +153,7 @@ func (rl *RateLimiter) Acquire(ctx context.Context, tokens int, onLimitExceeded 
 // AcquireWithTimeout attempts to acquire tokens with a timeout.
 //
 // This is a convenience method that creates a context with timeout.
-func (rl *RateLimiter) AcquireWithTimeout(timeout time.Duration, tokens int, onLimitExceeded *RateLimitBehavior) (bool, error) {
+func (rl *RateLimiter) AcquireWithTimeout(timeout time.Duration, tokens int64, onLimitExceeded *RateLimitBehavior) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	return rl.Acquire(ctx, tokens, onLimitExceeded)
@@ -162,7 +162,7 @@ func (rl *RateLimiter) AcquireWithTimeout(timeout time.Duration, tokens int, onL
 // TryAcquire attempts to acquire tokens without blocking.
 //
 // Returns true if tokens were acquired, false otherwise.
-func (rl *RateLimiter) TryAcquire(tokens int) bool {
+func (rl *RateLimiter) TryAcquire(tokens int64) bool {
 	skip := RateLimitSkip
 	acquired, _ := rl.Acquire(context.Background(), tokens, &skip)
 	return acquired
@@ -235,7 +235,7 @@ type SharedRateLimiter struct {
 }
 
 // NewSharedRateLimiter creates a new shared rate limiter.
-func NewSharedRateLimiter(limit int, period time.Duration, onLimitExceeded RateLimitBehavior) (*SharedRateLimiter, error) {
+func NewSharedRateLimiter(limit int64, period time.Duration, onLimitExceeded RateLimitBehavior) (*SharedRateLimiter, error) {
 	limiter, err := NewRateLimiter(limit, period, onLimitExceeded)
 	if err != nil {
 		return nil, err
@@ -247,12 +247,12 @@ func NewSharedRateLimiter(limit int, period time.Duration, onLimitExceeded RateL
 }
 
 // Acquire attempts to acquire tokens from the shared limiter.
-func (srl *SharedRateLimiter) Acquire(ctx context.Context, tokens int, onLimitExceeded *RateLimitBehavior) (bool, error) {
+func (srl *SharedRateLimiter) Acquire(ctx context.Context, tokens int64, onLimitExceeded *RateLimitBehavior) (bool, error) {
 	return srl.limiter.Acquire(ctx, tokens, onLimitExceeded)
 }
 
 // TryAcquire attempts to acquire tokens without blocking.
-func (srl *SharedRateLimiter) TryAcquire(tokens int) bool {
+func (srl *SharedRateLimiter) TryAcquire(tokens int64) bool {
 	return srl.limiter.TryAcquire(tokens)
 }
 
@@ -277,7 +277,7 @@ func (srl *SharedRateLimiter) Wait(ctx context.Context) error {
 
 // RateLimit represents a single rate limit configuration.
 type RateLimit struct {
-	Limit  int
+	Limit  int64
 	Period time.Duration
 }
 
@@ -335,7 +335,7 @@ func NewMultiRateLimiter(limits []RateLimit, onLimitExceeded RateLimitBehavior) 
 }
 
 // Acquire attempts to acquire tokens from all rate limiters.
-func (mrl *MultiRateLimiter) Acquire(ctx context.Context, tokens int, onLimitExceeded *RateLimitBehavior) (bool, error) {
+func (mrl *MultiRateLimiter) Acquire(ctx context.Context, tokens int64, onLimitExceeded *RateLimitBehavior) (bool, error) {
 	behavior := mrl.onLimitExceeded
 	if onLimitExceeded != nil {
 		behavior = *onLimitExceeded
@@ -418,7 +418,7 @@ func (mrl *MultiRateLimiter) Acquire(ctx context.Context, tokens int, onLimitExc
 }
 
 // TryAcquire attempts to acquire tokens without blocking.
-func (mrl *MultiRateLimiter) TryAcquire(tokens int) bool {
+func (mrl *MultiRateLimiter) TryAcquire(tokens int64) bool {
 	skip := RateLimitSkip
 	acquired, _ := mrl.Acquire(context.Background(), tokens, &skip)
 	return acquired
@@ -438,7 +438,7 @@ func (mrl *MultiRateLimiter) Reset() {
 //
 // Returns a slice of (limit, period, availableTokens) for each limiter.
 type LimiterStatus struct {
-	Limit           int
+	Limit           int64
 	Period          time.Duration
 	AvailableTokens float64
 }

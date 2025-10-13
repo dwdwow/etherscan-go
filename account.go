@@ -26,23 +26,23 @@ type GetERC20TokenTransfersOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int
+	Page *int64
 
 	// Offset is the number of transfers per page
 	// Default: 100
 	// Maximum: 10000
 	// Higher values return more results per page but may be slower
-	Offset *int
+	Offset *int64
 
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
-	StartBlock *int
+	StartBlock *int64
 
 	// EndBlock is the ending block number to search to
 	// Default: 999999999999 (latest block)
 	// Use this to limit the search range and improve performance
-	EndBlock *int
+	EndBlock *int64
 
 	// Sort order for the results
 	// Options:
@@ -53,7 +53,7 @@ type GetERC20TokenTransfersOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -149,22 +149,22 @@ func (c *HTTPClient) GetERC20TokenTransfers(ctx context.Context, opts *GetERC20T
 		params["contractaddress"] = *opts.ContractAddress
 	}
 	if opts.Page != nil {
-		params["page"] = strconv.Itoa(*opts.Page)
+		params["page"] = strconv.FormatInt(*opts.Page, 10)
 	}
 	if opts.Offset != nil {
-		params["offset"] = strconv.Itoa(*opts.Offset)
+		params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 	}
 	if opts.StartBlock != nil {
-		params["startblock"] = strconv.Itoa(*opts.StartBlock)
+		params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
 	}
 	if opts.EndBlock != nil {
-		params["endblock"] = strconv.Itoa(*opts.EndBlock)
+		params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
 	}
 	if opts.Sort != nil {
 		params["sort"] = *opts.Sort
 	}
 	if opts.ChainID != nil {
-		params["chainid"] = strconv.Itoa(*opts.ChainID)
+		params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 	}
 	onLimitExceeded = opts.OnLimitExceeded
 
@@ -199,20 +199,20 @@ type GetERC721TokenTransfersOpts struct {
 
 	// Page number for pagination
 	// Default: 1
-	Page *int
+	Page *int64
 
 	// Offset is the number of transfers per page
 	// Default: 100
 	// Maximum: 10000
-	Offset *int
+	Offset *int64
 
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
-	StartBlock *int
+	StartBlock *int64
 
 	// EndBlock is the ending block number to search to
 	// Default: 999999999999 (latest block)
-	EndBlock *int
+	EndBlock *int64
 
 	// Sort order for the results
 	// Options: "asc" (default) or "desc"
@@ -220,7 +220,7 @@ type GetERC721TokenTransfersOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior
@@ -282,22 +282,22 @@ func (c *HTTPClient) GetERC721TokenTransfers(ctx context.Context, opts *GetERC72
 		params["contractaddress"] = *opts.ContractAddress
 	}
 	if opts.Page != nil {
-		params["page"] = strconv.Itoa(*opts.Page)
+		params["page"] = strconv.FormatInt(*opts.Page, 10)
 	}
 	if opts.Offset != nil {
-		params["offset"] = strconv.Itoa(*opts.Offset)
+		params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 	}
 	if opts.StartBlock != nil {
-		params["startblock"] = strconv.Itoa(*opts.StartBlock)
+		params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
 	}
 	if opts.EndBlock != nil {
-		params["endblock"] = strconv.Itoa(*opts.EndBlock)
+		params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
 	}
 	if opts.Sort != nil {
 		params["sort"] = *opts.Sort
 	}
 	if opts.ChainID != nil {
-		params["chainid"] = strconv.Itoa(*opts.ChainID)
+		params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 	}
 	onLimitExceeded = opts.OnLimitExceeded
 
@@ -332,20 +332,20 @@ type GetERC1155TokenTransfersOpts struct {
 
 	// Page number for pagination
 	// Default: 1
-	Page *int
+	Page *int64
 
 	// Offset is the number of transfers per page
 	// Default: 100
 	// Maximum: 10000
-	Offset *int
+	Offset *int64
 
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
-	StartBlock *int
+	StartBlock *int64
 
 	// EndBlock is the ending block number to search to
 	// Default: 999999999999 (latest block)
-	EndBlock *int
+	EndBlock *int64
 
 	// Sort order for the results
 	// Options: "asc" (default) or "desc"
@@ -353,7 +353,7 @@ type GetERC1155TokenTransfersOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior
@@ -417,22 +417,22 @@ func (c *HTTPClient) GetERC1155TokenTransfers(ctx context.Context, opts *GetERC1
 		params["contractaddress"] = *opts.ContractAddress
 	}
 	if opts.Page != nil {
-		params["page"] = strconv.Itoa(*opts.Page)
+		params["page"] = strconv.FormatInt(*opts.Page, 10)
 	}
 	if opts.Offset != nil {
-		params["offset"] = strconv.Itoa(*opts.Offset)
+		params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 	}
 	if opts.StartBlock != nil {
-		params["startblock"] = strconv.Itoa(*opts.StartBlock)
+		params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
 	}
 	if opts.EndBlock != nil {
-		params["endblock"] = strconv.Itoa(*opts.EndBlock)
+		params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
 	}
 	if opts.Sort != nil {
 		params["sort"] = *opts.Sort
 	}
 	if opts.ChainID != nil {
-		params["chainid"] = strconv.Itoa(*opts.ChainID)
+		params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 	}
 	onLimitExceeded = opts.OnLimitExceeded
 
@@ -464,7 +464,7 @@ type GetAddressFundedByOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -526,7 +526,7 @@ func (c *HTTPClient) GetAddressFundedBy(ctx context.Context, address string, opt
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -561,17 +561,17 @@ type GetBlocksValidatedByAddressOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int
+	Page *int64
 
 	// Offset is the number of blocks per page
 	// Default: 10
 	// Use this to control how many blocks are returned per page
-	Offset *int
+	Offset *int64
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -645,13 +645,13 @@ func (c *HTTPClient) GetBlocksValidatedByAddress(ctx context.Context, address st
 			params["blocktype"] = *opts.BlockType
 		}
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -677,12 +677,12 @@ func (c *HTTPClient) GetBlocksValidatedByAddress(ctx context.Context, address st
 
 // GetBeaconChainWithdrawalsOpts contains optional parameters
 type GetBeaconChainWithdrawalsOpts struct {
-	StartBlock      *int
-	EndBlock        *int
-	Page            *int
-	Offset          *int
+	StartBlock      *int64
+	EndBlock        *int64
+	Page            *int64
+	Offset          *int64
 	Sort            *string
-	ChainID         *int
+	ChainID         *int64
 	OnLimitExceeded *RateLimitBehavior
 }
 
@@ -745,22 +745,22 @@ func (c *HTTPClient) GetBeaconChainWithdrawals(ctx context.Context, address stri
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.StartBlock != nil {
-			params["startblock"] = strconv.Itoa(*opts.StartBlock)
+			params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
 		}
 		if opts.EndBlock != nil {
-			params["endblock"] = strconv.Itoa(*opts.EndBlock)
+			params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
 		}
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.Sort != nil {
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -789,7 +789,7 @@ type GetEthBalanceByBlockNumberOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -844,16 +844,16 @@ type GetEthBalanceByBlockNumberOpts struct {
 //   - Balance is returned in wei (smallest unit)
 //   - Returns "0" if address not found or has no balance
 //   - Useful for historical balance analysis and auditing
-func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address string, blockno int, opts *GetEthBalanceByBlockNumberOpts) (string, error) {
+func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address string, blockno int64, opts *GetEthBalanceByBlockNumberOpts) (string, error) {
 	params := map[string]string{
 		"address": address,
-		"blockno": strconv.Itoa(blockno),
+		"blockno": strconv.FormatInt(blockno, 10),
 	}
 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -881,7 +881,7 @@ type GetContractCreatorAndCreationOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -948,7 +948,7 @@ func (c *HTTPClient) GetContractCreatorAndCreation(ctx context.Context, contract
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}

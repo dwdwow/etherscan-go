@@ -14,17 +14,17 @@ type GetPlasmaDepositsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int
+	Page *int64
 
 	// Offset is the number of deposits per page
 	// Default: 100
 	// Use this to control how many deposits are returned per page
-	Offset *int
+	Offset *int64
 
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Note: Only applicable to Polygon (chainid=137)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -78,13 +78,13 @@ func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		} else {
 			params["chainid"] = "137" // Default to Polygon
 		}
@@ -116,11 +116,11 @@ func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts
 type GetDepositTxsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int
+	Page *int64
 
 	// Offset is the number of deposits per page
 	// Default: 1000
-	Offset *int
+	Offset *int64
 
 	// Sort order for the results
 	// Options: "asc" or "desc" (default: "desc")
@@ -129,7 +129,7 @@ type GetDepositTxsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
@@ -169,16 +169,16 @@ func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *Ge
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.Sort != nil {
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
@@ -206,11 +206,11 @@ func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *Ge
 type GetWithdrawalTxsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int
+	Page *int64
 
 	// Offset is the number of withdrawals per page
 	// Default: 1000
-	Offset *int
+	Offset *int64
 
 	// Sort order for the results
 	// Options: "asc" or "desc" (default: "desc")
@@ -219,7 +219,7 @@ type GetWithdrawalTxsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID *int
+	ChainID *int64
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
@@ -259,16 +259,16 @@ func (c *HTTPClient) GetWithdrawalTxs(ctx context.Context, address string, opts 
 	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
 		if opts.Page != nil {
-			params["page"] = strconv.Itoa(*opts.Page)
+			params["page"] = strconv.FormatInt(*opts.Page, 10)
 		}
 		if opts.Offset != nil {
-			params["offset"] = strconv.Itoa(*opts.Offset)
+			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
 		}
 		if opts.Sort != nil {
 			params["sort"] = *opts.Sort
 		}
 		if opts.ChainID != nil {
-			params["chainid"] = strconv.Itoa(*opts.ChainID)
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
 		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
