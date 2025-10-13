@@ -356,27 +356,97 @@ func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLog
 	return result, nil
 }
 
-// GetEventLogsByAddressFilteredByTopicsOpts contains optional parameters
+// GetEventLogsByAddressFilteredByTopicsOpts contains optional parameters for GetEventLogsByAddressFilteredByTopics
 type GetEventLogsByAddressFilteredByTopicsOpts struct {
-	Page            *int
-	Offset          *int
-	FromBlock       *int
-	ToBlock         *int
-	Topic0          *string
-	Topic1          *string
-	Topic2          *string
-	Topic3          *string
-	Topic0_1_Opr    *string
-	Topic0_2_Opr    *string
-	Topic0_3_Opr    *string
-	Topic1_2_Opr    *string
-	Topic1_3_Opr    *string
-	Topic2_3_Opr    *string
-	ChainID         *int
+	// Page number for pagination
+	// Default: 1
+	Page *int
+
+	// Offset is the number of records per page
+	// Default: 1000
+	// Maximum: 1000
+	Offset *int
+
+	// FromBlock is the starting block number to search for logs
+	// If nil, searches from genesis block
+	FromBlock *int
+
+	// ToBlock is the ending block number to search for logs
+	// If nil, searches to latest block
+	ToBlock *int
+
+	// Topic0 is the first topic to filter by (event signature)
+	Topic0 *string
+
+	// Topic1 is the second topic to filter by (first indexed parameter)
+	Topic1 *string
+
+	// Topic2 is the third topic to filter by (second indexed parameter)
+	Topic2 *string
+
+	// Topic3 is the fourth topic to filter by (third indexed parameter)
+	Topic3 *string
+
+	// Topic0_1_Opr is the operator between topic0 and topic1
+	// Options: "and" or "or"
+	Topic0_1_Opr *string
+
+	// Topic0_2_Opr is the operator between topic0 and topic2
+	// Options: "and" or "or"
+	Topic0_2_Opr *string
+
+	// Topic0_3_Opr is the operator between topic0 and topic3
+	// Options: "and" or "or"
+	Topic0_3_Opr *string
+
+	// Topic1_2_Opr is the operator between topic1 and topic2
+	// Options: "and" or "or"
+	Topic1_2_Opr *string
+
+	// Topic1_3_Opr is the operator between topic1 and topic3
+	// Options: "and" or "or"
+	Topic1_3_Opr *string
+
+	// Topic2_3_Opr is the operator between topic2 and topic3
+	// Options: "and" or "or"
+	Topic2_3_Opr *string
+
+	// ChainID specifies which blockchain network to query
+	// If nil, uses the client's default chain ID
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
+	// If nil, uses the client's default behavior
 	OnLimitExceeded *RateLimitBehavior
 }
 
 // GetEventLogsByAddressFilteredByTopics returns event logs from a specific address filtered by topics and block range
+//
+// This endpoint combines address filtering with topic filtering to get event logs from a specific
+// contract address that match certain event signatures and parameters.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - address: The contract address to get logs from
+//   - opts: Optional parameters for filtering
+//
+// Returns:
+//   - []RespEventLogByAddressFilteredByTopics: List of filtered event logs
+//   - error: Error if the request fails
+//
+// Example:
+//
+//	// Get Transfer events from a specific contract
+//	contractAddr := "0xA0b86a33E6441b8C4C5C8C0C0C0C0C0C0C0C0C0"
+//	transferTopic := "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+//	logs, err := client.GetEventLogsByAddressFilteredByTopics(ctx, contractAddr, &GetEventLogsByAddressFilteredByTopicsOpts{
+//	    Topic0: &transferTopic,
+//	})
+//
+// Note:
+//   - Combines address and topic filtering
+//   - Maximum 1000 records per call
+//   - Use Page and Offset for pagination
 func (c *HTTPClient) GetEventLogsByAddressFilteredByTopics(ctx context.Context, address string, opts *GetEventLogsByAddressFilteredByTopicsOpts) ([]RespEventLogByAddressFilteredByTopics, error) {
 	params := map[string]string{
 		"address": address,

@@ -199,27 +199,89 @@ func (c *HTTPClient) GetContractSourceCode(ctx context.Context, address string, 
 	return result, nil
 }
 
-// VerifySourceCodeOpts contains optional parameters for source code verification
+// VerifySourceCodeOpts contains optional parameters for VerifySourceCode
 type VerifySourceCodeOpts struct {
+	// ConstructorArguments are the constructor arguments used when deploying the contract
+	// If the contract has constructor parameters, provide them here
 	ConstructorArguments *string
-	CompilerMode         *string
-	ZksolcVersion        *string
-	ChainID              *int
-	OnLimitExceeded      *RateLimitBehavior
+
+	// CompilerMode specifies the compiler mode (e.g., "solc/zksync" for ZK Stack)
+	// Use this for special compilation modes or ZK Stack contracts
+	CompilerMode *string
+
+	// ZksolcVersion specifies the zkSolc version for ZK Stack (e.g., "v1.3.14")
+	// Required when using ZK Stack compilation
+	ZksolcVersion *string
+
+	// ChainID specifies which blockchain network to query
+	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
+	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Options:
+	//   - RateLimitBlock: Wait until a token is available (default)
+	//   - RateLimitRaise: Return an error when rate limit is exceeded
+	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
+	OnLimitExceeded *RateLimitBehavior
 }
 
 // VerifySourceCode submits contract source code for verification
 //
+// This endpoint submits contract source code for verification on Etherscan. After
+// successful verification, the contract source code will be publicly visible and
+// the ABI will be available for programmatic interaction.
+//
 // Args:
-//   - sourceCode: The Solidity source code
+//   - ctx: Context for request cancellation and timeout
+//   - sourceCode: The Solidity source code to verify
 //   - contractAddress: The deployed contract address
-//   - contractName: Contract name (e.g. "contracts/Verified.sol:Verified")
-//   - compilerVersion: Compiler version (e.g. "v0.8.24+commit.e11b9ed9")
+//   - contractName: Contract name (e.g., "contracts/Verified.sol:Verified")
+//   - compilerVersion: Compiler version (e.g., "v0.8.24+commit.e11b9ed9")
 //   - codeFormat: Source code format ("solidity-single-file" or "solidity-standard-json-input")
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - string: Verification GUID for tracking verification status
+//   - error: Error if the request fails
 //
 // Example:
 //
-//	guid, err := client.VerifySourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, "solidity-single-file", nil)
+//	// Verify a simple contract
+//	sourceCode := `pragma solidity ^0.8.0;
+//	contract MyContract {
+//	    uint256 public value;
+//	    constructor(uint256 _value) { value = _value; }
+//	}`
+//	contractAddr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+//	contractName := "MyContract.sol:MyContract"
+//	compilerVer := "v0.8.24+commit.e11b9ed9"
+//	codeFormat := "solidity-single-file"
+//
+//	guid, err := client.VerifySourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, codeFormat, nil)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Verification GUID: %s\n", guid)
+//
+//	// With constructor arguments
+//	constructorArgs := "0000000000000000000000000000000000000000000000000000000000000064" // 100 in hex
+//	guid, err := client.VerifySourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, codeFormat, &VerifySourceCodeOpts{
+//	    ConstructorArguments: &constructorArgs,
+//	})
+//
+//	// For ZK Stack contracts
+//	guid, err := client.VerifySourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, codeFormat, &VerifySourceCodeOpts{
+//	    CompilerMode:  &[]string{"solc/zksync"}[0],
+//	    ZksolcVersion: &[]string{"v1.3.14"}[0],
+//	})
+//
+// Note:
+//   - Returns GUID for tracking verification status
+//   - Use CheckSourceCodeVerificationStatus to check verification progress
+//   - Constructor arguments must be ABI-encoded
+//   - Source code must match the deployed bytecode exactly
 func (c *HTTPClient) VerifySourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion, codeFormat string, opts *VerifySourceCodeOpts) (string, error) {
 	params := map[string]string{
 		"sourceCode":      sourceCode,
@@ -265,19 +327,75 @@ func (c *HTTPClient) VerifySourceCode(ctx context.Context, sourceCode, contractA
 	return fmt.Sprintf("%v", data), nil
 }
 
-// VerifyVyperSourceCodeOpts contains optional parameters for Vyper source code verification
+// VerifyVyperSourceCodeOpts contains optional parameters for VerifyVyperSourceCode
 type VerifyVyperSourceCodeOpts struct {
+	// ConstructorArguments are the constructor arguments used when deploying the contract
+	// If the contract has constructor parameters, provide them here
 	ConstructorArguments *string
-	OptimizationUsed     *int
-	ChainID              *int
-	OnLimitExceeded      *RateLimitBehavior
+
+	// OptimizationUsed specifies whether optimization was used during compilation
+	// Options: 0 (no optimization) or 1 (optimization used)
+	OptimizationUsed *int
+
+	// ChainID specifies which blockchain network to query
+	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
+	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Options:
+	//   - RateLimitBlock: Wait until a token is available (default)
+	//   - RateLimitRaise: Return an error when rate limit is exceeded
+	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
+	OnLimitExceeded *RateLimitBehavior
 }
 
 // VerifyVyperSourceCode submits Vyper contract source code for verification
 //
+// This endpoint submits Vyper contract source code for verification on Etherscan.
+// Vyper is a Python-like programming language for Ethereum smart contracts. After
+// successful verification, the contract source code will be publicly visible.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - sourceCode: The Vyper source code in JSON format
+//   - contractAddress: The deployed contract address
+//   - contractName: Contract name (e.g., "contracts/Verified.vy:Verified")
+//   - compilerVersion: Vyper compiler version (e.g., "vyper:0.4.0")
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - string: Verification GUID for tracking verification status
+//   - error: Error if the request fails
+//
 // Example:
 //
+//	// Verify a Vyper contract
+//	sourceCode := `{"language": "Vyper", "sources": {"contract.vy": {"content": "@external\ndef hello() -> String[100]:\n    return \"Hello, World!\""}}}`
+//	contractAddr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+//	contractName := "contract.vy:hello"
+//	compilerVer := "vyper:0.4.0"
+//
 //	guid, err := client.VerifyVyperSourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, nil)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Verification GUID: %s\n", guid)
+//
+//	// With constructor arguments and optimization
+//	constructorArgs := "0000000000000000000000000000000000000000000000000000000000000064"
+//	optimization := 1
+//	guid, err := client.VerifyVyperSourceCode(ctx, sourceCode, contractAddr, contractName, compilerVer, &VerifyVyperSourceCodeOpts{
+//	    ConstructorArguments: &constructorArgs,
+//	    OptimizationUsed:     &optimization,
+//	})
+//
+// Note:
+//   - Source code must be in JSON format for Vyper
+//   - Returns GUID for tracking verification status
+//   - Use CheckSourceCodeVerificationStatus to check verification progress
+//   - Constructor arguments must be ABI-encoded
 func (c *HTTPClient) VerifyVyperSourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion string, opts *VerifyVyperSourceCodeOpts) (string, error) {
 	params := map[string]string{
 		"sourceCode":      sourceCode,
@@ -375,17 +493,58 @@ func (c *HTTPClient) VerifyStylusSourceCode(ctx context.Context, sourceCode, con
 	return fmt.Sprintf("%v", data), nil
 }
 
-// CheckSourceCodeVerificationStatusOpts contains optional parameters
+// CheckSourceCodeVerificationStatusOpts contains optional parameters for CheckSourceCodeVerificationStatus
 type CheckSourceCodeVerificationStatusOpts struct {
-	ChainID         *int
+	// ChainID specifies which blockchain network to query
+	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
+	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Options:
+	//   - RateLimitBlock: Wait until a token is available (default)
+	//   - RateLimitRaise: Return an error when rate limit is exceeded
+	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
 }
 
 // CheckSourceCodeVerificationStatus checks the verification status of a submitted source code verification request
 //
+// This endpoint checks the verification status of a previously submitted source code
+// verification request using the GUID returned from VerifySourceCode. This is useful
+// for tracking verification progress and determining when verification is complete.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - guid: The unique GUID received from the verification request
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - string: Verification status message
+//   - error: Error if the request fails
+//
 // Example:
 //
+//	// Check verification status
+//	guid := "your-verification-guid-here"
 //	status, err := client.CheckSourceCodeVerificationStatus(ctx, guid, nil)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Verification Status: %s\n", status)
+//
+//	// With custom chain ID
+//	chainID := 137 // Polygon
+//	status, err := client.CheckSourceCodeVerificationStatus(ctx, guid, &CheckSourceCodeVerificationStatusOpts{
+//	    ChainID: &chainID,
+//	})
+//
+// Note:
+//   - Use the GUID returned from VerifySourceCode
+//   - Verification may take several minutes to complete
+//   - Returns status message indicating verification progress
+//   - Check periodically until verification is complete
 func (c *HTTPClient) CheckSourceCodeVerificationStatus(ctx context.Context, guid string, opts *CheckSourceCodeVerificationStatusOpts) (string, error) {
 	params := map[string]string{
 		"guid": guid,

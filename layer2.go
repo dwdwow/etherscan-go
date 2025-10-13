@@ -9,17 +9,66 @@ import (
 // Layer 2 Module
 // ============================================================================
 
-// GetPlasmaDepositsOpts contains optional parameters
+// GetPlasmaDepositsOpts contains optional parameters for GetPlasmaDeposits
 type GetPlasmaDepositsOpts struct {
-	Page            *int
-	Offset          *int
-	ChainID         *int
+	// Page number for pagination
+	// Default: 1
+	// Use this to navigate through multiple pages of results
+	Page *int
+
+	// Offset is the number of deposits per page
+	// Default: 100
+	// Use this to control how many deposits are returned per page
+	Offset *int
+
+	// ChainID specifies which blockchain network to query
+	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Note: Only applicable to Polygon (chainid=137)
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
+	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Options:
+	//   - RateLimitBlock: Wait until a token is available (default)
+	//   - RateLimitRaise: Return an error when rate limit is exceeded
+	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
 }
 
 // GetPlasmaDeposits returns a list of Plasma Deposits received by an address
 //
-// Note: Only applicable to Polygon (chainid=137)
+// This endpoint returns a list of Plasma deposits received by an address on Polygon.
+// Plasma deposits are part of Polygon's Layer 2 scaling solution, where users can
+// deposit funds from Ethereum mainnet to Polygon.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - address: Address to get Plasma deposits for
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - []RespPlasmaDeposit: List of Plasma deposits with detailed information
+//   - error: Error if the request fails
+//
+// Example:
+//
+//	// Get Plasma deposits for an address
+//	addr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+//	deposits, err := client.GetPlasmaDeposits(ctx, addr, nil)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+//	for _, deposit := range deposits {
+//	    fmt.Printf("Deposit Hash: %s\n", deposit.Hash)
+//	    fmt.Printf("Amount: %s\n", deposit.Amount)
+//	    fmt.Printf("Block Number: %s\n", deposit.BlockNumber)
+//	}
+//
+// Note:
+//   - Only applicable to Polygon (chainid=137)
+//   - Returns empty slice if no deposits found
+//   - Useful for tracking Layer 2 deposits
 func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts *GetPlasmaDepositsOpts) ([]RespPlasmaDeposit, error) {
 	params := map[string]string{
 		"address":   address,
@@ -63,19 +112,52 @@ func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts
 	return result, nil
 }
 
-// GetDepositTxsOpts contains optional parameters
+// GetDepositTxsOpts contains optional parameters for GetDepositTxs
 type GetDepositTxsOpts struct {
-	Page            *int
-	Offset          *int
-	Sort            *string
-	ChainID         *int
+	// Page number for pagination
+	// Default: 1
+	Page *int
+
+	// Offset is the number of deposits per page
+	// Default: 1000
+	Offset *int
+
+	// Sort order for the results
+	// Options: "asc" or "desc" (default: "desc")
+	Sort *string
+
+	// ChainID specifies which blockchain network to query
+	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
+	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
 }
 
 // GetDepositTxs returns a list of deposits in ETH or ERC20 tokens from Ethereum to L2
 //
-// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
-// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
+// This endpoint returns a list of deposits from Ethereum mainnet to Layer 2 networks.
+// This is useful for tracking cross-chain deposits and Layer 2 activity.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - address: Address to get deposit transactions for
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - []RespDepositTx: List of deposit transactions
+//   - error: Error if the request fails
+//
+// Example:
+//
+//	// Get deposit transactions for an address
+//	addr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+//	deposits, err := client.GetDepositTxs(ctx, addr, nil)
+//
+// Note:
+//   - Only applicable to Arbitrum Stack and Optimism Stack networks
+//   - Returns empty slice if no deposits found
 func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *GetDepositTxsOpts) ([]RespDepositTx, error) {
 	params := map[string]string{
 		"address": address,
@@ -120,19 +202,52 @@ func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *Ge
 	return result, nil
 }
 
-// GetWithdrawalTxsOpts contains optional parameters
+// GetWithdrawalTxsOpts contains optional parameters for GetWithdrawalTxs
 type GetWithdrawalTxsOpts struct {
-	Page            *int
-	Offset          *int
-	Sort            *string
-	ChainID         *int
+	// Page number for pagination
+	// Default: 1
+	Page *int
+
+	// Offset is the number of withdrawals per page
+	// Default: 1000
+	Offset *int
+
+	// Sort order for the results
+	// Options: "asc" or "desc" (default: "desc")
+	Sort *string
+
+	// ChainID specifies which blockchain network to query
+	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
+	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
+	ChainID *int
+
+	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded *RateLimitBehavior
 }
 
 // GetWithdrawalTxs returns a list of withdrawals in ETH or ERC20 tokens from L2 to Ethereum
 //
-// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
-// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
+// This endpoint returns a list of withdrawals from Layer 2 networks back to Ethereum mainnet.
+// This is useful for tracking cross-chain withdrawals and Layer 2 activity.
+//
+// Args:
+//   - ctx: Context for request cancellation and timeout
+//   - address: Address to get withdrawal transactions for
+//   - opts: Optional parameters (can be nil)
+//
+// Returns:
+//   - []RespWithdrawalTx: List of withdrawal transactions
+//   - error: Error if the request fails
+//
+// Example:
+//
+//	// Get withdrawal transactions for an address
+//	addr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+//	withdrawals, err := client.GetWithdrawalTxs(ctx, addr, nil)
+//
+// Note:
+//   - Only applicable to Arbitrum Stack and Optimism Stack networks
+//   - Returns empty slice if no withdrawals found
 func (c *HTTPClient) GetWithdrawalTxs(ctx context.Context, address string, opts *GetWithdrawalTxsOpts) ([]RespWithdrawalTx, error) {
 	params := map[string]string{
 		"address": address,
