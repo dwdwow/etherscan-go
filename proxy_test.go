@@ -12,7 +12,7 @@ func TestRpcEthBlockNumber(t *testing.T) {
 	defer cancel()
 
 	blockNumber, err := config.Client.RpcEthBlockNumber(ctx, &RpcEthBlockNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthBlockNumber failed: %v", err)
@@ -36,7 +36,7 @@ func TestRpcEthBlockByNumber(t *testing.T) {
 
 	// Test with latest block
 	block, err := config.Client.RpcEthBlockByNumber(ctx, "latest", &RpcEthBlockByNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthBlockByNumber failed: %v", err)
@@ -65,7 +65,7 @@ func TestRpcEthBlockByNumberWithFullTxs(t *testing.T) {
 
 	// Test with latest block, returning only transaction hashes
 	block, err := config.Client.RpcEthBlockByNumberWithFullTxs(ctx, "latest", &RpcEthBlockByNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthBlockByNumber with transaction hashes failed: %v", err)
@@ -91,7 +91,7 @@ func TestRpcEthUncleByBlockNumberAndIndex(t *testing.T) {
 
 	// Test with a recent block that might have uncles
 	block, err := config.Client.RpcEthUncleByBlockNumberAndIndex(ctx, "latest", "0x0", &RpcEthUncleByBlockNumberAndIndexOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthUncleByBlockNumberAndIndex failed: %v", err)
@@ -116,7 +116,7 @@ func TestRpcEthBlockTransactionCountByNumber(t *testing.T) {
 	defer cancel()
 
 	count, err := config.Client.RpcEthBlockTransactionCountByNumber(ctx, "latest", &RpcEthBlockTransactionCountByNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthBlockTransactionCountByNumber failed: %v", err)
@@ -140,7 +140,7 @@ func TestRpcEthTransactionByHash(t *testing.T) {
 
 	// Test with a known transaction hash
 	tx, err := config.Client.RpcEthTransactionByHash(ctx, TestTransactions.SampleTxHash, &RpcEthTransactionByHashOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthTransactionByHash failed: %v", err)
@@ -169,7 +169,7 @@ func TestRpcEthTransactionByBlockNumberAndIndex(t *testing.T) {
 
 	// Test with latest block and first transaction
 	tx, err := config.Client.RpcEthTransactionByBlockNumberAndIndex(ctx, "latest", "0x0", &RpcEthTransactionByBlockNumberAndIndexOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthTransactionByBlockNumberAndIndex failed: %v", err)
@@ -194,7 +194,7 @@ func TestRpcEthTransactionCount(t *testing.T) {
 	defer cancel()
 
 	count, err := config.Client.RpcEthTransactionCount(ctx, TestAddresses.VitalikButerin, "latest", &RpcEthTransactionCountOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthTransactionCount failed: %v", err)
@@ -218,7 +218,7 @@ func TestRpcEthTransactionReceipt(t *testing.T) {
 
 	// Test with a known transaction hash
 	receipt, err := config.Client.RpcEthTransactionReceipt(ctx, TestTransactions.SampleTxHash, &RpcEthTransactionReceiptOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthTransactionReceipt failed: %v", err)
@@ -250,7 +250,7 @@ func TestRpcEthCall(t *testing.T) {
 	// Vitalik's address as parameter
 	callData := "0x70a08231000000000000000000000000" + TestAddresses.VitalikButerin[2:] // Remove 0x prefix
 	result, err := config.Client.RpcEthCall(ctx, TestAddresses.USDTContract, callData, &RpcEthCallOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthCall failed: %v", err)
@@ -274,7 +274,7 @@ func TestRpcEthGetCode(t *testing.T) {
 
 	// Test with USDT contract
 	code, err := config.Client.RpcEthGetCode(ctx, TestAddresses.USDTContract, &RpcEthGetCodeOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthGetCode failed: %v", err)
@@ -298,7 +298,7 @@ func TestRpcEthGetStorageAt(t *testing.T) {
 
 	// Test with USDT contract and storage slot 0
 	storage, err := config.Client.RpcEthGetStorageAt(ctx, TestAddresses.USDTContract, "0x0", &RpcEthGetStorageAtOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthGetStorageAt failed: %v", err)
@@ -321,7 +321,7 @@ func TestRpcEthGetGasPrice(t *testing.T) {
 	defer cancel()
 
 	gasPrice, err := config.Client.RpcEthGetGasPrice(ctx, &RpcEthGetGasPriceOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthGetGasPrice failed: %v", err)
@@ -345,8 +345,8 @@ func TestRpcEthEstimateGas(t *testing.T) {
 
 	// Test with a simple transfer call
 	estimate, err := config.Client.RpcEthEstimateGas(ctx, TestAddresses.VitalikButerin, "0x", &RpcEthEstimateGasOpts{
-		Value:   &[]string{"0x0"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Value:   "0x0",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("RpcEthEstimateGas failed: %v", err)

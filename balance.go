@@ -10,24 +10,25 @@ import (
 // GetEthBalanceOpts contains optional parameters for GetEthBalance
 type GetEthBalanceOpts struct {
 	// Tag specifies the block parameter to get balance at
+	// Default: "latest"
 	// Options:
-	//   - "latest" (default): Get balance at the most recent block
+	//   - "latest": Get balance at the most recent block (default)
 	//   - "earliest": Get balance at the earliest block
 	//   - "pending": Get balance at the pending block
-	Tag *string
+	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetEthBalance returns the Ether balance of a given address
@@ -72,25 +73,23 @@ type GetEthBalanceOpts struct {
 //   - For addresses with no balance, returns "0"
 //   - This endpoint is not rate limited for free tier users
 func (c *HTTPClient) GetEthBalance(ctx context.Context, address string, opts *GetEthBalanceOpts) (string, error) {
-	params := map[string]string{"address": address}
-
-	if opts != nil {
-		if opts.Tag != nil {
-			params["tag"] = *opts.Tag
-		} else {
-			params["tag"] = "latest"
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
-	} else {
-		params["tag"] = "latest"
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
 	}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil && opts.OnLimitExceeded != nil {
-		onLimitExceeded = opts.OnLimitExceeded
+	params := map[string]string{
+		"address": address,
+		"tag":     opts.Tag,
 	}
+
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -113,24 +112,25 @@ func (c *HTTPClient) GetEthBalance(ctx context.Context, address string, opts *Ge
 // GetEthBalancesOpts contains optional parameters for GetEthBalances
 type GetEthBalancesOpts struct {
 	// Tag specifies the block parameter to get balances at
+	// Default: "latest"
 	// Options:
-	//   - "latest" (default): Get balances at the most recent block
+	//   - "latest": Get balances at the most recent block (default)
 	//   - "earliest": Get balances at the earliest block
 	//   - "pending": Get balances at the pending block
-	Tag *string
+	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetEthBalances returns Ether balances for multiple addresses in a single call
@@ -181,21 +181,23 @@ type GetEthBalancesOpts struct {
 //   - This endpoint is not rate limited for free tier users
 //   - All addresses must be valid Ethereum address format
 func (c *HTTPClient) GetEthBalances(ctx context.Context, addresses []string, opts *GetEthBalancesOpts) ([]RespEthBalanceEntry, error) {
-	params := map[string]string{
-		"address": strings.Join(addresses, ","),
-		"tag":     "latest",
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
 	}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil {
-		if opts.Tag != nil {
-			params["tag"] = *opts.Tag
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
-		onLimitExceeded = opts.OnLimitExceeded
+	params := map[string]string{
+		"address": strings.Join(addresses, ","),
+		"tag":     opts.Tag,
 	}
+
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

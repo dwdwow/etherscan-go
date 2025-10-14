@@ -15,8 +15,8 @@ func TestGetDailyBlockCountRewards(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	rewards, err := config.Client.GetDailyBlockCountRewards(ctx, startDate, endDate, &GetDailyBlockCountRewardsOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyBlockCountRewards failed: %v", err)
@@ -50,8 +50,8 @@ func TestGetDailyBlockRewards(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	rewards, err := config.Client.GetDailyBlockRewards(ctx, startDate, endDate, &GetDailyBlockRewardsOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyBlockRewards failed: %v", err)
@@ -82,8 +82,8 @@ func TestGetDailyAvgBlockTime(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	times, err := config.Client.GetDailyAvgBlockTime(ctx, startDate, endDate, &GetDailyAvgBlockTimeOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAvgBlockTime failed: %v", err)
@@ -114,8 +114,8 @@ func TestGetDailyUncleBlockCountAndRewards(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	uncles, err := config.Client.GetDailyUncleBlockCountAndRewards(ctx, startDate, endDate, &GetDailyUncleBlockCountAndRewardsOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyUncleBlockCountAndRewards failed: %v", err)
@@ -146,7 +146,7 @@ func TestGetTotalEthSupply(t *testing.T) {
 	defer cancel()
 
 	supply, err := config.Client.GetTotalEthSupply(ctx, &GetTotalEthSupplyOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetTotalEthSupply failed: %v", err)
@@ -165,7 +165,7 @@ func TestGetTotalEth2Supply(t *testing.T) {
 	defer cancel()
 
 	supply, err := config.Client.GetTotalEth2Supply(ctx, &GetTotalEth2SupplyOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetTotalEth2Supply failed: %v", err)
@@ -184,7 +184,7 @@ func TestGetEthPrice(t *testing.T) {
 	defer cancel()
 
 	price, err := config.Client.GetEthPrice(ctx, &GetEthPriceOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthPrice failed: %v", err)
@@ -212,8 +212,8 @@ func TestGetEthHistoricalPrices(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	prices, err := config.Client.GetEthHistoricalPrices(ctx, startDate, endDate, &GetEthHistoricalPricesOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthHistoricalPrices failed: %v", err)
@@ -244,7 +244,7 @@ func TestGetEthereumNodesSize(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	sizes, err := config.Client.GetEthereumNodesSize(ctx, startDate, endDate, "geth", "default", "asc", &GetEthereumNodesSizeOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthereumNodesSize failed: %v", err)
@@ -272,7 +272,7 @@ func TestGetNodeCount(t *testing.T) {
 	defer cancel()
 
 	count, err := config.Client.GetNodeCount(ctx, &GetNodeCountOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetNodeCount failed: %v", err)
@@ -294,8 +294,8 @@ func TestGetDailyTxFees(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	fees, err := config.Client.GetDailyTxFees(ctx, startDate, endDate, &GetDailyTxFeesOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyTxFees failed: %v", err)
@@ -326,8 +326,8 @@ func TestGetDailyNewAddresses(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	addresses, err := config.Client.GetDailyNewAddresses(ctx, startDate, endDate, &GetDailyNewAddressesOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyNewAddresses failed: %v", err)
@@ -358,8 +358,8 @@ func TestGetDailyNetworkUtilizations(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	utilizations, err := config.Client.GetDailyNetworkUtilizations(ctx, startDate, endDate, &GetDailyNetworkUtilizationsOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyNetworkUtilizations failed: %v", err)
@@ -390,8 +390,8 @@ func TestGetDailyAvgHashrates(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	hashrates, err := config.Client.GetDailyAvgHashrates(ctx, startDate, endDate, &GetDailyAvgHashratesOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAvgHashrates failed: %v", err)
@@ -422,8 +422,8 @@ func TestGetDailyTxCounts(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	counts, err := config.Client.GetDailyTxCounts(ctx, startDate, endDate, &GetDailyTxCountsOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyTxCounts failed: %v", err)
@@ -454,8 +454,8 @@ func TestGetDailyAvgDifficulties(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	difficulties, err := config.Client.GetDailyAvgDifficulties(ctx, startDate, endDate, &GetDailyAvgDifficultiesOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAvgDifficulties failed: %v", err)

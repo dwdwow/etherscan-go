@@ -14,7 +14,7 @@ func TestGetAddressTag(t *testing.T) {
 	// Test with Vitalik's address
 	addresses := []string{TestAddresses.VitalikButerin}
 	tags, err := config.Client.GetAddressTag(ctx, addresses, &GetAddressTagOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAddressTag failed: %v", err)
@@ -41,7 +41,7 @@ func TestGetLabelMasterlist(t *testing.T) {
 	defer cancel()
 
 	labels, err := config.Client.GetLabelMasterlist(ctx, &GetLabelMasterlistOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetLabelMasterlist failed: %v", err)
@@ -134,7 +134,7 @@ func TestGetLatestCSVBatchNumber(t *testing.T) {
 	defer cancel()
 
 	batchNumbers, err := config.Client.GetLatestCSVBatchNumber(ctx, &GetLatestCSVBatchNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetLatestCSVBatchNumber failed: %v", err)
@@ -153,7 +153,7 @@ func TestCheckCreditUsage(t *testing.T) {
 	defer cancel()
 
 	usage, err := config.Client.CheckCreditUsage(ctx, &CheckCreditUsageOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("CheckCreditUsage failed: %v", err)
@@ -238,7 +238,7 @@ func TestGetAddressTagWithDifferentChain(t *testing.T) {
 	// Test with Polygon mainnet
 	addresses := []string{TestAddresses.VitalikButerin}
 	tags, err := config.Client.GetAddressTag(ctx, addresses, &GetAddressTagOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAddressTag with Polygon failed: %v", err)
@@ -258,7 +258,7 @@ func TestGetLabelMasterlistWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	labels, err := config.Client.GetLabelMasterlist(ctx, &GetLabelMasterlistOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetLabelMasterlist with Polygon failed: %v", err)
@@ -297,7 +297,7 @@ func TestCheckCreditUsageWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	usage, err := config.Client.CheckCreditUsage(ctx, &CheckCreditUsageOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("CheckCreditUsage with Polygon failed: %v", err)

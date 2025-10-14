@@ -14,25 +14,25 @@ type GetPlasmaDepositsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of deposits per page
 	// Default: 100
 	// Use this to control how many deposits are returned per page
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Note: Only applicable to Polygon (chainid=137)
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetPlasmaDeposits returns a list of Plasma Deposits received by an address
@@ -70,27 +70,36 @@ type GetPlasmaDepositsOpts struct {
 //   - Returns empty slice if no deposits found
 //   - Useful for tracking Layer 2 deposits
 func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts *GetPlasmaDepositsOpts) ([]RespPlasmaDeposit, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"address":   address,
 		"blocktype": "blocks",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		} else {
 			params["chainid"] = "137" // Default to Polygon
 		}
-		onLimitExceeded = opts.OnLimitExceeded
 	} else {
 		params["chainid"] = "137"
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
 	}
 
 	data, err := c.request(requestParams{
@@ -116,23 +125,23 @@ func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts
 type GetDepositTxsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of deposits per page
 	// Default: 1000
-	Offset *int64
+	Offset int64 `default:"1000" json:"offset"`
 
 	// Sort order for the results
 	// Options: "asc" or "desc" (default: "desc")
-	Sort *string
+	Sort string `default:"desc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetDepositTxs returns a list of deposits in ETH or ERC20 tokens from Ethereum to L2
@@ -159,6 +168,11 @@ type GetDepositTxsOpts struct {
 //   - Only applicable to Arbitrum Stack and Optimism Stack networks
 //   - Returns empty slice if no deposits found
 func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *GetDepositTxsOpts) ([]RespDepositTx, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"address": address,
 		"page":    "1",
@@ -166,20 +180,24 @@ func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *Ge
 		"sort":    "desc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
+		if opts.Sort != "" {
+			params["sort"] = opts.Sort
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -206,23 +224,23 @@ func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *Ge
 type GetWithdrawalTxsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of withdrawals per page
 	// Default: 1000
-	Offset *int64
+	Offset int64 `default:"1000" json:"offset"`
 
 	// Sort order for the results
 	// Options: "asc" or "desc" (default: "desc")
-	Sort *string
+	Sort string `default:"desc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetWithdrawalTxs returns a list of withdrawals in ETH or ERC20 tokens from L2 to Ethereum
@@ -249,6 +267,11 @@ type GetWithdrawalTxsOpts struct {
 //   - Only applicable to Arbitrum Stack and Optimism Stack networks
 //   - Returns empty slice if no withdrawals found
 func (c *HTTPClient) GetWithdrawalTxs(ctx context.Context, address string, opts *GetWithdrawalTxsOpts) ([]RespWithdrawalTx, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"address": address,
 		"page":    "1",
@@ -256,20 +279,24 @@ func (c *HTTPClient) GetWithdrawalTxs(ctx context.Context, address string, opts 
 		"sort":    "desc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
+		if opts.Sort != "" {
+			params["sort"] = opts.Sort
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 

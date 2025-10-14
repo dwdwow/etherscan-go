@@ -233,7 +233,7 @@ type requestParams struct {
 	method          string // "GET" or "POST"
 	noFoundReturn   any
 	baseURL         string
-	onLimitExceeded *RateLimitBehavior
+	onLimitExceeded RateLimitBehavior
 }
 
 // request is the internal method for making API requests
@@ -245,8 +245,8 @@ func (c *HTTPClient) request(params requestParams) (any, error) {
 
 	// Determine rate limit behavior
 	behavior := c.onLimitExceeded
-	if params.onLimitExceeded != nil {
-		behavior = *params.onLimitExceeded
+	if params.onLimitExceeded != "" {
+		behavior = params.onLimitExceeded
 	}
 
 	// Acquire rate limit token

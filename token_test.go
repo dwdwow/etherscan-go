@@ -13,7 +13,7 @@ func TestGetERC20TotalSupply(t *testing.T) {
 
 	// Test with USDT contract
 	supply, err := config.Client.GetERC20TotalSupply(ctx, TestAddresses.USDTContract, &GetERC20TotalSupplyOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20TotalSupply failed: %v", err)
@@ -33,7 +33,7 @@ func TestGetERC20AccountBalance(t *testing.T) {
 
 	// Test with USDT contract and Vitalik's address
 	balance, err := config.Client.GetERC20AccountBalance(ctx, TestAddresses.USDTContract, TestAddresses.VitalikButerin, &GetERC20AccountBalanceOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20AccountBalance failed: %v", err)
@@ -53,7 +53,7 @@ func TestGetERC20HistoricalTotalSupply(t *testing.T) {
 
 	// Test with USDT contract and a recent block
 	supply, err := config.Client.GetERC20HistoricalTotalSupply(ctx, TestAddresses.USDTContract, TestBlocks.RecentBlock, &GetERC20HistoricalTotalSupplyOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20HistoricalTotalSupply failed: %v", err)
@@ -73,7 +73,7 @@ func TestGetERC20HistoricalAccountBalance(t *testing.T) {
 
 	// Test with USDT contract, Vitalik's address, and a recent block
 	balance, err := config.Client.GetERC20HistoricalAccountBalance(ctx, TestAddresses.USDTContract, TestAddresses.VitalikButerin, TestBlocks.RecentBlock, &GetERC20HistoricalAccountBalanceOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20HistoricalAccountBalance failed: %v", err)
@@ -93,9 +93,9 @@ func TestGetERC20Holders(t *testing.T) {
 
 	// Test with USDT contract
 	holders, err := config.Client.GetERC20Holders(ctx, TestAddresses.USDTContract, &GetERC20HoldersOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20Holders failed: %v", err)
@@ -124,7 +124,7 @@ func TestGetERC20HolderCount(t *testing.T) {
 
 	// Test with USDT contract
 	count, err := config.Client.GetERC20HolderCount(ctx, TestAddresses.USDTContract, &GetERC20HolderCountOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20HolderCount failed: %v", err)
@@ -144,7 +144,7 @@ func TestGetTopERC20Holders(t *testing.T) {
 
 	// Test with USDT contract
 	holders, err := config.Client.GetTopERC20Holders(ctx, TestAddresses.USDTContract, 10, &GetTopERC20HoldersOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetTopERC20Holders failed: %v", err)
@@ -173,7 +173,7 @@ func TestGetTokenInfo(t *testing.T) {
 
 	// Test with USDT contract
 	info, err := config.Client.GetTokenInfo(ctx, TestAddresses.USDTContract, &GetTokenInfoOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetTokenInfo failed: %v", err)
@@ -202,9 +202,9 @@ func TestGetAccountERC20Holdings(t *testing.T) {
 
 	// Test with Vitalik's address
 	holdings, err := config.Client.GetAccountERC20Holdings(ctx, TestAddresses.VitalikButerin, &GetAccountERC20HoldingsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAccountERC20Holdings failed: %v", err)
@@ -236,9 +236,9 @@ func TestGetAccountNFTHoldings(t *testing.T) {
 
 	// Test with Vitalik's address
 	holdings, err := config.Client.GetAccountNFTHoldings(ctx, TestAddresses.VitalikButerin, &GetAccountNFTHoldingsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAccountNFTHoldings failed: %v", err)
@@ -272,9 +272,9 @@ func TestGetAccountNFTInventories(t *testing.T) {
 	// Using a popular NFT contract address (example: Bored Ape Yacht Club)
 	nftContract := "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
 	inventories, err := config.Client.GetAccountNFTInventories(ctx, TestAddresses.VitalikButerin, nftContract, &GetAccountNFTInventoriesOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAccountNFTInventories failed: %v", err)
@@ -357,7 +357,7 @@ func TestGetERC20TotalSupplyWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	supply, err := config.Client.GetERC20TotalSupply(ctx, TestAddresses.USDTContract, &GetERC20TotalSupplyOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20TotalSupply with Polygon failed: %v", err)
@@ -377,7 +377,7 @@ func TestGetERC20AccountBalanceWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	balance, err := config.Client.GetERC20AccountBalance(ctx, TestAddresses.USDTContract, TestAddresses.VitalikButerin, &GetERC20AccountBalanceOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20AccountBalance with Polygon failed: %v", err)

@@ -13,10 +13,10 @@ func TestGetERC20TokenTransfers(t *testing.T) {
 
 	// Test with address parameter
 	transfers, err := config.Client.GetERC20TokenTransfers(ctx, &GetERC20TokenTransfersOpts{
-		Address: &TestAddresses.VitalikButerin,
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Address: TestAddresses.VitalikButerin,
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC20TokenTransfers failed: %v", err)
@@ -47,10 +47,10 @@ func TestGetERC721TokenTransfers(t *testing.T) {
 
 	// Test with address parameter
 	transfers, err := config.Client.GetERC721TokenTransfers(ctx, &GetERC721TokenTransfersOpts{
-		Address: &TestAddresses.VitalikButerin,
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Address: TestAddresses.VitalikButerin,
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC721TokenTransfers failed: %v", err)
@@ -81,10 +81,10 @@ func TestGetERC1155TokenTransfers(t *testing.T) {
 
 	// Test with address parameter
 	transfers, err := config.Client.GetERC1155TokenTransfers(ctx, &GetERC1155TokenTransfersOpts{
-		Address: &TestAddresses.VitalikButerin,
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Address: TestAddresses.VitalikButerin,
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetERC1155TokenTransfers failed: %v", err)
@@ -114,7 +114,7 @@ func TestGetAddressFundedBy(t *testing.T) {
 	defer cancel()
 
 	funding, err := config.Client.GetAddressFundedBy(ctx, TestAddresses.VitalikButerin, &GetAddressFundedByOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetAddressFundedBy failed: %v", err)
@@ -139,10 +139,10 @@ func TestGetBlocksValidatedByAddress(t *testing.T) {
 	defer cancel()
 
 	blocks, err := config.Client.GetBlocksValidatedByAddress(ctx, TestAddresses.VitalikButerin, &GetBlocksValidatedByAddressOpts{
-		BlockType: &[]string{"blocks"}[0],
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		BlockType: "blocks",
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetBlocksValidatedByAddress failed: %v", err)
@@ -169,12 +169,12 @@ func TestGetBeaconChainWithdrawals(t *testing.T) {
 	defer cancel()
 
 	withdrawals, err := config.Client.GetBeaconChainWithdrawals(ctx, TestAddresses.VitalikButerin, &GetBeaconChainWithdrawalsOpts{
-		StartBlock: &[]int64{0}[0],
-		EndBlock:   &[]int64{999999999999}[0],
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"asc"}[0],
-		ChainID:    &[]int64{1}[0], // Ethereum mainnet
+		StartBlock: 0,
+		EndBlock:   999999999999,
+		Page:       1,
+		Offset:     10,
+		Sort:       "asc",
+		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetBeaconChainWithdrawals failed: %v", err)
@@ -201,7 +201,7 @@ func TestGetEthBalanceByBlockNumber(t *testing.T) {
 	defer cancel()
 
 	balance, err := config.Client.GetEthBalanceByBlockNumber(ctx, TestAddresses.VitalikButerin, TestBlocks.RecentBlock, &GetEthBalanceByBlockNumberOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalanceByBlockNumber failed: %v", err)
@@ -221,7 +221,7 @@ func TestGetContractCreatorAndCreation(t *testing.T) {
 
 	contractAddresses := []string{TestAddresses.USDTContract}
 	creations, err := config.Client.GetContractCreatorAndCreation(ctx, contractAddresses, &GetContractCreatorAndCreationOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractCreatorAndCreation failed: %v", err)

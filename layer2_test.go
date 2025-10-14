@@ -13,9 +13,9 @@ func TestGetPlasmaDeposits(t *testing.T) {
 
 	// Test with a known address
 	deposits, err := config.Client.GetPlasmaDeposits(ctx, TestAddresses.VitalikButerin, &GetPlasmaDepositsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetPlasmaDeposits failed: %v", err)
@@ -46,9 +46,9 @@ func TestGetDepositTxs(t *testing.T) {
 
 	// Test with a known address
 	deposits, err := config.Client.GetDepositTxs(ctx, TestAddresses.VitalikButerin, &GetDepositTxsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDepositTxs failed: %v", err)
@@ -79,9 +79,9 @@ func TestGetWithdrawalTxs(t *testing.T) {
 
 	// Test with a known address
 	withdrawals, err := config.Client.GetWithdrawalTxs(ctx, TestAddresses.VitalikButerin, &GetWithdrawalTxsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetWithdrawalTxs failed: %v", err)
@@ -166,9 +166,9 @@ func TestGetPlasmaDepositsWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	deposits, err := config.Client.GetPlasmaDeposits(ctx, TestAddresses.VitalikButerin, &GetPlasmaDepositsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetPlasmaDeposits with Polygon failed: %v", err)
@@ -188,9 +188,9 @@ func TestGetDepositTxsWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	deposits, err := config.Client.GetDepositTxs(ctx, TestAddresses.VitalikButerin, &GetDepositTxsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDepositTxs with Polygon failed: %v", err)
@@ -210,9 +210,9 @@ func TestGetWithdrawalTxsWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	withdrawals, err := config.Client.GetWithdrawalTxs(ctx, TestAddresses.VitalikButerin, &GetWithdrawalTxsOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		Page:    1,
+		Offset:  10,
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetWithdrawalTxs with Polygon failed: %v", err)

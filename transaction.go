@@ -10,42 +10,43 @@ type GetNormalTransactionsOpts struct {
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
-	StartBlock *int64
+	StartBlock int64 `default:"0" json:"startblock"`
 
 	// EndBlock is the ending block number to search to
 	// Default: 999999999999 (latest block)
 	// Use this to limit the search range and improve performance
-	EndBlock *int64
+	EndBlock int64 `default:"999999999999" json:"endblock"`
 
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of transactions per page
 	// Default: 100
 	// Maximum: 10000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// Sort order for the results
+	// Default: "asc"
 	// Options:
-	//   - "asc" (default): Sort by block number in ascending order (oldest first)
+	//   - "asc": Sort by block number in ascending order (oldest first)
 	//   - "desc": Sort by block number in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetNormalTransactions returns list of 'Normal' transactions by address
@@ -102,35 +103,28 @@ type GetNormalTransactionsOpts struct {
 //   - Internal transactions (contract-to-contract) are not included (use GetInternalTransactionsByAddress)
 //   - All values are returned as strings in Wei
 func (c *HTTPClient) GetNormalTransactions(ctx context.Context, address string, opts *GetNormalTransactionsOpts) ([]RespNormalTx, error) {
-	params := map[string]string{
-		"address":    address,
-		"startblock": "0",
-		"endblock":   "999999999999",
-		"page":       "1",
-		"offset":     "100",
-		"sort":       "asc",
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	params := map[string]string{
+		"address":    address,
+		"startblock": strconv.FormatInt(opts.StartBlock, 10),
+		"endblock":   strconv.FormatInt(opts.EndBlock, 10),
+		"page":       strconv.FormatInt(opts.Page, 10),
+		"offset":     strconv.FormatInt(opts.Offset, 10),
+		"sort":       opts.Sort,
+	}
+
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.StartBlock != nil {
-			params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
-		}
-		if opts.EndBlock != nil {
-			params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
-		}
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
-		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -158,26 +152,26 @@ type GetBridgeTransactionsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of transactions per page
 	// Default: 100
 	// Maximum: 10000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Note: This endpoint is only applicable to specific chains
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetBridgeTransactions returns bridge transactions for an address
@@ -231,17 +225,26 @@ func (c *HTTPClient) GetBridgeTransactions(ctx context.Context, address string, 
 		"offset":  "100",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -271,17 +274,17 @@ func (c *HTTPClient) GetBridgeTransactions(ctx context.Context, address string, 
 // GetContractExecutionStatusOpts contains optional parameters for GetContractExecutionStatus
 type GetContractExecutionStatusOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetContractExecutionStatus returns the status code of a contract execution
@@ -330,11 +333,18 @@ func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txHash stri
 		"txhash": txHash,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -360,17 +370,17 @@ func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txHash stri
 // GetTransactionReceiptStatusOpts contains optional parameters for GetTransactionReceiptStatus
 type GetTransactionReceiptStatusOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetTransactionReceiptStatus returns the status code of a transaction execution
@@ -419,11 +429,18 @@ func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txHash str
 		"txhash": txHash,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -455,42 +472,42 @@ type GetInternalTransactionsByAddressOpts struct {
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
-	StartBlock *int64
+	StartBlock int64 `default:"0" json:"startblock"`
 
 	// EndBlock is the ending block number to search to
 	// Default: 999999999999 (latest block)
 	// Use this to limit the search range and improve performance
-	EndBlock *int64
+	EndBlock int64 `default:"999999999999" json:"endblock"`
 
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of transactions per page
 	// Default: 100
 	// Maximum: 10000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// Sort order for the results
 	// Options:
 	//   - "asc" (default): Sort by block number in ascending order (oldest first)
 	//   - "desc": Sort by block number in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetInternalTransactionsByAddress returns list of 'Internal' transactions by address
@@ -557,26 +574,35 @@ func (c *HTTPClient) GetInternalTransactionsByAddress(ctx context.Context, addre
 		"sort":       "asc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.StartBlock != nil {
-			params["startblock"] = strconv.FormatInt(*opts.StartBlock, 10)
+		if opts.StartBlock != 0 {
+			params["startblock"] = strconv.FormatInt(opts.StartBlock, 10)
 		}
-		if opts.EndBlock != nil {
-			params["endblock"] = strconv.FormatInt(*opts.EndBlock, 10)
+		if opts.EndBlock != 999999999999 {
+			params["endblock"] = strconv.FormatInt(opts.EndBlock, 10)
 		}
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
+		if opts.Sort != "" {
+			params["sort"] = opts.Sort
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -602,17 +628,17 @@ func (c *HTTPClient) GetInternalTransactionsByAddress(ctx context.Context, addre
 // GetInternalTransactionsByHashOpts contains optional parameters for GetInternalTransactionsByHash
 type GetInternalTransactionsByHashOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetInternalTransactionsByHash returns list of internal transactions by transaction hash
@@ -661,11 +687,18 @@ func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txHash s
 		"txhash": txHash,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -693,32 +726,32 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of transactions per page
 	// Default: 100
 	// Maximum: 10000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// Sort order for the results
 	// Options:
 	//   - "asc" (default): Sort by block number in ascending order (oldest first)
 	//   - "desc": Sort by block number in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetInternalTransactionsByBlockRange returns list of internal transactions within a block range
@@ -776,20 +809,29 @@ func (c *HTTPClient) GetInternalTransactionsByBlockRange(ctx context.Context, st
 		"sort":       "asc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
+		if opts.Sort != "" {
+			params["sort"] = opts.Sort
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 

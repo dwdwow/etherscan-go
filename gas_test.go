@@ -14,7 +14,7 @@ func TestGetConfirmationTimeEstimate(t *testing.T) {
 	// Test with a reasonable gas price (20 Gwei)
 	gasPrice := int64(20000000000) // 20 Gwei in wei
 	estimate, err := config.Client.GetConfirmationTimeEstimate(ctx, gasPrice, &GetConfirmationTimeEstimateOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetConfirmationTimeEstimate failed: %v", err)
@@ -33,7 +33,7 @@ func TestGetGasOracle(t *testing.T) {
 	defer cancel()
 
 	oracle, err := config.Client.GetGasOracle(ctx, &GetGasOracleOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetGasOracle failed: %v", err)
@@ -64,8 +64,8 @@ func TestGetDailyAverageGasLimit(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	limits, err := config.Client.GetDailyAverageGasLimit(ctx, startDate, endDate, &GetDailyAverageGasLimitOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAverageGasLimit failed: %v", err)
@@ -96,8 +96,8 @@ func TestGetDailyTotalGasUsed(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	gasUsed, err := config.Client.GetDailyTotalGasUsed(ctx, startDate, endDate, &GetDailyTotalGasUsedOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyTotalGasUsed failed: %v", err)
@@ -128,8 +128,8 @@ func TestGetDailyAverageGasPrice(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	prices, err := config.Client.GetDailyAverageGasPrice(ctx, startDate, endDate, &GetDailyAverageGasPriceOpts{
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAverageGasPrice failed: %v", err)
@@ -197,8 +197,8 @@ func TestGetDailyAverageGasLimitWithDescSort(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	limits, err := config.Client.GetDailyAverageGasLimit(ctx, startDate, endDate, &GetDailyAverageGasLimitOpts{
-		Sort:    &[]string{"desc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "desc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAverageGasLimit with desc sort failed: %v", err)
@@ -220,8 +220,8 @@ func TestGetDailyTotalGasUsedWithDescSort(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	gasUsed, err := config.Client.GetDailyTotalGasUsed(ctx, startDate, endDate, &GetDailyTotalGasUsedOpts{
-		Sort:    &[]string{"desc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "desc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyTotalGasUsed with desc sort failed: %v", err)
@@ -243,8 +243,8 @@ func TestGetDailyAverageGasPriceWithDescSort(t *testing.T) {
 	startDate := "2023-01-01"
 	endDate := "2023-01-07"
 	prices, err := config.Client.GetDailyAverageGasPrice(ctx, startDate, endDate, &GetDailyAverageGasPriceOpts{
-		Sort:    &[]string{"desc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Sort:    "desc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetDailyAverageGasPrice with desc sort failed: %v", err)

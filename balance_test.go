@@ -13,8 +13,8 @@ func TestGetEthBalance(t *testing.T) {
 
 	// Test single address balance
 	balance, err := config.Client.GetEthBalance(ctx, TestAddresses.VitalikButerin, &GetEthBalanceOpts{
-		Tag:     &[]string{"latest"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Tag:     "latest",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalance failed: %v", err)
@@ -40,8 +40,8 @@ func TestGetEthBalances(t *testing.T) {
 	}
 
 	balances, err := config.Client.GetEthBalances(ctx, addresses, &GetEthBalancesOpts{
-		Tag:     &[]string{"latest"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Tag:     "latest",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalances failed: %v", err)
@@ -70,8 +70,8 @@ func TestGetEthBalanceWithPendingTag(t *testing.T) {
 
 	// Test with pending tag
 	balance, err := config.Client.GetEthBalance(ctx, TestAddresses.VitalikButerin, &GetEthBalanceOpts{
-		Tag:     &[]string{"pending"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Tag:     "pending",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalance with pending tag failed: %v", err)
@@ -91,8 +91,8 @@ func TestGetEthBalanceWithLatestTag(t *testing.T) {
 
 	// Test with earliest tag
 	balance, err := config.Client.GetEthBalance(ctx, TestAddresses.VitalikButerin, &GetEthBalanceOpts{
-		Tag:     &[]string{"latest"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Tag:     "latest",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalance with latest tag failed: %v", err)
@@ -113,8 +113,8 @@ func TestGetEthBalancesWithDifferentChain(t *testing.T) {
 	// Test with Polygon mainnet
 	addresses := []string{TestAddresses.VitalikButerin}
 	balances, err := config.Client.GetEthBalances(ctx, addresses, &GetEthBalancesOpts{
-		Tag:     &[]string{"latest"}[0],
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		Tag:     "latest",
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEthBalances with Polygon failed: %v", err)

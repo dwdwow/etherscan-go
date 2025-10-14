@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -15,17 +16,17 @@ import (
 // GetAddressTagOpts contains optional parameters for GetAddressTag
 type GetAddressTagOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetAddressTag returns address name tag and metadata
@@ -73,6 +74,11 @@ type GetAddressTagOpts struct {
 //   - Returns empty slice if no tags found
 //   - Useful for identifying known addresses and their purposes
 func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts *GetAddressTagOpts) ([]RespAddressTag, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if len(addresses) > 100 {
 		return nil, fmt.Errorf("maximum 100 addresses allowed")
 	}
@@ -81,13 +87,12 @@ func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts
 		"address": strings.Join(addresses, ","),
 	}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = fmt.Sprintf("%d", *opts.ChainID)
-		}
-		onLimitExceeded = opts.OnLimitExceeded
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -111,17 +116,17 @@ func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts
 // GetLabelMasterlistOpts contains optional parameters for GetLabelMasterlist
 type GetLabelMasterlistOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetLabelMasterlist returns the masterlist of available label groupings
@@ -162,15 +167,19 @@ type GetLabelMasterlistOpts struct {
 //   - Labels can be used with ExportSpecificLabelCSV to filter addresses
 //   - Useful for discovering available address categories
 func (c *HTTPClient) GetLabelMasterlist(ctx context.Context, opts *GetLabelMasterlistOpts) ([]RespLabelMaster, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = fmt.Sprintf("%d", *opts.ChainID)
-		}
-		onLimitExceeded = opts.OnLimitExceeded
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -344,17 +353,17 @@ func (c *HTTPClient) ExportAllAddressTagsCSV(ctx context.Context) ([]byte, error
 // GetLatestCSVBatchNumberOpts contains optional parameters for GetLatestCSVBatchNumber
 type GetLatestCSVBatchNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetLatestCSVBatchNumber gets the latest running number for CSV Export
@@ -386,15 +395,19 @@ type GetLatestCSVBatchNumberOpts struct {
 //   - Returns empty slice if no batch info found
 //   - Useful for tracking CSV export versions
 func (c *HTTPClient) GetLatestCSVBatchNumber(ctx context.Context, opts *GetLatestCSVBatchNumberOpts) ([]RespLatestCSVBatchNumber, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = fmt.Sprintf("%d", *opts.ChainID)
-		}
-		onLimitExceeded = opts.OnLimitExceeded
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -422,17 +435,17 @@ func (c *HTTPClient) GetLatestCSVBatchNumber(ctx context.Context, opts *GetLates
 // CheckCreditUsageOpts contains optional parameters for CheckCreditUsage
 type CheckCreditUsageOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // CheckCreditUsage returns information about API credit usage and limits
@@ -475,15 +488,19 @@ type CheckCreditUsageOpts struct {
 //   - Useful for monitoring API usage and limits
 //   - Helps prevent exceeding plan limits
 func (c *HTTPClient) CheckCreditUsage(ctx context.Context, opts *CheckCreditUsageOpts) (*RespCreditUsage, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
-	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = fmt.Sprintf("%d", *opts.ChainID)
-		}
-		onLimitExceeded = opts.OnLimitExceeded
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
+
+	// Handle rate limiting
+	onLimitExceeded := opts.OnLimitExceeded
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

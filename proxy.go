@@ -12,12 +12,12 @@ import (
 // RpcEthBlockNumberOpts contains optional parameters for RpcEthBlockNumber
 type RpcEthBlockNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthBlockNumber returns the number of the most recent block
@@ -50,13 +50,20 @@ type RpcEthBlockNumberOpts struct {
 //   - Returns block number in hex format with "0x" prefix
 //   - Equivalent to eth_blockNumber JSON-RPC method
 func (c *HTTPClient) RpcEthBlockNumber(ctx context.Context, opts *RpcEthBlockNumberOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -82,12 +89,12 @@ func (c *HTTPClient) RpcEthBlockNumber(ctx context.Context, opts *RpcEthBlockNum
 // RpcEthBlockByNumberOpts contains optional parameters for RpcEthBlockByNumber
 type RpcEthBlockByNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthBlockByNumber returns information about a block by block number
@@ -130,11 +137,18 @@ func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, opts *
 		"boolean": "false",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -190,11 +204,18 @@ func (c *HTTPClient) RpcEthBlockByNumberWithFullTxs(ctx context.Context, tag str
 		"boolean": "true",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -220,12 +241,12 @@ func (c *HTTPClient) RpcEthBlockByNumberWithFullTxs(ctx context.Context, tag str
 // RpcEthUncleByBlockNumberAndIndexOpts contains optional parameters for RpcEthUncleByBlockNumberAndIndex
 type RpcEthUncleByBlockNumberAndIndexOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthUncleByBlockNumberAndIndex returns information about an uncle block by block number and index
@@ -265,11 +286,18 @@ func (c *HTTPClient) RpcEthUncleByBlockNumberAndIndex(ctx context.Context, tag, 
 		"index": index,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -295,12 +323,12 @@ func (c *HTTPClient) RpcEthUncleByBlockNumberAndIndex(ctx context.Context, tag, 
 // RpcEthBlockTransactionCountByNumberOpts contains optional parameters for RpcEthBlockTransactionCountByNumber
 type RpcEthBlockTransactionCountByNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthBlockTransactionCountByNumber returns the number of transactions in a block by block number
@@ -335,15 +363,22 @@ type RpcEthBlockTransactionCountByNumberOpts struct {
 //   - Equivalent to eth_getBlockTransactionCountByNumber JSON-RPC method
 //   - Returns count in hex format with "0x" prefix
 func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, tag string, opts *RpcEthBlockTransactionCountByNumberOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"tag": tag,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -369,12 +404,12 @@ func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, ta
 // RpcEthTransactionByHashOpts contains optional parameters for RpcEthTransactionByHash
 type RpcEthTransactionByHashOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthTransactionByHash returns information about a transaction by its hash
@@ -416,11 +451,18 @@ func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string,
 		"txhash": txHash,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -446,12 +488,12 @@ func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string,
 // RpcEthTransactionByBlockNumberAndIndexOpts contains optional parameters for RpcEthTransactionByBlockNumberAndIndex
 type RpcEthTransactionByBlockNumberAndIndexOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthTransactionByBlockNumberAndIndex returns information about a transaction by block number and transaction index position
@@ -494,11 +536,18 @@ func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context,
 		"index": index,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -524,12 +573,12 @@ func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context,
 // RpcEthTransactionCountOpts contains optional parameters for RpcEthTransactionCount
 type RpcEthTransactionCountOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthTransactionCount returns the number of transactions performed by an address
@@ -567,16 +616,23 @@ type RpcEthTransactionCountOpts struct {
 //   - Returns nonce in hex format with "0x" prefix
 //   - Nonce represents the number of transactions sent from this address
 func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag string, opts *RpcEthTransactionCountOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"address": address,
 		"tag":     tag,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -602,12 +658,12 @@ func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag st
 // RpcEthSendRawTransactionOpts contains optional parameters for RpcEthSendRawTransaction
 type RpcEthSendRawTransactionOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthSendRawTransaction submits a pre-signed transaction for broadcast to the Ethereum network
@@ -641,15 +697,22 @@ type RpcEthSendRawTransactionOpts struct {
 //   - For long hex strings, request is automatically sent as POST
 //   - Returns transaction hash if successful
 func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, opts *RpcEthSendRawTransactionOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"hex": hex,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -676,12 +739,12 @@ func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, o
 // RpcEthTransactionReceiptOpts contains optional parameters for RpcEthTransactionReceipt
 type RpcEthTransactionReceiptOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthTransactionReceipt returns the receipt of a transaction by transaction hash
@@ -723,11 +786,18 @@ func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txHash string
 		"txhash": txHash,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -755,15 +825,15 @@ type RpcEthCallOpts struct {
 	// Tag specifies the block parameter for the call
 	// Options: "latest", "earliest", "pending", or block number in hex
 	// Default: "latest"
-	Tag *string
+	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthCall executes a new message call immediately without creating a transaction on the block chain
@@ -810,20 +880,27 @@ type RpcEthCallOpts struct {
 //   - Returns result in hex format
 //   - Useful for calling view/pure functions on smart contracts
 func (c *HTTPClient) RpcEthCall(ctx context.Context, to, data string, opts *RpcEthCallOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"to":   to,
 		"data": data,
 		"tag":  "latest",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.Tag != "" {
+		params["tag"] = opts.Tag
+	}
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Tag != nil {
-			params["tag"] = *opts.Tag
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -851,15 +928,15 @@ type RpcEthGetCodeOpts struct {
 	// Tag specifies the block parameter for the call
 	// Options: "latest", "earliest", "pending", or block number in hex
 	// Default: "latest"
-	Tag *string
+	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthGetCode returns code at a given address
@@ -902,14 +979,21 @@ func (c *HTTPClient) RpcEthGetCode(ctx context.Context, address string, opts *Rp
 		"tag":     "latest",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
+	if opts.Tag != "" {
+		params["tag"] = opts.Tag
+	}
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Tag != nil {
-			params["tag"] = *opts.Tag
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -937,15 +1021,15 @@ type RpcEthGetStorageAtOpts struct {
 	// Tag specifies the block parameter for the call
 	// Options: "latest", "earliest", "pending", or block number in hex
 	// Default: "latest"
-	Tag *string
+	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthGetStorageAt returns the value from a storage position at a given address
@@ -986,14 +1070,21 @@ func (c *HTTPClient) RpcEthGetStorageAt(ctx context.Context, address, position s
 		"tag":      "latest",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
+	if opts.Tag != "" {
+		params["tag"] = opts.Tag
+	}
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Tag != nil {
-			params["tag"] = *opts.Tag
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -1019,12 +1110,12 @@ func (c *HTTPClient) RpcEthGetStorageAt(ctx context.Context, address, position s
 // RpcEthGetGasPriceOpts contains optional parameters for RpcEthGetGasPrice
 type RpcEthGetGasPriceOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthGetGasPrice returns the current price per gas in wei
@@ -1060,13 +1151,20 @@ type RpcEthGetGasPriceOpts struct {
 //   - Returns gas price in wei as hex string
 //   - Useful for transaction gas price estimation
 func (c *HTTPClient) RpcEthGetGasPrice(ctx context.Context, opts *RpcEthGetGasPriceOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -1092,24 +1190,24 @@ func (c *HTTPClient) RpcEthGetGasPrice(ctx context.Context, opts *RpcEthGetGasPr
 // RpcEthEstimateGasOpts contains optional parameters for RpcEthEstimateGas
 type RpcEthEstimateGasOpts struct {
 	// Value is the value sent in transaction (hex string)
-	// If nil, no value is sent
-	Value *string
+	// Default: "" (no value sent)
+	Value string `default:"" json:"value"`
 
 	// Gas is the amount of gas provided for transaction (hex string)
-	// If nil, uses default gas limit
-	Gas *string
+	// Default: "" (uses default gas limit)
+	Gas string `default:"" json:"gas"`
 
 	// GasPrice is the gas price in wei (hex string)
-	// If nil, uses current network gas price
-	GasPrice *string
+	// Default: "" (uses current network gas price)
+	GasPrice string `default:"" json:"gasprice"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // RpcEthEstimateGas makes a call or transaction, which won't be added to the blockchain and returns the used gas
@@ -1155,25 +1253,32 @@ type RpcEthEstimateGasOpts struct {
 //   - Post EIP-1559: gasPrice must be higher than block's baseFeePerGas
 //   - Returns estimated gas usage in hex format
 func (c *HTTPClient) RpcEthEstimateGas(ctx context.Context, to, data string, opts *RpcEthEstimateGasOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"to":   to,
 		"data": data,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.Value != "" {
+		params["value"] = opts.Value
+	}
+	if opts.Gas != "" {
+		params["gas"] = opts.Gas
+	}
+	if opts.GasPrice != "" {
+		params["gasPrice"] = opts.GasPrice
+	}
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Value != nil {
-			params["value"] = *opts.Value
-		}
-		if opts.Gas != nil {
-			params["gas"] = *opts.Gas
-		}
-		if opts.GasPrice != nil {
-			params["gasPrice"] = *opts.GasPrice
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 

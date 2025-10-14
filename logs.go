@@ -12,38 +12,38 @@ import (
 // GetEventLogsByAddressOpts contains optional parameters for GetEventLogsByAddress
 type GetEventLogsByAddressOpts struct {
 	// FromBlock is the starting block number to search for logs
-	// If nil, searches from genesis block
+	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
-	FromBlock *int64
+	FromBlock int64 `default:"0" json:"fromblock"`
 
 	// ToBlock is the ending block number to search for logs
-	// If nil, searches to latest block
+	// Default: 999999999999 (latest block)
 	// Use this to limit the search range and improve performance
-	ToBlock *int64
+	ToBlock int64 `default:"999999999999" json:"toblock"`
 
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"1000" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetEventLogsByAddress returns event logs from an address, with optional filtering by block range
@@ -98,27 +98,34 @@ type GetEventLogsByAddressOpts struct {
 //   - Topics field contains event signature and indexed parameters
 //   - Data field contains non-indexed event parameters
 func (c *HTTPClient) GetEventLogsByAddress(ctx context.Context, address string, opts *GetEventLogsByAddressOpts) ([]RespEventLogByAddress, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"address": address,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts.FromBlock != 0 {
+		params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
+	}
+	if opts.ToBlock != 999999999999 {
+		params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
+	}
+	if opts.Page != 1 {
+		params["page"] = strconv.FormatInt(opts.Page, 10)
+	}
+	if opts.Offset != 1000 {
+		params["offset"] = strconv.FormatInt(opts.Offset, 10)
+	}
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
-		}
-		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
-		}
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
-		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -146,83 +153,83 @@ type GetEventLogsByTopicsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
 	// Higher values return more results per page but may be slower
-	Offset *int64
+	Offset int64 `default:"1000" json:"offset"`
 
 	// FromBlock is the starting block number to search for logs
-	// If nil, searches from genesis block
+	// If 0, searches from genesis block
 	// Use this to limit the search range and improve performance
-	FromBlock *int64
+	FromBlock int64 `default:"0" json:"fromblock"`
 
 	// ToBlock is the ending block number to search for logs
-	// If nil, searches to latest block
+	// If 0, searches to latest block
 	// Use this to limit the search range and improve performance
-	ToBlock *int64
+	ToBlock int64 `default:"999999999999" json:"toblock"`
 
 	// Topic0 is the first topic to filter by (event signature)
 	// This is typically the keccak256 hash of the event signature
 	// Example: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef" (Transfer event)
-	Topic0 *string
+	Topic0 string `default:"" json:"topic0"`
 
 	// Topic1 is the second topic to filter by (first indexed parameter)
 	// This is typically an address or other indexed parameter
-	Topic1 *string
+	Topic1 string `default:"" json:"topic1"`
 
 	// Topic2 is the third topic to filter by (second indexed parameter)
 	// This is typically an address or other indexed parameter
-	Topic2 *string
+	Topic2 string `default:"" json:"topic2"`
 
 	// Topic3 is the fourth topic to filter by (third indexed parameter)
 	// This is typically an address or other indexed parameter
-	Topic3 *string
+	Topic3 string `default:"" json:"topic3"`
 
 	// Topic0_1_Opr is the operator between topic0 and topic1
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic0_1_Opr *string
+	Topic0_1_Opr string `default:"and" json:"topic0_1_opr"`
 
 	// Topic0_2_Opr is the operator between topic0 and topic2
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic0_2_Opr *string
+	Topic0_2_Opr string `default:"and" json:"topic0_2_opr"`
 
 	// Topic0_3_Opr is the operator between topic0 and topic3
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic0_3_Opr *string
+	Topic0_3_Opr string `default:"and" json:"topic0_3_opr"`
 
 	// Topic1_2_Opr is the operator between topic1 and topic2
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic1_2_Opr *string
+	Topic1_2_Opr string `default:"and" json:"topic1_2_opr"`
 
 	// Topic1_3_Opr is the operator between topic1 and topic3
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic1_3_Opr *string
+	Topic1_3_Opr string `default:"and" json:"topic1_3_opr"`
 
 	// Topic2_3_Opr is the operator between topic2 and topic3
 	// Options: "and" or "or"
 	// Default: "and"
-	Topic2_3_Opr *string
+	Topic2_3_Opr string `default:"and" json:"topic2_3_opr"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// If empty, uses the client's default behavior (RateLimitBlock)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetEventLogsByTopics returns event logs filtered by topics in a block range
@@ -282,58 +289,67 @@ type GetEventLogsByTopicsOpts struct {
 //   - Use "and" or "or" operators to combine topic filters
 //   - Maximum 1000 records per call
 func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLogsByTopicsOpts) ([]RespEventLogByTopics, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"page":   "1",
 		"offset": "1000",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
+		if opts.FromBlock != 0 {
+			params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
 		}
-		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
+		if opts.ToBlock != 999999999999 {
+			params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
 		}
-		if opts.Topic0 != nil {
-			params["topic0"] = *opts.Topic0
+		if opts.Topic0 != "" {
+			params["topic0"] = opts.Topic0
 		}
-		if opts.Topic1 != nil {
-			params["topic1"] = *opts.Topic1
+		if opts.Topic1 != "" {
+			params["topic1"] = opts.Topic1
 		}
-		if opts.Topic2 != nil {
-			params["topic2"] = *opts.Topic2
+		if opts.Topic2 != "" {
+			params["topic2"] = opts.Topic2
 		}
-		if opts.Topic3 != nil {
-			params["topic3"] = *opts.Topic3
+		if opts.Topic3 != "" {
+			params["topic3"] = opts.Topic3
 		}
-		if opts.Topic0_1_Opr != nil {
-			params["topic0_1_opr"] = *opts.Topic0_1_Opr
+		if opts.Topic0_1_Opr != "" {
+			params["topic0_1_opr"] = opts.Topic0_1_Opr
 		}
-		if opts.Topic0_2_Opr != nil {
-			params["topic0_2_opr"] = *opts.Topic0_2_Opr
+		if opts.Topic0_2_Opr != "" {
+			params["topic0_2_opr"] = opts.Topic0_2_Opr
 		}
-		if opts.Topic0_3_Opr != nil {
-			params["topic0_3_opr"] = *opts.Topic0_3_Opr
+		if opts.Topic0_3_Opr != "" {
+			params["topic0_3_opr"] = opts.Topic0_3_Opr
 		}
-		if opts.Topic1_2_Opr != nil {
-			params["topic1_2_opr"] = *opts.Topic1_2_Opr
+		if opts.Topic1_2_Opr != "" {
+			params["topic1_2_opr"] = opts.Topic1_2_Opr
 		}
-		if opts.Topic1_3_Opr != nil {
-			params["topic1_3_opr"] = *opts.Topic1_3_Opr
+		if opts.Topic1_3_Opr != "" {
+			params["topic1_3_opr"] = opts.Topic1_3_Opr
 		}
-		if opts.Topic2_3_Opr != nil {
-			params["topic2_3_opr"] = *opts.Topic2_3_Opr
+		if opts.Topic2_3_Opr != "" {
+			params["topic2_3_opr"] = opts.Topic2_3_Opr
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -360,64 +376,64 @@ func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLog
 type GetEventLogsByAddressFilteredByTopicsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of records per page
 	// Default: 1000
 	// Maximum: 1000
-	Offset *int64
+	Offset int64 `default:"1000" json:"offset"`
 
 	// FromBlock is the starting block number to search for logs
-	// If nil, searches from genesis block
-	FromBlock *int64
+	// If 0, searches from genesis block
+	FromBlock int64 `default:"0" json:"fromblock"`
 
 	// ToBlock is the ending block number to search for logs
-	// If nil, searches to latest block
-	ToBlock *int64
+	// If 0, searches to latest block
+	ToBlock int64 `default:"999999999999" json:"toblock"`
 
 	// Topic0 is the first topic to filter by (event signature)
-	Topic0 *string
+	Topic0 string `default:"" json:"topic0"`
 
 	// Topic1 is the second topic to filter by (first indexed parameter)
-	Topic1 *string
+	Topic1 string `default:"" json:"topic1"`
 
 	// Topic2 is the third topic to filter by (second indexed parameter)
-	Topic2 *string
+	Topic2 string `default:"" json:"topic2"`
 
 	// Topic3 is the fourth topic to filter by (third indexed parameter)
-	Topic3 *string
+	Topic3 string `default:"" json:"topic3"`
 
 	// Topic0_1_Opr is the operator between topic0 and topic1
 	// Options: "and" or "or"
-	Topic0_1_Opr *string
+	Topic0_1_Opr string `default:"and" json:"topic0_1_opr"`
 
 	// Topic0_2_Opr is the operator between topic0 and topic2
 	// Options: "and" or "or"
-	Topic0_2_Opr *string
+	Topic0_2_Opr string `default:"and" json:"topic0_2_opr"`
 
 	// Topic0_3_Opr is the operator between topic0 and topic3
 	// Options: "and" or "or"
-	Topic0_3_Opr *string
+	Topic0_3_Opr string `default:"and" json:"topic0_3_opr"`
 
 	// Topic1_2_Opr is the operator between topic1 and topic2
 	// Options: "and" or "or"
-	Topic1_2_Opr *string
+	Topic1_2_Opr string `default:"and" json:"topic1_2_opr"`
 
 	// Topic1_3_Opr is the operator between topic1 and topic3
 	// Options: "and" or "or"
-	Topic1_3_Opr *string
+	Topic1_3_Opr string `default:"and" json:"topic1_3_opr"`
 
 	// Topic2_3_Opr is the operator between topic2 and topic3
 	// Options: "and" or "or"
-	Topic2_3_Opr *string
+	Topic2_3_Opr string `default:"and" json:"topic2_3_opr"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID
-	ChainID *int64
+	// If 0, uses the client's default chain ID
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior
-	OnLimitExceeded *RateLimitBehavior
+	// If empty, uses the client's default behavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetEventLogsByAddressFilteredByTopics returns event logs from a specific address filtered by topics and block range
@@ -448,59 +464,68 @@ type GetEventLogsByAddressFilteredByTopicsOpts struct {
 //   - Maximum 1000 records per call
 //   - Use Page and Offset for pagination
 func (c *HTTPClient) GetEventLogsByAddressFilteredByTopics(ctx context.Context, address string, opts *GetEventLogsByAddressFilteredByTopicsOpts) ([]RespEventLogByAddressFilteredByTopics, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"address": address,
 		"page":    "1",
 		"offset":  "1000",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		if opts.Page != 0 {
+			params["page"] = strconv.FormatInt(opts.Page, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
+		if opts.Offset != 0 {
+			params["offset"] = strconv.FormatInt(opts.Offset, 10)
 		}
-		if opts.FromBlock != nil {
-			params["fromBlock"] = strconv.FormatInt(*opts.FromBlock, 10)
+		if opts.FromBlock != 0 {
+			params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
 		}
-		if opts.ToBlock != nil {
-			params["toBlock"] = strconv.FormatInt(*opts.ToBlock, 10)
+		if opts.ToBlock != 999999999999 {
+			params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
 		}
-		if opts.Topic0 != nil {
-			params["topic0"] = *opts.Topic0
+		if opts.Topic0 != "" {
+			params["topic0"] = opts.Topic0
 		}
-		if opts.Topic1 != nil {
-			params["topic1"] = *opts.Topic1
+		if opts.Topic1 != "" {
+			params["topic1"] = opts.Topic1
 		}
-		if opts.Topic2 != nil {
-			params["topic2"] = *opts.Topic2
+		if opts.Topic2 != "" {
+			params["topic2"] = opts.Topic2
 		}
-		if opts.Topic3 != nil {
-			params["topic3"] = *opts.Topic3
+		if opts.Topic3 != "" {
+			params["topic3"] = opts.Topic3
 		}
-		if opts.Topic0_1_Opr != nil {
-			params["topic0_1_opr"] = *opts.Topic0_1_Opr
+		if opts.Topic0_1_Opr != "" {
+			params["topic0_1_opr"] = opts.Topic0_1_Opr
 		}
-		if opts.Topic0_2_Opr != nil {
-			params["topic0_2_opr"] = *opts.Topic0_2_Opr
+		if opts.Topic0_2_Opr != "" {
+			params["topic0_2_opr"] = opts.Topic0_2_Opr
 		}
-		if opts.Topic0_3_Opr != nil {
-			params["topic0_3_opr"] = *opts.Topic0_3_Opr
+		if opts.Topic0_3_Opr != "" {
+			params["topic0_3_opr"] = opts.Topic0_3_Opr
 		}
-		if opts.Topic1_2_Opr != nil {
-			params["topic1_2_opr"] = *opts.Topic1_2_Opr
+		if opts.Topic1_2_Opr != "" {
+			params["topic1_2_opr"] = opts.Topic1_2_Opr
 		}
-		if opts.Topic1_3_Opr != nil {
-			params["topic1_3_opr"] = *opts.Topic1_3_Opr
+		if opts.Topic1_3_Opr != "" {
+			params["topic1_3_opr"] = opts.Topic1_3_Opr
 		}
-		if opts.Topic2_3_Opr != nil {
-			params["topic2_3_opr"] = *opts.Topic2_3_Opr
+		if opts.Topic2_3_Opr != "" {
+			params["topic2_3_opr"] = opts.Topic2_3_Opr
 		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 

@@ -13,12 +13,12 @@ func TestGetNormalTransactions(t *testing.T) {
 
 	// Test with Vitalik's address
 	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
-		StartBlock: &[]int64{18000000}[0], // Recent block
-		EndBlock:   &[]int64{18000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"asc"}[0],
-		ChainID:    &[]int64{1}[0], // Ethereum mainnet
+		StartBlock: 18000000, // Recent block
+		EndBlock:   18000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "asc",
+		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetNormalTransactions failed: %v", err)
@@ -52,12 +52,12 @@ func TestGetInternalTransactionsByAddress(t *testing.T) {
 
 	// Test with Vitalik's address
 	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
-		StartBlock: &[]int64{18000000}[0], // Recent block
-		EndBlock:   &[]int64{18000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"asc"}[0],
-		ChainID:    &[]int64{1}[0], // Ethereum mainnet
+		StartBlock: 18000000, // Recent block
+		EndBlock:   18000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "asc",
+		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetInternalTransactionsByAddress failed: %v", err)
@@ -91,7 +91,7 @@ func TestGetInternalTransactionsByHash(t *testing.T) {
 
 	// Test with a known transaction hash
 	transactions, err := config.Client.GetInternalTransactionsByHash(ctx, TestTransactions.SampleTxHash, &GetInternalTransactionsByHashOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetInternalTransactionsByHash failed: %v", err)
@@ -122,10 +122,10 @@ func TestGetInternalTransactionsByBlockRange(t *testing.T) {
 
 	// Test with a recent block range
 	transactions, err := config.Client.GetInternalTransactionsByBlockRange(ctx, int(TestBlocks.RecentBlock), int(TestBlocks.RecentBlock+10), &GetInternalTransactionsByBlockRangeOpts{
-		Page:    &[]int64{1}[0],
-		Offset:  &[]int64{10}[0],
-		Sort:    &[]string{"asc"}[0],
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		Page:    1,
+		Offset:  10,
+		Sort:    "asc",
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetInternalTransactionsByBlockRange failed: %v", err)
@@ -156,7 +156,7 @@ func TestGetContractExecutionStatus(t *testing.T) {
 
 	// Test with a known transaction hash
 	status, err := config.Client.GetContractExecutionStatus(ctx, TestTransactions.SampleTxHash, &GetContractExecutionStatusOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractExecutionStatus failed: %v", err)
@@ -182,7 +182,7 @@ func TestGetTransactionReceiptStatus(t *testing.T) {
 
 	// Test with a known transaction hash
 	status, err := config.Client.GetTransactionReceiptStatus(ctx, TestTransactions.SampleTxHash, &GetTransactionReceiptStatusOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetTransactionReceiptStatus failed: %v", err)
@@ -295,12 +295,12 @@ func TestGetNormalTransactionsWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
-		StartBlock: &[]int64{40000000}[0], // Recent block on Polygon
-		EndBlock:   &[]int64{40000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"asc"}[0],
-		ChainID:    &[]int64{137}[0], // Polygon mainnet
+		StartBlock: 40000000, // Recent block on Polygon
+		EndBlock:   40000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "asc",
+		ChainID:    137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetNormalTransactions with Polygon failed: %v", err)
@@ -320,12 +320,12 @@ func TestGetInternalTransactionsByAddressWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
-		StartBlock: &[]int64{40000000}[0], // Recent block on Polygon
-		EndBlock:   &[]int64{40000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"asc"}[0],
-		ChainID:    &[]int64{137}[0], // Polygon mainnet
+		StartBlock: 40000000, // Recent block on Polygon
+		EndBlock:   40000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "asc",
+		ChainID:    137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetInternalTransactionsByAddress with Polygon failed: %v", err)
@@ -345,12 +345,12 @@ func TestGetNormalTransactionsWithDescSort(t *testing.T) {
 
 	// Test with descending sort
 	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
-		StartBlock: &[]int64{18000000}[0], // Recent block
-		EndBlock:   &[]int64{18000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"desc"}[0],
-		ChainID:    &[]int64{1}[0], // Ethereum mainnet
+		StartBlock: 18000000, // Recent block
+		EndBlock:   18000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "desc",
+		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetNormalTransactions with desc sort failed: %v", err)
@@ -370,12 +370,12 @@ func TestGetInternalTransactionsByAddressWithDescSort(t *testing.T) {
 
 	// Test with descending sort
 	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
-		StartBlock: &[]int64{18000000}[0], // Recent block
-		EndBlock:   &[]int64{18000100}[0], // Small range
-		Page:       &[]int64{1}[0],
-		Offset:     &[]int64{10}[0],
-		Sort:       &[]string{"desc"}[0],
-		ChainID:    &[]int64{1}[0], // Ethereum mainnet
+		StartBlock: 18000000, // Recent block
+		EndBlock:   18000100, // Small range
+		Page:       1,
+		Offset:     10,
+		Sort:       "desc",
+		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetInternalTransactionsByAddress with desc sort failed: %v", err)

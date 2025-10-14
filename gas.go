@@ -13,17 +13,17 @@ import (
 // GetConfirmationTimeEstimateOpts contains optional parameters for GetConfirmationTimeEstimate
 type GetConfirmationTimeEstimateOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetConfirmationTimeEstimate returns the estimated time, in seconds, for a transaction to be confirmed on the blockchain
@@ -62,15 +62,22 @@ type GetConfirmationTimeEstimateOpts struct {
 //   - Returns estimated time in seconds as string
 //   - Useful for optimizing transaction confirmation times
 func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasPrice int64, opts *GetConfirmationTimeEstimateOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"gasprice": strconv.FormatInt(gasPrice, 10),
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -95,17 +102,17 @@ func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasPrice i
 // GetGasOracleOpts contains optional parameters for GetGasOracle
 type GetGasOracleOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetGasOracle returns the current Safe, Proposed and Fast gas prices
@@ -142,13 +149,20 @@ type GetGasOracleOpts struct {
 //   - SuggestBaseFee shows the base fee of the next pending block
 //   - GasUsedRatio estimates network utilization
 func (c *HTTPClient) GetGasOracle(ctx context.Context, opts *GetGasOracleOpts) (*RespGasOracle, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -177,20 +191,20 @@ type GetDailyAverageGasLimitOpts struct {
 	// Options:
 	//   - "asc" (default): Sort by date in ascending order (oldest first)
 	//   - "desc": Sort by date in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetDailyAverageGasLimit returns the historical daily average gas limit of the Ethereum network
@@ -235,20 +249,27 @@ type GetDailyAverageGasLimitOpts struct {
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network capacity over time
 func (c *HTTPClient) GetDailyAverageGasLimit(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasLimitOpts) ([]RespDailyAvgGasLimit, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"startdate": startDate,
 		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts != nil && opts.Sort != "" {
+		params["sort"] = opts.Sort
+	}
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -277,20 +298,20 @@ type GetDailyTotalGasUsedOpts struct {
 	// Options:
 	//   - "asc" (default): Sort by date in ascending order (oldest first)
 	//   - "desc": Sort by date in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetDailyTotalGasUsed returns the total amount of gas used daily for transactions on the Ethereum network
@@ -335,20 +356,27 @@ type GetDailyTotalGasUsedOpts struct {
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network activity and gas consumption
 func (c *HTTPClient) GetDailyTotalGasUsed(ctx context.Context, startDate, endDate string, opts *GetDailyTotalGasUsedOpts) ([]RespDailyTotalGasUsed, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"startdate": startDate,
 		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts != nil && opts.Sort != "" {
+		params["sort"] = opts.Sort
+	}
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -377,20 +405,20 @@ type GetDailyAverageGasPriceOpts struct {
 	// Options:
 	//   - "asc" (default): Sort by date in ascending order (oldest first)
 	//   - "desc": Sort by date in descending order (newest first)
-	Sort *string
+	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// Default: 1 (Ethereum mainnet)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID *int64
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
+	// Default: RateLimitBlock (wait until a token is available)
 	// Options:
 	//   - RateLimitBlock: Wait until a token is available (default)
 	//   - RateLimitRaise: Return an error when rate limit is exceeded
 	//   - RateLimitSkip: Return false without executing when rate limit is exceeded
-	OnLimitExceeded *RateLimitBehavior
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetDailyAverageGasPrice returns the daily average gas price used on the Ethereum network
@@ -436,20 +464,27 @@ type GetDailyAverageGasPriceOpts struct {
 //   - Gas prices are in Gwei
 //   - Useful for analyzing gas price trends and network congestion
 func (c *HTTPClient) GetDailyAverageGasPrice(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasPriceOpts) ([]RespDailyAvgGasPrice, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	params := map[string]string{
 		"startdate": startDate,
 		"enddate":   endDate,
 		"sort":      "asc",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	if opts != nil && opts.Sort != "" {
+		params["sort"] = opts.Sort
+	}
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Sort != nil {
-			params["sort"] = *opts.Sort
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 

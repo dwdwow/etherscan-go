@@ -13,11 +13,11 @@ func TestGetEventLogsByAddress(t *testing.T) {
 
 	// Test with USDT contract address
 	logs, err := config.Client.GetEventLogsByAddress(ctx, TestAddresses.USDTContract, &GetEventLogsByAddressOpts{
-		FromBlock: &[]int64{18000000}[0], // Recent block
-		ToBlock:   &[]int64{18000100}[0], // Small range
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		FromBlock: 18000000, // Recent block
+		ToBlock:   18000100, // Small range
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByAddress failed: %v", err)
@@ -49,12 +49,12 @@ func TestGetEventLogsByTopics(t *testing.T) {
 	// Test with Transfer event topic (ERC20 Transfer)
 	transferTopic := "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 	logs, err := config.Client.GetEventLogsByTopics(ctx, &GetEventLogsByTopicsOpts{
-		FromBlock: &[]int64{18000000}[0], // Recent block
-		ToBlock:   &[]int64{18000100}[0], // Small range
-		Topic0:    &transferTopic,
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		FromBlock: 18000000, // Recent block
+		ToBlock:   18000100, // Small range
+		Topic0:    transferTopic,
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByTopics failed: %v", err)
@@ -86,12 +86,12 @@ func TestGetEventLogsByAddressFilteredByTopics(t *testing.T) {
 	// Test with USDT contract and Transfer event topic
 	transferTopic := "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 	logs, err := config.Client.GetEventLogsByAddressFilteredByTopics(ctx, TestAddresses.USDTContract, &GetEventLogsByAddressFilteredByTopicsOpts{
-		FromBlock: &[]int64{18000000}[0], // Recent block
-		ToBlock:   &[]int64{18000100}[0], // Small range
-		Topic0:    &transferTopic,
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		FromBlock: 18000000, // Recent block
+		ToBlock:   18000100, // Small range
+		Topic0:    transferTopic,
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByAddressFilteredByTopics failed: %v", err)
@@ -176,11 +176,11 @@ func TestGetEventLogsByAddressWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	logs, err := config.Client.GetEventLogsByAddress(ctx, TestAddresses.USDTContract, &GetEventLogsByAddressOpts{
-		FromBlock: &[]int64{40000000}[0], // Recent block on Polygon
-		ToBlock:   &[]int64{40000100}[0], // Small range
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{137}[0], // Polygon mainnet
+		FromBlock: 40000000, // Recent block on Polygon
+		ToBlock:   40000100, // Small range
+		Page:      1,
+		Offset:    10,
+		ChainID:   137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByAddress with Polygon failed: %v", err)
@@ -203,13 +203,13 @@ func TestGetEventLogsByTopicsWithMultipleTopics(t *testing.T) {
 	// Vitalik's address as topic1 (from address)
 	vitalikTopic := "0x000000000000000000000000" + TestAddresses.VitalikButerin[2:] // Remove 0x prefix and pad
 	logs, err := config.Client.GetEventLogsByTopics(ctx, &GetEventLogsByTopicsOpts{
-		FromBlock: &[]int64{18000000}[0], // Recent block
-		ToBlock:   &[]int64{18000100}[0], // Small range
-		Topic0:    &transferTopic,
-		Topic1:    &vitalikTopic,
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		FromBlock: 18000000, // Recent block
+		ToBlock:   18000100, // Small range
+		Topic0:    transferTopic,
+		Topic1:    vitalikTopic,
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByTopics with multiple topics failed: %v", err)
@@ -232,13 +232,13 @@ func TestGetEventLogsByAddressFilteredByTopicsWithMultipleTopics(t *testing.T) {
 	// Vitalik's address as topic1 (from address)
 	vitalikTopic := "0x000000000000000000000000" + TestAddresses.VitalikButerin[2:] // Remove 0x prefix and pad
 	logs, err := config.Client.GetEventLogsByAddressFilteredByTopics(ctx, TestAddresses.USDTContract, &GetEventLogsByAddressFilteredByTopicsOpts{
-		FromBlock: &[]int64{18000000}[0], // Recent block
-		ToBlock:   &[]int64{18000100}[0], // Small range
-		Topic0:    &transferTopic,
-		Topic1:    &vitalikTopic,
-		Page:      &[]int64{1}[0],
-		Offset:    &[]int64{10}[0],
-		ChainID:   &[]int64{1}[0], // Ethereum mainnet
+		FromBlock: 18000000, // Recent block
+		ToBlock:   18000100, // Small range
+		Topic0:    transferTopic,
+		Topic1:    vitalikTopic,
+		Page:      1,
+		Offset:    10,
+		ChainID:   1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetEventLogsByAddressFilteredByTopics with multiple topics failed: %v", err)

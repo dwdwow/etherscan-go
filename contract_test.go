@@ -14,7 +14,7 @@ func TestGetContractABI(t *testing.T) {
 
 	// Test with USDT contract (should be verified)
 	abi, err := config.Client.GetContractABI(ctx, TestAddresses.USDTContract, &GetContractABIOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractABI failed: %v", err)
@@ -38,7 +38,7 @@ func TestGetContractSourceCode(t *testing.T) {
 
 	// Test with USDT contract (should be verified)
 	sourceCodes, err := config.Client.GetContractSourceCode(ctx, TestAddresses.USDTContract, &GetContractSourceCodeOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractSourceCode failed: %v", err)
@@ -71,7 +71,7 @@ func TestGetContractABIWithUnverifiedContract(t *testing.T) {
 	// Test with an unverified contract (random address)
 	unverifiedAddress := "0x1234567890123456789012345678901234567890"
 	abi, err := config.Client.GetContractABI(ctx, unverifiedAddress, &GetContractABIOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "Contract source code not verified") {
@@ -95,7 +95,7 @@ func TestGetContractSourceCodeWithUnverifiedContract(t *testing.T) {
 	// Test with an unverified contract (random address)
 	unverifiedAddress := "0x1234567890123456789012345678901234567890"
 	sourceCodes, err := config.Client.GetContractSourceCode(ctx, unverifiedAddress, &GetContractSourceCodeOpts{
-		ChainID: &[]int64{1}[0], // Ethereum mainnet
+		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractSourceCode failed: %v", err)
@@ -151,7 +151,7 @@ func TestGetContractABIWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	abi, err := config.Client.GetContractABI(ctx, TestAddresses.USDTContract, &GetContractABIOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractABI with Polygon failed: %v", err)
@@ -171,7 +171,7 @@ func TestGetContractSourceCodeWithDifferentChain(t *testing.T) {
 
 	// Test with Polygon mainnet
 	sourceCodes, err := config.Client.GetContractSourceCode(ctx, TestAddresses.USDTContract, &GetContractSourceCodeOpts{
-		ChainID: &[]int64{137}[0], // Polygon mainnet
+		ChainID: 137, // Polygon mainnet
 	})
 	if err != nil {
 		t.Fatalf("GetContractSourceCode with Polygon failed: %v", err)

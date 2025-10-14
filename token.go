@@ -13,12 +13,12 @@ import (
 // GetERC20TotalSupplyOpts contains optional parameters for GetERC20TotalSupply
 type GetERC20TotalSupplyOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20TotalSupply returns the current amount of an ERC-20 token in circulation
@@ -50,15 +50,23 @@ type GetERC20TotalSupplyOpts struct {
 //   - Value is in the token's smallest unit
 //   - Use token decimals to convert to human-readable format
 func (c *HTTPClient) GetERC20TotalSupply(ctx context.Context, contractAddress string, opts *GetERC20TotalSupplyOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"contractaddress": contractAddress,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -83,12 +91,12 @@ func (c *HTTPClient) GetERC20TotalSupply(ctx context.Context, contractAddress st
 // GetERC20AccountBalanceOpts contains optional parameters for GetERC20AccountBalance
 type GetERC20AccountBalanceOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20AccountBalance returns the current balance of an ERC-20 token of an address
@@ -122,16 +130,24 @@ type GetERC20AccountBalanceOpts struct {
 //   - Value is in the token's smallest unit
 //   - Use token decimals to convert to human-readable format
 func (c *HTTPClient) GetERC20AccountBalance(ctx context.Context, contractAddress, address string, opts *GetERC20AccountBalanceOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"contractaddress": contractAddress,
 		"address":         address,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -156,12 +172,12 @@ func (c *HTTPClient) GetERC20AccountBalance(ctx context.Context, contractAddress
 // GetERC20HistoricalTotalSupplyOpts contains optional parameters for GetERC20HistoricalTotalSupply
 type GetERC20HistoricalTotalSupplyOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20HistoricalTotalSupply returns the amount of an ERC-20 token in circulation at a certain block height
@@ -195,16 +211,24 @@ type GetERC20HistoricalTotalSupplyOpts struct {
 //   - Returns supply in hex format
 //   - Value is in the token's smallest unit
 func (c *HTTPClient) GetERC20HistoricalTotalSupply(ctx context.Context, contractAddress string, blockNo int64, opts *GetERC20HistoricalTotalSupplyOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"contractaddress": contractAddress,
 		"blockno":         strconv.FormatInt(blockNo, 10),
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -229,12 +253,12 @@ func (c *HTTPClient) GetERC20HistoricalTotalSupply(ctx context.Context, contract
 // GetERC20HistoricalAccountBalanceOpts contains optional parameters for GetERC20HistoricalAccountBalance
 type GetERC20HistoricalAccountBalanceOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20HistoricalAccountBalance returns the balance of an ERC-20 token of an address at a certain block height
@@ -270,17 +294,25 @@ type GetERC20HistoricalAccountBalanceOpts struct {
 //   - Returns balance in hex format
 //   - Value is in the token's smallest unit
 func (c *HTTPClient) GetERC20HistoricalAccountBalance(ctx context.Context, contractAddress, address string, blockNo int64, opts *GetERC20HistoricalAccountBalanceOpts) (string, error) {
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
 	params := map[string]string{
 		"contractaddress": contractAddress,
 		"address":         address,
 		"blockno":         strconv.FormatInt(blockNo, 10),
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -306,19 +338,19 @@ func (c *HTTPClient) GetERC20HistoricalAccountBalance(ctx context.Context, contr
 type GetERC20HoldersOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of holders per page
 	// Default: 100, max: 10000
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20Holders returns the current ERC20 token holders and number of tokens held
@@ -351,23 +383,25 @@ type GetERC20HoldersOpts struct {
 //   - Returns empty slice if no holders found
 //   - Maximum 10000 records per page
 func (c *HTTPClient) GetERC20Holders(ctx context.Context, contractAddress string, opts *GetERC20HoldersOpts) ([]RespERC20HolderInfo, error) {
-	params := map[string]string{
-		"contractaddress": contractAddress,
-		"page":            "1",
-		"offset":          "100",
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	params := map[string]string{
+		"contractaddress": contractAddress,
+		"page":            strconv.FormatInt(opts.Page, 10),
+		"offset":          strconv.FormatInt(opts.Offset, 10),
+	}
+
+	// Add chain ID if specified
+	if opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
-		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -393,12 +427,12 @@ func (c *HTTPClient) GetERC20Holders(ctx context.Context, contractAddress string
 // GetERC20HolderCountOpts contains optional parameters for GetERC20HolderCount
 type GetERC20HolderCountOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetERC20HolderCount returns the total number of holders for an ERC-20 token
@@ -433,11 +467,19 @@ func (c *HTTPClient) GetERC20HolderCount(ctx context.Context, contractAddress st
 		"contractaddress": contractAddress,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return "", err
+	}
+
+	// Add chain ID if specified
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -462,12 +504,12 @@ func (c *HTTPClient) GetERC20HolderCount(ctx context.Context, contractAddress st
 // GetTopERC20HoldersOpts contains optional parameters for GetTopERC20Holders
 type GetTopERC20HoldersOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetTopERC20Holders returns the top token holders of an ERC-20 token
@@ -512,11 +554,19 @@ func (c *HTTPClient) GetTopERC20Holders(ctx context.Context, contractAddress str
 		"offset":          strconv.FormatInt(offset, 10),
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	// Add chain ID if specified
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -542,12 +592,12 @@ func (c *HTTPClient) GetTopERC20Holders(ctx context.Context, contractAddress str
 // GetTokenInfoOpts contains optional parameters for GetTokenInfo
 type GetTokenInfoOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetTokenInfo returns project information and social media links of an ERC20/ERC721/ERC1155 token
@@ -585,11 +635,19 @@ func (c *HTTPClient) GetTokenInfo(ctx context.Context, contractAddress string, o
 		"contractaddress": contractAddress,
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	// Add chain ID if specified
+	if opts != nil && opts.ChainID != 0 {
+		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
 	if opts != nil {
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -627,19 +685,19 @@ func (c *HTTPClient) GetTokenInfo(ctx context.Context, contractAddress string, o
 type GetAccountERC20HoldingsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of tokens per page
 	// Default: 100
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetAccountERC20Holdings returns the ERC-20 tokens and amount held by an address
@@ -678,17 +736,24 @@ func (c *HTTPClient) GetAccountERC20Holdings(ctx context.Context, address string
 		"offset":  "100",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		params["page"] = strconv.FormatInt(opts.Page, 10)
+		params["offset"] = strconv.FormatInt(opts.Offset, 10)
+
+		// Add chain ID if specified
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -715,19 +780,19 @@ func (c *HTTPClient) GetAccountERC20Holdings(ctx context.Context, address string
 type GetAccountNFTHoldingsOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of tokens per page
 	// Default: 100
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetAccountNFTHoldings returns the ERC-721 tokens and amount held by an address
@@ -766,17 +831,24 @@ func (c *HTTPClient) GetAccountNFTHoldings(ctx context.Context, address string, 
 		"offset":  "100",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		params["page"] = strconv.FormatInt(opts.Page, 10)
+		params["offset"] = strconv.FormatInt(opts.Offset, 10)
+
+		// Add chain ID if specified
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
@@ -803,19 +875,19 @@ func (c *HTTPClient) GetAccountNFTHoldings(ctx context.Context, address string, 
 type GetAccountNFTInventoriesOpts struct {
 	// Page number for pagination
 	// Default: 1
-	Page *int64
+	Page int64 `default:"1" json:"page"`
 
 	// Offset is the number of tokens per page
 	// Default: 100, max: 1000
-	Offset *int64
+	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID *int64
+	// Default: 1 (Ethereum mainnet)
+	ChainID int64 `default:"1" json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
-	// If nil, uses the client's default behavior (RateLimitBlock)
-	OnLimitExceeded *RateLimitBehavior
+	// Default: RateLimitBlock (wait until a token is available)
+	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
 // GetAccountNFTInventories returns the ERC-721 token inventory of an address, filtered by contract address
@@ -858,17 +930,24 @@ func (c *HTTPClient) GetAccountNFTInventories(ctx context.Context, address, cont
 		"offset":          "100",
 	}
 
-	var onLimitExceeded *RateLimitBehavior
+	// Apply default values from struct tags
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
 	if opts != nil {
-		if opts.Page != nil {
-			params["page"] = strconv.FormatInt(*opts.Page, 10)
+		params["page"] = strconv.FormatInt(opts.Page, 10)
+		params["offset"] = strconv.FormatInt(opts.Offset, 10)
+
+		// Add chain ID if specified
+		if opts.ChainID != 0 {
+			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 		}
-		if opts.Offset != nil {
-			params["offset"] = strconv.FormatInt(*opts.Offset, 10)
-		}
-		if opts.ChainID != nil {
-			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
-		}
+	}
+
+	// Handle rate limiting
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
 		onLimitExceeded = opts.OnLimitExceeded
 	}
 
