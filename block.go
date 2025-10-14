@@ -67,18 +67,14 @@ type GetBlockAndUncleRewardsOpts struct {
 //   - UncleInclusionReward is the reward for including uncle blocks
 //   - Useful for analyzing miner economics and network health
 func (c *HTTPClient) GetBlockAndUncleRewards(ctx context.Context, blockNo int64, opts *GetBlockAndUncleRewardsOpts) (*RespBlockReward, error) {
-	params := map[string]string{
-		"blockno": strconv.FormatInt(blockNo, 10),
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["blockno"] = strconv.FormatInt(blockNo, 10)
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -157,20 +153,17 @@ type GetBlockTransactionsCountOpts struct {
 //   - Returns detailed breakdown of different transaction types
 //   - Useful for analyzing block activity and transaction volume
 func (c *HTTPClient) GetBlockTransactionsCount(ctx context.Context, blockNo int64, opts *GetBlockTransactionsCountOpts) (*RespBlockTxsCountByBlockNo, error) {
-	params := map[string]string{
-		"blockno": strconv.FormatInt(blockNo, 10),
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
+	// Add required parameters
+	params["blockno"] = strconv.FormatInt(blockNo, 10)
+
 	if opts != nil && opts.ChainID != 1 {
 		return nil, fmt.Errorf("this endpoint is only supported on Ethereum mainnet (chainid=1)")
-	}
-	if opts != nil {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
 
 	// Handle rate limiting
@@ -254,21 +247,20 @@ type GetBlockCountdownTimeOpts struct {
 //   - Estimate is based on current network block time
 //   - Useful for planning transactions and operations
 func (c *HTTPClient) GetBlockCountdownTime(ctx context.Context, blockNo int64, opts *GetBlockCountdownTimeOpts) (*RespEstimateBlockCountdownTimeByBlockNo, error) {
-	params := map[string]string{
-		"blockno": strconv.FormatInt(blockNo, 10),
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["blockno"] = strconv.FormatInt(blockNo, 10)
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -332,22 +324,21 @@ type GetBlockNumberByTimestampOpts struct {
 //   - "before" returns the latest block before the timestamp
 //   - "after" returns the earliest block after the timestamp
 func (c *HTTPClient) GetBlockNumberByTimestamp(ctx context.Context, timestamp int64, closest string, opts *GetBlockNumberByTimestampOpts) (int, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return 0, err
 	}
 
-	params := map[string]string{
-		"timestamp": strconv.FormatInt(timestamp, 10),
-		"closest":   closest,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["timestamp"] = strconv.FormatInt(timestamp, 10)
+	params["closest"] = closest
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -427,26 +418,21 @@ type GetDailyAvgBlockSizesOpts struct {
 //   - Returns empty slice if no data found
 //   - Block size is returned in bytes
 func (c *HTTPClient) GetDailyAvgBlockSizes(ctx context.Context, startDate, endDate string, opts *GetDailyAvgBlockSizesOpts) ([]RespDailyAvgBlockSize, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

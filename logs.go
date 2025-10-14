@@ -2,7 +2,6 @@ package etherscan
 
 import (
 	"context"
-	"strconv"
 )
 
 // ============================================================================
@@ -98,30 +97,14 @@ type GetEventLogsByAddressOpts struct {
 //   - Topics field contains event signature and indexed parameters
 //   - Data field contains non-indexed event parameters
 func (c *HTTPClient) GetEventLogsByAddress(ctx context.Context, address string, opts *GetEventLogsByAddressOpts) ([]RespEventLogByAddress, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-	}
-
-	if opts.FromBlock != 0 {
-		params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
-	}
-	if opts.ToBlock != 999999999999 {
-		params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
-	}
-	if opts.Page != 1 {
-		params["page"] = strconv.FormatInt(opts.Page, 10)
-	}
-	if opts.Offset != 1000 {
-		params["offset"] = strconv.FormatInt(opts.Offset, 10)
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -289,62 +272,10 @@ type GetEventLogsByTopicsOpts struct {
 //   - Use "and" or "or" operators to combine topic filters
 //   - Maximum 1000 records per call
 func (c *HTTPClient) GetEventLogsByTopics(ctx context.Context, opts *GetEventLogsByTopicsOpts) ([]RespEventLogByTopics, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
-	}
-
-	params := map[string]string{
-		"page":   "1",
-		"offset": "1000",
-	}
-
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.FromBlock != 0 {
-			params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
-		}
-		if opts.ToBlock != 999999999999 {
-			params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
-		}
-		if opts.Topic0 != "" {
-			params["topic0"] = opts.Topic0
-		}
-		if opts.Topic1 != "" {
-			params["topic1"] = opts.Topic1
-		}
-		if opts.Topic2 != "" {
-			params["topic2"] = opts.Topic2
-		}
-		if opts.Topic3 != "" {
-			params["topic3"] = opts.Topic3
-		}
-		if opts.Topic0_1_Opr != "" {
-			params["topic0_1_opr"] = opts.Topic0_1_Opr
-		}
-		if opts.Topic0_2_Opr != "" {
-			params["topic0_2_opr"] = opts.Topic0_2_Opr
-		}
-		if opts.Topic0_3_Opr != "" {
-			params["topic0_3_opr"] = opts.Topic0_3_Opr
-		}
-		if opts.Topic1_2_Opr != "" {
-			params["topic1_2_opr"] = opts.Topic1_2_Opr
-		}
-		if opts.Topic1_3_Opr != "" {
-			params["topic1_3_opr"] = opts.Topic1_3_Opr
-		}
-		if opts.Topic2_3_Opr != "" {
-			params["topic2_3_opr"] = opts.Topic2_3_Opr
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
 	}
 
 	// Handle rate limiting
@@ -464,64 +395,14 @@ type GetEventLogsByAddressFilteredByTopicsOpts struct {
 //   - Maximum 1000 records per call
 //   - Use Page and Offset for pagination
 func (c *HTTPClient) GetEventLogsByAddressFilteredByTopics(ctx context.Context, address string, opts *GetEventLogsByAddressFilteredByTopicsOpts) ([]RespEventLogByAddressFilteredByTopics, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"page":    "1",
-		"offset":  "1000",
-	}
-
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.FromBlock != 0 {
-			params["fromBlock"] = strconv.FormatInt(opts.FromBlock, 10)
-		}
-		if opts.ToBlock != 999999999999 {
-			params["toBlock"] = strconv.FormatInt(opts.ToBlock, 10)
-		}
-		if opts.Topic0 != "" {
-			params["topic0"] = opts.Topic0
-		}
-		if opts.Topic1 != "" {
-			params["topic1"] = opts.Topic1
-		}
-		if opts.Topic2 != "" {
-			params["topic2"] = opts.Topic2
-		}
-		if opts.Topic3 != "" {
-			params["topic3"] = opts.Topic3
-		}
-		if opts.Topic0_1_Opr != "" {
-			params["topic0_1_opr"] = opts.Topic0_1_Opr
-		}
-		if opts.Topic0_2_Opr != "" {
-			params["topic0_2_opr"] = opts.Topic0_2_Opr
-		}
-		if opts.Topic0_3_Opr != "" {
-			params["topic0_3_opr"] = opts.Topic0_3_Opr
-		}
-		if opts.Topic1_2_Opr != "" {
-			params["topic1_2_opr"] = opts.Topic1_2_Opr
-		}
-		if opts.Topic1_3_Opr != "" {
-			params["topic1_3_opr"] = opts.Topic1_3_Opr
-		}
-		if opts.Topic2_3_Opr != "" {
-			params["topic2_3_opr"] = opts.Topic2_3_Opr
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior

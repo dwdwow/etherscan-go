@@ -75,26 +75,21 @@ type GetDailyBlockCountRewardsOpts struct {
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network activity over time
 func (c *HTTPClient) GetDailyBlockCountRewards(ctx context.Context, startDate, endDate string, opts *GetDailyBlockCountRewardsOpts) ([]RespDailyBlockCountReward, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -156,26 +151,21 @@ type GetDailyBlockRewardsOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyBlockRewards(ctx context.Context, startDate, endDate string, opts *GetDailyBlockRewardsOpts) ([]RespDailyBlockReward, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -238,26 +228,21 @@ type GetDailyAvgBlockTimeOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyAvgBlockTime(ctx context.Context, startDate, endDate string, opts *GetDailyAvgBlockTimeOpts) ([]RespDailyAvgTimeBlockMined, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -319,26 +304,21 @@ type GetDailyUncleBlockCountAndRewardsOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, startDate, endDate string, opts *GetDailyUncleBlockCountAndRewardsOpts) ([]RespDailyUncleBlockCountAndReward, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -395,19 +375,17 @@ type GetTotalEthSupplyOpts struct {
 //   - Returns supply in wei (smallest unit)
 //   - Excludes ETH2 staking rewards and EIP-1559 burnt fees
 func (c *HTTPClient) GetTotalEthSupply(ctx context.Context, opts *GetTotalEthSupplyOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -459,19 +437,17 @@ type GetTotalEth2SupplyOpts struct {
 //   - Returns supply in wei (smallest unit)
 //   - Includes ETH2 staking rewards and EIP-1559 burnt fees
 func (c *HTTPClient) GetTotalEth2Supply(ctx context.Context, opts *GetTotalEth2SupplyOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -530,19 +506,17 @@ type GetEthPriceOpts struct {
 //   - Returns current token price in USD
 //   - Includes market cap information
 func (c *HTTPClient) GetEthPrice(ctx context.Context, opts *GetEthPriceOpts) (*RespEthPrice, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -604,26 +578,21 @@ type GetEthHistoricalPricesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startDate, endDate string, opts *GetEthHistoricalPricesOpts) ([]RespEthHistoricalPrice, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -686,18 +655,18 @@ type GetEthereumNodesSizeOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startDate, endDate, clientType, syncMode, sort string, opts *GetEthereumNodesSizeOpts) ([]RespEtheumNodeSize, error) {
-	params := map[string]string{
-		"startdate":  startDate,
-		"enddate":    endDate,
-		"clienttype": clientType,
-		"syncmode":   syncMode,
-		"sort":       sort,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
+
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
+	params["clienttype"] = clientType
+	params["syncmode"] = syncMode
+	params["sort"] = sort
 
 	if opts.ChainID != 0 {
 		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
@@ -762,19 +731,17 @@ type GetNodeCountOpts struct {
 //   - Returns total number of discoverable nodes
 //   - Useful for network health analysis
 func (c *HTTPClient) GetNodeCount(ctx context.Context, opts *GetNodeCountOpts) (*RespNodeCount, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -836,26 +803,21 @@ type GetDailyTxFeesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyTxFees(ctx context.Context, startDate, endDate string, opts *GetDailyTxFeesOpts) ([]RespDailyTxFee, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -917,26 +879,21 @@ type GetDailyNewAddressesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyNewAddresses(ctx context.Context, startDate, endDate string, opts *GetDailyNewAddressesOpts) ([]RespDailyNewAddress, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -998,26 +955,21 @@ type GetDailyNetworkUtilizationsOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyNetworkUtilizations(ctx context.Context, startDate, endDate string, opts *GetDailyNetworkUtilizationsOpts) ([]RespDailyNetworkUtilization, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -1079,26 +1031,21 @@ type GetDailyAvgHashratesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyAvgHashrates(ctx context.Context, startDate, endDate string, opts *GetDailyAvgHashratesOpts) ([]RespDailyAvgHashrate, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -1160,26 +1107,21 @@ type GetDailyTxCountsOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyTxCounts(ctx context.Context, startDate, endDate string, opts *GetDailyTxCountsOpts) ([]RespDailyTxCount, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -1241,26 +1183,21 @@ type GetDailyAvgDifficultiesOpts struct {
 //   - Date format must be yyyy-MM-dd
 //   - Returns empty slice if no data found
 func (c *HTTPClient) GetDailyAvgDifficulties(ctx context.Context, startDate, endDate string, opts *GetDailyAvgDifficultiesOpts) ([]RespDailyAvgDifficulty, error) {
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

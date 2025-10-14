@@ -103,24 +103,14 @@ type GetNormalTransactionsOpts struct {
 //   - Internal transactions (contract-to-contract) are not included (use GetInternalTransactionsByAddress)
 //   - All values are returned as strings in Wei
 func (c *HTTPClient) GetNormalTransactions(ctx context.Context, address string, opts *GetNormalTransactionsOpts) ([]RespNormalTx, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address":    address,
-		"startblock": strconv.FormatInt(opts.StartBlock, 10),
-		"endblock":   strconv.FormatInt(opts.EndBlock, 10),
-		"page":       strconv.FormatInt(opts.Page, 10),
-		"offset":     strconv.FormatInt(opts.Offset, 10),
-		"sort":       opts.Sort,
-	}
-
-	// Add chain ID if specified
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -219,28 +209,14 @@ type GetBridgeTransactionsOpts struct {
 //   - Bridge transactions show cross-chain asset movements
 //   - All amounts are returned as strings in the smallest unit of the token
 func (c *HTTPClient) GetBridgeTransactions(ctx context.Context, address string, opts *GetBridgeTransactionsOpts) ([]RespBridgeTx, error) {
-	params := map[string]string{
-		"address": address,
-		"page":    "1",
-		"offset":  "100",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -329,18 +305,14 @@ type GetContractExecutionStatusOpts struct {
 //   - Only applicable to contract transactions (transactions that interact with smart contracts)
 //   - For regular ETH transfers, this endpoint may not provide meaningful results
 func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txHash string, opts *GetContractExecutionStatusOpts) (*RespContractExecutionStatus, error) {
-	params := map[string]string{
-		"txhash": txHash,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["txhash"] = txHash
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -425,18 +397,14 @@ type GetTransactionReceiptStatusOpts struct {
 //   - This endpoint works for all transaction types (ETH transfers, contract calls, etc.)
 //   - Pre-Byzantium transactions will not have receipt status information
 func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txHash string, opts *GetTransactionReceiptStatusOpts) (*RespCheckTxReceiptStatus, error) {
-	params := map[string]string{
-		"txhash": txHash,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["txhash"] = txHash
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -565,40 +533,14 @@ type GetInternalTransactionsByAddressOpts struct {
 //   - All values are returned as strings in Wei
 //   - Type field indicates the type of internal transaction (call, create, etc.)
 func (c *HTTPClient) GetInternalTransactionsByAddress(ctx context.Context, address string, opts *GetInternalTransactionsByAddressOpts) ([]RespInternalTxByAddress, error) {
-	params := map[string]string{
-		"address":    address,
-		"startblock": "0",
-		"endblock":   "999999999999",
-		"page":       "1",
-		"offset":     "100",
-		"sort":       "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil {
-		if opts.StartBlock != 0 {
-			params["startblock"] = strconv.FormatInt(opts.StartBlock, 10)
-		}
-		if opts.EndBlock != 999999999999 {
-			params["endblock"] = strconv.FormatInt(opts.EndBlock, 10)
-		}
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.Sort != "" {
-			params["sort"] = opts.Sort
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -683,18 +625,14 @@ type GetInternalTransactionsByHashOpts struct {
 //   - Internal transactions show the complete execution trace of a transaction
 //   - All values are returned as strings in Wei
 func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txHash string, opts *GetInternalTransactionsByHashOpts) ([]RespInternalTxByHash, error) {
-	params := map[string]string{
-		"txhash": txHash,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["txhash"] = txHash
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -801,33 +739,15 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //   - All values are returned as strings in Wei
 //   - TraceID field helps identify which internal transactions belong to the same execution trace
 func (c *HTTPClient) GetInternalTransactionsByBlockRange(ctx context.Context, startBlock, endBlock int, opts *GetInternalTransactionsByBlockRangeOpts) ([]RespInternalTxByBlockRange, error) {
-	params := map[string]string{
-		"startblock": strconv.Itoa(startBlock),
-		"endblock":   strconv.Itoa(endBlock),
-		"page":       "1",
-		"offset":     "100",
-		"sort":       "asc",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.Sort != "" {
-			params["sort"] = opts.Sort
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["startblock"] = strconv.Itoa(startBlock)
+	params["endblock"] = strconv.Itoa(endBlock)
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior

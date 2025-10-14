@@ -3,7 +3,6 @@ package etherscan
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -73,23 +72,20 @@ type GetEthBalanceOpts struct {
 //   - For addresses with no balance, returns "0"
 //   - This endpoint is not rate limited for free tier users
 func (c *HTTPClient) GetEthBalance(ctx context.Context, address string, opts *GetEthBalanceOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"tag":     opts.Tag,
-	}
-
-	// Add chain ID if specified
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -181,23 +177,20 @@ type GetEthBalancesOpts struct {
 //   - This endpoint is not rate limited for free tier users
 //   - All addresses must be valid Ethereum address format
 func (c *HTTPClient) GetEthBalances(ctx context.Context, addresses []string, opts *GetEthBalancesOpts) ([]RespEthBalanceEntry, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": strings.Join(addresses, ","),
-		"tag":     opts.Tag,
-	}
-
-	// Add chain ID if specified
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = strings.Join(addresses, ",")
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

@@ -2,7 +2,6 @@ package etherscan
 
 import (
 	"context"
-	"strconv"
 )
 
 // ============================================================================
@@ -50,15 +49,10 @@ type RpcEthBlockNumberOpts struct {
 //   - Returns block number in hex format with "0x" prefix
 //   - Equivalent to eth_blockNumber JSON-RPC method
 func (c *HTTPClient) RpcEthBlockNumber(ctx context.Context, opts *RpcEthBlockNumberOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
-	}
-
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
 
 	// Handle rate limiting
@@ -132,19 +126,15 @@ type RpcEthBlockByNumberOpts struct {
 //   - Tag can be block number in hex or "latest", "earliest", "pending"
 //   - Boolean parameter controls transaction detail level
 func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, opts *RpcEthBlockByNumberOpts) (*RespEthBlockInfo, error) {
-	params := map[string]string{
-		"tag":     tag,
-		"boolean": "false",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["tag"] = tag
+	params["boolean"] = "false"
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -199,19 +189,15 @@ func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, opts *
 //   - Block tag can be block number in hex or "latest", "earliest", "pending"
 
 func (c *HTTPClient) RpcEthBlockByNumberWithFullTxs(ctx context.Context, tag string, opts *RpcEthBlockByNumberOpts) (*RespEthBlockInfoWithFullTxs, error) {
-	params := map[string]string{
-		"tag":     tag,
-		"boolean": "true",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["tag"] = tag
+	params["boolean"] = "true"
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -281,19 +267,15 @@ type RpcEthUncleByBlockNumberAndIndexOpts struct {
 //   - Equivalent to eth_getUncleByBlockNumberAndIndex JSON-RPC method
 //   - Uncle blocks are blocks that were mined but not included in the main chain
 func (c *HTTPClient) RpcEthUncleByBlockNumberAndIndex(ctx context.Context, tag, index string, opts *RpcEthUncleByBlockNumberAndIndexOpts) (*RespEthUncleBlockInfo, error) {
-	params := map[string]string{
-		"tag":   tag,
-		"index": index,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["tag"] = tag
+	params["index"] = index
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -363,18 +345,14 @@ type RpcEthBlockTransactionCountByNumberOpts struct {
 //   - Equivalent to eth_getBlockTransactionCountByNumber JSON-RPC method
 //   - Returns count in hex format with "0x" prefix
 func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, tag string, opts *RpcEthBlockTransactionCountByNumberOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"tag": tag,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["tag"] = tag
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -447,18 +425,14 @@ type RpcEthTransactionByHashOpts struct {
 //   - Returns nil if transaction not found
 //   - All values are in hex format
 func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string, opts *RpcEthTransactionByHashOpts) (*RespEthTxInfo, error) {
-	params := map[string]string{
-		"txhash": txHash,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["txhash"] = txHash
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -531,19 +505,15 @@ type RpcEthTransactionByBlockNumberAndIndexOpts struct {
 //   - Returns nil if transaction not found
 //   - Index must be within the block's transaction count
 func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context, tag, index string, opts *RpcEthTransactionByBlockNumberAndIndexOpts) (*RespEthTxInfo, error) {
-	params := map[string]string{
-		"tag":   tag,
-		"index": index,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["tag"] = tag
+	params["index"] = index
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -616,19 +586,15 @@ type RpcEthTransactionCountOpts struct {
 //   - Returns nonce in hex format with "0x" prefix
 //   - Nonce represents the number of transactions sent from this address
 func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag string, opts *RpcEthTransactionCountOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"tag":     tag,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
+	params["tag"] = tag
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -697,18 +663,14 @@ type RpcEthSendRawTransactionOpts struct {
 //   - For long hex strings, request is automatically sent as POST
 //   - Returns transaction hash if successful
 func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, opts *RpcEthSendRawTransactionOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"hex": hex,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["hex"] = hex
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -782,18 +744,14 @@ type RpcEthTransactionReceiptOpts struct {
 //   - Status is "0x1" for success, "0x0" for failure
 //   - Only applicable for post Byzantium Fork transactions
 func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txHash string, opts *RpcEthTransactionReceiptOpts) (*RespEthTxReceiptInfo, error) {
-	params := map[string]string{
-		"txhash": txHash,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["txhash"] = txHash
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -880,23 +838,15 @@ type RpcEthCallOpts struct {
 //   - Returns result in hex format
 //   - Useful for calling view/pure functions on smart contracts
 func (c *HTTPClient) RpcEthCall(ctx context.Context, to, data string, opts *RpcEthCallOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"to":   to,
-		"data": data,
-		"tag":  "latest",
-	}
-
-	if opts.Tag != "" {
-		params["tag"] = opts.Tag
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["to"] = to
+	params["data"] = data
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -974,22 +924,14 @@ type RpcEthGetCodeOpts struct {
 //   - Returns "0x" if address has no code (EOA)
 //   - Returns contract bytecode if address is a contract
 func (c *HTTPClient) RpcEthGetCode(ctx context.Context, address string, opts *RpcEthGetCodeOpts) (string, error) {
-	params := map[string]string{
-		"address": address,
-		"tag":     "latest",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	if opts.Tag != "" {
-		params["tag"] = opts.Tag
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -1064,23 +1006,15 @@ type RpcEthGetStorageAtOpts struct {
 //   - This endpoint is experimental and may have potential issues
 //   - Position must be in hex format
 func (c *HTTPClient) RpcEthGetStorageAt(ctx context.Context, address, position string, opts *RpcEthGetStorageAtOpts) (string, error) {
-	params := map[string]string{
-		"address":  address,
-		"position": position,
-		"tag":      "latest",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	if opts.Tag != "" {
-		params["tag"] = opts.Tag
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
+	params["position"] = position
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -1151,15 +1085,10 @@ type RpcEthGetGasPriceOpts struct {
 //   - Returns gas price in wei as hex string
 //   - Useful for transaction gas price estimation
 func (c *HTTPClient) RpcEthGetGasPrice(ctx context.Context, opts *RpcEthGetGasPriceOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
-	}
-
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
 
 	// Handle rate limiting
@@ -1253,28 +1182,15 @@ type RpcEthEstimateGasOpts struct {
 //   - Post EIP-1559: gasPrice must be higher than block's baseFeePerGas
 //   - Returns estimated gas usage in hex format
 func (c *HTTPClient) RpcEthEstimateGas(ctx context.Context, to, data string, opts *RpcEthEstimateGasOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"to":   to,
-		"data": data,
-	}
-
-	if opts.Value != "" {
-		params["value"] = opts.Value
-	}
-	if opts.Gas != "" {
-		params["gas"] = opts.Gas
-	}
-	if opts.GasPrice != "" {
-		params["gasPrice"] = opts.GasPrice
-	}
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["to"] = to
+	params["data"] = data
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior

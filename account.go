@@ -129,8 +129,9 @@ type GetERC20TokenTransfersOpts struct {
 //   - All values are returned as strings in the token's smallest unit
 //   - TokenDecimal field indicates the number of decimal places for the token
 func (c *HTTPClient) GetERC20TokenTransfers(ctx context.Context, opts *GetERC20TokenTransfersOpts) ([]RespERC20TokenTransfer, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
@@ -138,8 +139,7 @@ func (c *HTTPClient) GetERC20TokenTransfers(ctx context.Context, opts *GetERC20T
 		return nil, fmt.Errorf("at least one of Address or ContractAddress must be provided")
 	}
 
-	params := map[string]string{}
-
+	// Add required parameters
 	if opts.Address != "" {
 		params["address"] = opts.Address
 	}
@@ -147,18 +147,11 @@ func (c *HTTPClient) GetERC20TokenTransfers(ctx context.Context, opts *GetERC20T
 		params["contractaddress"] = opts.ContractAddress
 	}
 
-	params["page"] = strconv.FormatInt(opts.Page, 10)
-	params["offset"] = strconv.FormatInt(opts.Offset, 10)
-	params["startblock"] = strconv.FormatInt(opts.StartBlock, 10)
-	params["endblock"] = strconv.FormatInt(opts.EndBlock, 10)
-	params["sort"] = opts.Sort
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -254,8 +247,9 @@ type GetERC721TokenTransfersOpts struct {
 //   - Use Page and Offset parameters to paginate through results
 //   - TokenID field contains the specific NFT token ID
 func (c *HTTPClient) GetERC721TokenTransfers(ctx context.Context, opts *GetERC721TokenTransfersOpts) ([]RespERC721TokenTransfer, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
@@ -263,8 +257,7 @@ func (c *HTTPClient) GetERC721TokenTransfers(ctx context.Context, opts *GetERC72
 		return nil, fmt.Errorf("at least one of Address or ContractAddress must be provided")
 	}
 
-	params := map[string]string{}
-
+	// Add required parameters
 	if opts.Address != "" {
 		params["address"] = opts.Address
 	}
@@ -272,18 +265,11 @@ func (c *HTTPClient) GetERC721TokenTransfers(ctx context.Context, opts *GetERC72
 		params["contractaddress"] = opts.ContractAddress
 	}
 
-	params["page"] = strconv.FormatInt(opts.Page, 10)
-	params["offset"] = strconv.FormatInt(opts.Offset, 10)
-	params["startblock"] = strconv.FormatInt(opts.StartBlock, 10)
-	params["endblock"] = strconv.FormatInt(opts.EndBlock, 10)
-	params["sort"] = opts.Sort
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -381,8 +367,9 @@ type GetERC1155TokenTransfersOpts struct {
 //   - TokenID field contains the specific token ID
 //   - TokenValue field contains the amount transferred
 func (c *HTTPClient) GetERC1155TokenTransfers(ctx context.Context, opts *GetERC1155TokenTransfersOpts) ([]RespERC1155TokenTransfer, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
@@ -390,8 +377,7 @@ func (c *HTTPClient) GetERC1155TokenTransfers(ctx context.Context, opts *GetERC1
 		return nil, fmt.Errorf("at least one of Address or ContractAddress must be provided")
 	}
 
-	params := map[string]string{}
-
+	// Add required parameters
 	if opts.Address != "" {
 		params["address"] = opts.Address
 	}
@@ -399,18 +385,11 @@ func (c *HTTPClient) GetERC1155TokenTransfers(ctx context.Context, opts *GetERC1
 		params["contractaddress"] = opts.ContractAddress
 	}
 
-	params["page"] = strconv.FormatInt(opts.Page, 10)
-	params["offset"] = strconv.FormatInt(opts.Offset, 10)
-	params["startblock"] = strconv.FormatInt(opts.StartBlock, 10)
-	params["endblock"] = strconv.FormatInt(opts.EndBlock, 10)
-	params["sort"] = opts.Sort
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -495,21 +474,20 @@ type GetAddressFundedByOpts struct {
 //   - TimeStamp is Unix timestamp
 //   - Useful for tracking fund flows and address relationships
 func (c *HTTPClient) GetAddressFundedBy(ctx context.Context, address string, opts *GetAddressFundedByOpts) (*RespAddressFundedBy, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -612,24 +590,20 @@ type GetBlocksValidatedByAddressOpts struct {
 //   - TimeStamp is Unix timestamp
 //   - Useful for analyzing miner performance and rewards
 func (c *HTTPClient) GetBlocksValidatedByAddress(ctx context.Context, address string, opts *GetBlocksValidatedByAddressOpts) ([]RespBlockValidated, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address":   address,
-		"blocktype": opts.BlockType,
-		"page":      strconv.FormatInt(opts.Page, 10),
-		"offset":    strconv.FormatInt(opts.Offset, 10),
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -728,26 +702,20 @@ type GetBeaconChainWithdrawalsOpts struct {
 //   - Only available for Ethereum mainnet
 //   - Useful for tracking validator rewards and withdrawals
 func (c *HTTPClient) GetBeaconChainWithdrawals(ctx context.Context, address string, opts *GetBeaconChainWithdrawalsOpts) ([]RespBeaconChainWithdrawal, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address":    address,
-		"startblock": strconv.FormatInt(opts.StartBlock, 10),
-		"endblock":   strconv.FormatInt(opts.EndBlock, 10),
-		"page":       strconv.FormatInt(opts.Page, 10),
-		"offset":     strconv.FormatInt(opts.Offset, 10),
-		"sort":       opts.Sort,
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -829,22 +797,21 @@ type GetEthBalanceByBlockNumberOpts struct {
 //   - Returns "0" if address not found or has no balance
 //   - Useful for historical balance analysis and auditing
 func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address string, blockNo int64, opts *GetEthBalanceByBlockNumberOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"blockno": strconv.FormatInt(blockNo, 10),
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
+	params["blockno"] = strconv.FormatInt(blockNo, 10)
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -925,8 +892,9 @@ type GetContractCreatorAndCreationOpts struct {
 //   - Useful for tracking contract deployment history
 //   - Helps identify contract relationships and developer activity
 func (c *HTTPClient) GetContractCreatorAndCreation(ctx context.Context, contractAddresses []string, opts *GetContractCreatorAndCreationOpts) ([]RespContractCreationAndCreation, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
@@ -934,16 +902,14 @@ func (c *HTTPClient) GetContractCreatorAndCreation(ctx context.Context, contract
 		return nil, fmt.Errorf("maximum 5 contract addresses allowed")
 	}
 
-	params := map[string]string{
-		"contractaddresses": strings.Join(contractAddresses, ","),
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["contractaddresses"] = strings.Join(contractAddresses, ",")
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

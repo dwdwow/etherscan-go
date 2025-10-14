@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -74,8 +73,9 @@ type GetAddressTagOpts struct {
 //   - Returns empty slice if no tags found
 //   - Useful for identifying known addresses and their purposes
 func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts *GetAddressTagOpts) ([]RespAddressTag, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
@@ -83,16 +83,14 @@ func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts
 		return nil, fmt.Errorf("maximum 100 addresses allowed")
 	}
 
-	params := map[string]string{
-		"address": strings.Join(addresses, ","),
-	}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = strings.Join(addresses, ",")
 
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -167,19 +165,17 @@ type GetLabelMasterlistOpts struct {
 //   - Labels can be used with ExportSpecificLabelCSV to filter addresses
 //   - Useful for discovering available address categories
 func (c *HTTPClient) GetLabelMasterlist(ctx context.Context, opts *GetLabelMasterlistOpts) ([]RespLabelMaster, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -395,19 +391,17 @@ type GetLatestCSVBatchNumberOpts struct {
 //   - Returns empty slice if no batch info found
 //   - Useful for tracking CSV export versions
 func (c *HTTPClient) GetLatestCSVBatchNumber(ctx context.Context, opts *GetLatestCSVBatchNumberOpts) ([]RespLatestCSVBatchNumber, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,
@@ -488,19 +482,17 @@ type CheckCreditUsageOpts struct {
 //   - Useful for monitoring API usage and limits
 //   - Helps prevent exceeding plan limits
 func (c *HTTPClient) CheckCreditUsage(ctx context.Context, opts *CheckCreditUsageOpts) (*RespCreditUsage, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{}
-
-	if opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
-
 	// Handle rate limiting
-	onLimitExceeded := opts.OnLimitExceeded
+	var onLimitExceeded RateLimitBehavior
+	if opts != nil {
+		onLimitExceeded = opts.OnLimitExceeded
+	}
 
 	data, err := c.request(requestParams{
 		ctx:             ctx,

@@ -2,7 +2,6 @@ package etherscan
 
 import (
 	"context"
-	"strconv"
 )
 
 // ============================================================================
@@ -70,31 +69,15 @@ type GetPlasmaDepositsOpts struct {
 //   - Returns empty slice if no deposits found
 //   - Useful for tracking Layer 2 deposits
 func (c *HTTPClient) GetPlasmaDeposits(ctx context.Context, address string, opts *GetPlasmaDepositsOpts) ([]RespPlasmaDeposit, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address":   address,
-		"blocktype": "blocks",
-	}
-
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		} else {
-			params["chainid"] = "137" // Default to Polygon
-		}
-	} else {
-		params["chainid"] = "137"
-	}
+	// Add required parameters
+	params["address"] = address
+	params["blocktype"] = "blocks"
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -168,32 +151,14 @@ type GetDepositTxsOpts struct {
 //   - Only applicable to Arbitrum Stack and Optimism Stack networks
 //   - Returns empty slice if no deposits found
 func (c *HTTPClient) GetDepositTxs(ctx context.Context, address string, opts *GetDepositTxsOpts) ([]RespDepositTx, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"page":    "1",
-		"offset":  "1000",
-		"sort":    "desc",
-	}
-
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.Sort != "" {
-			params["sort"] = opts.Sort
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -267,32 +232,14 @@ type GetWithdrawalTxsOpts struct {
 //   - Only applicable to Arbitrum Stack and Optimism Stack networks
 //   - Returns empty slice if no withdrawals found
 func (c *HTTPClient) GetWithdrawalTxs(ctx context.Context, address string, opts *GetWithdrawalTxsOpts) ([]RespWithdrawalTx, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-		"page":    "1",
-		"offset":  "1000",
-		"sort":    "desc",
-	}
-
-	if opts != nil {
-		if opts.Page != 0 {
-			params["page"] = strconv.FormatInt(opts.Page, 10)
-		}
-		if opts.Offset != 0 {
-			params["offset"] = strconv.FormatInt(opts.Offset, 10)
-		}
-		if opts.Sort != "" {
-			params["sort"] = opts.Sort
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior

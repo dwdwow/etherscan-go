@@ -62,18 +62,14 @@ type GetConfirmationTimeEstimateOpts struct {
 //   - Returns estimated time in seconds as string
 //   - Useful for optimizing transaction confirmation times
 func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasPrice int64, opts *GetConfirmationTimeEstimateOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"gasprice": strconv.FormatInt(gasPrice, 10),
-	}
-
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["gasprice"] = strconv.FormatInt(gasPrice, 10)
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -149,15 +145,10 @@ type GetGasOracleOpts struct {
 //   - SuggestBaseFee shows the base fee of the next pending block
 //   - GasUsedRatio estimates network utilization
 func (c *HTTPClient) GetGasOracle(ctx context.Context, opts *GetGasOracleOpts) (*RespGasOracle, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
-	}
-
-	params := map[string]string{}
-
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
 	}
 
 	// Handle rate limiting
@@ -249,23 +240,15 @@ type GetDailyAverageGasLimitOpts struct {
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network capacity over time
 func (c *HTTPClient) GetDailyAverageGasLimit(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasLimitOpts) ([]RespDailyAvgGasLimit, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	if opts != nil && opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -356,23 +339,15 @@ type GetDailyTotalGasUsedOpts struct {
 //   - Returns empty slice if no data found
 //   - Useful for analyzing network activity and gas consumption
 func (c *HTTPClient) GetDailyTotalGasUsed(ctx context.Context, startDate, endDate string, opts *GetDailyTotalGasUsedOpts) ([]RespDailyTotalGasUsed, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	if opts != nil && opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -464,23 +439,15 @@ type GetDailyAverageGasPriceOpts struct {
 //   - Gas prices are in Gwei
 //   - Useful for analyzing gas price trends and network congestion
 func (c *HTTPClient) GetDailyAverageGasPrice(ctx context.Context, startDate, endDate string, opts *GetDailyAverageGasPriceOpts) ([]RespDailyAvgGasPrice, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"startdate": startDate,
-		"enddate":   endDate,
-		"sort":      "asc",
-	}
-
-	if opts != nil && opts.Sort != "" {
-		params["sort"] = opts.Sort
-	}
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["startdate"] = startDate
+	params["enddate"] = endDate
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior

@@ -1,6 +1,7 @@
 package etherscan
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
@@ -55,6 +56,18 @@ func ApplyDefaults(opts any) error {
 	return nil
 }
 
+// ApplyDefaultsAndExtractParams applies default values and extracts API parameters in one step
+// Returns a map of API parameters, excluding non-API fields like OnLimitExceeded
+func ApplyDefaultsAndExtractParams(opts any) (map[string]string, error) {
+	// First apply defaults
+	if err := ApplyDefaults(opts); err != nil {
+		return nil, err
+	}
+
+	// Then extract API parameters
+	return ExtractAPIParams(opts)
+}
+
 // setFieldValue sets a field value from a string representation
 func setFieldValue(field reflect.Value, value string) error {
 	switch field.Kind() {
@@ -99,6 +112,82 @@ func setFieldValue(field reflect.Value, value string) error {
 	}
 
 	return nil
+}
+
+// ExtractAPIParams extracts API parameters from opts struct, excluding non-API fields
+// Returns a map of parameter names to values, only including fields that should be sent to the API
+func ExtractAPIParams(opts any) (map[string]string, error) {
+	if opts == nil {
+		return make(map[string]string), nil
+	}
+
+	v := reflect.ValueOf(opts)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("opts must be a struct or pointer to struct")
+	}
+
+	params := make(map[string]string)
+	t := v.Type()
+
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		fieldType := t.Field(i)
+
+		// Skip unexported fields
+		if !field.CanInterface() {
+			continue
+		}
+
+		// Get the json tag to determine the API parameter name
+		jsonTag := fieldType.Tag.Get("json")
+		if jsonTag == "" || jsonTag == "-" {
+			continue
+		}
+
+		// Extract the parameter name from json tag
+		paramName := strings.Split(jsonTag, ",")[0]
+		if paramName == "" {
+			continue
+		}
+
+		// Skip OnLimitExceeded field as it's not an API parameter
+		if paramName == "on_limit_exceeded" {
+			continue
+		}
+
+		// Convert field value to string
+		var value string
+		switch field.Kind() {
+		case reflect.String:
+			value = field.String()
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			value = strconv.FormatInt(field.Int(), 10)
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			value = strconv.FormatUint(field.Uint(), 10)
+		case reflect.Float32, reflect.Float64:
+			value = strconv.FormatFloat(field.Float(), 'f', -1, 64)
+		case reflect.Bool:
+			value = strconv.FormatBool(field.Bool())
+		default:
+			// For custom types, try to convert to string
+			if field.Type().Implements(reflect.TypeOf((*interface{ String() string })(nil)).Elem()) {
+				value = field.Interface().(interface{ String() string }).String()
+			} else {
+				value = fmt.Sprintf("%v", field.Interface())
+			}
+		}
+
+		// Only include non-zero values (except for string fields where empty string is valid)
+		if value != "" || field.Kind() == reflect.String {
+			params[paramName] = value
+		}
+	}
+
+	return params, nil
 }
 
 // ParseDefaultTag parses a default tag value that might contain multiple options

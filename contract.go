@@ -77,18 +77,14 @@ type GetContractABIOpts struct {
 //   - ABI is returned as a JSON string that needs to be parsed
 //   - Essential for programmatic contract interaction
 func (c *HTTPClient) GetContractABI(ctx context.Context, address string, opts *GetContractABIOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"address": address,
-	}
-
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -175,18 +171,14 @@ type GetContractSourceCodeOpts struct {
 //   - SourceCode field contains the actual Solidity source
 //   - ABI field contains the contract's ABI
 func (c *HTTPClient) GetContractSourceCode(ctx context.Context, address string, opts *GetContractSourceCodeOpts) ([]RespContractSourceCode, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return nil, err
 	}
 
-	params := map[string]string{
-		"address": address,
-	}
-
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["address"] = address
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -297,33 +289,18 @@ type VerifySourceCodeOpts struct {
 //   - Constructor arguments must be ABI-encoded
 //   - Source code must match the deployed bytecode exactly
 func (c *HTTPClient) VerifySourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion, codeFormat string, opts *VerifySourceCodeOpts) (string, error) {
-	params := map[string]string{
-		"sourceCode":      sourceCode,
-		"contractaddress": contractAddress,
-		"contractname":    contractName,
-		"compilerversion": compilerVersion,
-		"codeformat":      codeFormat,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	if opts != nil {
-		if opts.ConstructorArguments != "" {
-			params["constructorArguements"] = opts.ConstructorArguments
-		}
-		if opts.CompilerMode != "" {
-			params["compilermode"] = opts.CompilerMode
-		}
-		if opts.ZksolcVersion != "" {
-			params["zksolcVersion"] = opts.ZksolcVersion
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["sourceCode"] = sourceCode
+	params["contractaddress"] = contractAddress
+	params["contractname"] = contractName
+	params["compilerversion"] = compilerVersion
+	params["codeformat"] = codeFormat
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -420,30 +397,18 @@ type VerifyVyperSourceCodeOpts struct {
 //   - Use CheckSourceCodeVerificationStatus to check verification progress
 //   - Constructor arguments must be ABI-encoded
 func (c *HTTPClient) VerifyVyperSourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion string, opts *VerifyVyperSourceCodeOpts) (string, error) {
-	params := map[string]string{
-		"sourceCode":      sourceCode,
-		"contractaddress": contractAddress,
-		"contractname":    contractName,
-		"compilerversion": compilerVersion,
-		"codeformat":      "vyper-json",
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	if opts != nil {
-		if opts.ConstructorArguments != "" {
-			params["constructorArguments"] = opts.ConstructorArguments
-		}
-		if opts.OptimizationUsed != 0 {
-			params["optimizationUsed"] = strconv.FormatInt(opts.OptimizationUsed, 10)
-		}
-		if opts.ChainID != 0 {
-			params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-		}
-	}
+	// Add required parameters
+	params["sourceCode"] = sourceCode
+	params["contractaddress"] = contractAddress
+	params["contractname"] = contractName
+	params["compilerversion"] = compilerVersion
+	params["codeformat"] = "vyper-json"
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -489,23 +454,19 @@ type VerifyStylusSourceCodeOpts struct {
 //
 //	guid, err := client.VerifyStylusSourceCode(ctx, githubURL, contractAddr, contractName, compilerVer, 3, nil)
 func (c *HTTPClient) VerifyStylusSourceCode(ctx context.Context, sourceCode, contractAddress, contractName, compilerVersion string, licenseType int64, opts *VerifyStylusSourceCodeOpts) (string, error) {
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	params := map[string]string{
-		"sourceCode":      sourceCode,
-		"contractaddress": contractAddress,
-		"contractname":    contractName,
-		"compilerversion": compilerVersion,
-		"licenseType":     strconv.FormatInt(licenseType, 10),
-		"codeformat":      "stylus",
-	}
-
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["sourceCode"] = sourceCode
+	params["contractaddress"] = contractAddress
+	params["contractname"] = contractName
+	params["compilerversion"] = compilerVersion
+	params["licenseType"] = strconv.FormatInt(licenseType, 10)
+	params["codeformat"] = "stylus"
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
@@ -585,18 +546,14 @@ type CheckSourceCodeVerificationStatusOpts struct {
 //   - Returns status message indicating verification progress
 //   - Check periodically until verification is complete
 func (c *HTTPClient) CheckSourceCodeVerificationStatus(ctx context.Context, guid string, opts *CheckSourceCodeVerificationStatusOpts) (string, error) {
-	params := map[string]string{
-		"guid": guid,
-	}
-
-	// Apply default values from struct tags
-	if err := ApplyDefaults(opts); err != nil {
+	// Apply defaults and extract API parameters
+	params, err := ApplyDefaultsAndExtractParams(opts)
+	if err != nil {
 		return "", err
 	}
 
-	if opts != nil && opts.ChainID != 0 {
-		params["chainid"] = strconv.FormatInt(opts.ChainID, 10)
-	}
+	// Add required parameters
+	params["guid"] = guid
 
 	// Handle rate limiting
 	var onLimitExceeded RateLimitBehavior
