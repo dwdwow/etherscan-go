@@ -65,7 +65,10 @@ func TestGetBlockCountdownTime(t *testing.T) {
 	defer cancel()
 
 	// Use a known block number instead of calling RpcEthBlockNumber
-	blockNumber := "0x1a2b3c" // Example hex block number
+	blockNo := "0x1a2b3c" // Use a hardcoded block number for testing
+
+	// Use a known block number instead of calling RpcEthBlockNumber
+	blockNumber := blockNo // Example hex block number
 
 	if blockNumber == "" {
 		t.Error("Block number is empty")

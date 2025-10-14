@@ -169,9 +169,9 @@ func TestGetContractExecutionStatus(t *testing.T) {
 		if status.IsError == "" {
 			t.Error("IsError field is empty")
 		}
-		if status.ErrDescription == "" {
-			t.Log("ErrDescription field is empty (this is normal for successful transactions)")
-		}
+		// if status.ErrDescription == "" {
+		// 	t.Log("ErrDescription field is empty (this is normal for successful transactions)")
+		// }
 	}
 }
 

@@ -18,7 +18,7 @@ func ApplyDefaults(opts any) error {
 	}
 
 	v := reflect.ValueOf(opts)
-	if v.Kind() == reflect.Ptr {
+	if v.Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 
@@ -58,7 +58,12 @@ func ApplyDefaults(opts any) error {
 
 // ApplyDefaultsAndExtractParams applies default values and extracts API parameters in one step
 // Returns a map of API parameters, excluding non-API fields like OnLimitExceeded
-func ApplyDefaultsAndExtractParams(opts any) (map[string]string, error) {
+func ApplyDefaultsAndExtractParams[T any](opts *T) (map[string]string, error) {
+	// If opts is nil, return empty params map
+	if opts == nil {
+		opts = new(T)
+	}
+
 	// First apply defaults
 	if err := ApplyDefaults(opts); err != nil {
 		return nil, err
@@ -122,7 +127,7 @@ func ExtractAPIParams(opts any) (map[string]string, error) {
 	}
 
 	v := reflect.ValueOf(opts)
-	if v.Kind() == reflect.Ptr {
+	if v.Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 

@@ -234,6 +234,7 @@ type requestParams struct {
 	noFoundReturn   any
 	baseURL         string
 	onLimitExceeded RateLimitBehavior
+	retryCount      int // Track retry attempts for rate limiting
 }
 
 // request is the internal method for making API requests
@@ -385,6 +386,22 @@ func (c *HTTPClient) request(params requestParams) (any, error) {
 		if strings.HasPrefix(message, "No ") && strings.HasSuffix(message, " found") {
 			return params.noFoundReturn, nil
 		}
+
+		// Check for rate limit errors
+		if strings.Contains(message, "Maximum rate limit reached") ||
+			strings.Contains(message, "rate limit") ||
+			strings.Contains(message, "Rate limit") {
+			// Retry with 1 second delay
+			log.Printf("etherscan: rate limit detected for %s %s, retrying in 1 second...", params.module, params.action)
+			time.Sleep(1 * time.Second)
+
+			// Recursively retry the request (with a limit to prevent infinite recursion)
+			if params.retryCount < 3 {
+				params.retryCount++
+				return c.request(params)
+			}
+		}
+
 		return nil, fmt.Errorf("etherscan: %s %s failed: %d %s %s %v", params.module, params.action, resp.StatusCode, status, message, data)
 	}
 
