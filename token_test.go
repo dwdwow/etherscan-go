@@ -289,10 +289,10 @@ func TestGetAccountNFTInventories(t *testing.T) {
 		if inventory.TokenID == "" {
 			t.Error("Inventory TokenID field is empty")
 		}
-		if inventory.TokenBalance == "" {
-			t.Error("Inventory TokenBalance field is empty")
+		if inventory.TokenAddress == "" {
+			t.Error("Inventory TokenAddress field is empty")
 		}
-		t.Logf("First NFT inventory: TokenID=%s, Balance=%s", inventory.TokenID, inventory.TokenBalance)
+		t.Logf("First NFT inventory: TokenID=%s, TokenAddress=%s", inventory.TokenID, inventory.TokenAddress)
 	}
 }
 
