@@ -221,27 +221,27 @@ func (c *HTTPClient) GetLabelMasterlist(ctx context.Context, opts *GetLabelMaste
 //   - Returns CSV data as string
 //   - Use GetLabelMasterlist to see available labels
 //   - Useful for bulk address analysis by category
-func (c *HTTPClient) ExportSpecificLabelCSV(ctx context.Context, label string) (string, error) {
+func (c *HTTPClient) ExportSpecificLabelCSV(ctx context.Context, label string) ([]byte, error) {
 	url := fmt.Sprintf("%s?module=nametag&action=exportaddresstags&label=%s&format=csv&apikey=%s",
 		APIAshx, label, c.apiKey)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
-	return string(body), nil
+	return body, nil
 }
 
 // ExportOFACSanctionedRelatedLabelsCSV returns addresses sanctioned by the U.S. Department of the Treasury's
@@ -270,27 +270,27 @@ func (c *HTTPClient) ExportSpecificLabelCSV(ctx context.Context, label string) (
 //   - Returns CSV data as string
 //   - Contains addresses sanctioned by OFAC
 //   - Useful for compliance and risk assessment
-func (c *HTTPClient) ExportOFACSanctionedRelatedLabelsCSV(ctx context.Context) (string, error) {
+func (c *HTTPClient) ExportOFACSanctionedRelatedLabelsCSV(ctx context.Context) ([]byte, error) {
 	url := fmt.Sprintf("%s?module=nametag&action=exportaddresstags&label=ofac-sanctioned&format=csv&apikey=%s",
 		APIAshx, c.apiKey)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
-	return string(body), nil
+	return body, nil
 }
 
 // ExportAllAddressTagsCSV exports a complete CSV list of ALL address name tags and/or labels
@@ -318,27 +318,27 @@ func (c *HTTPClient) ExportOFACSanctionedRelatedLabelsCSV(ctx context.Context) (
 //   - Returns CSV data as string
 //   - Contains all address tags and labels
 //   - Large dataset - may take time to download
-func (c *HTTPClient) ExportAllAddressTagsCSV(ctx context.Context) (string, error) {
+func (c *HTTPClient) ExportAllAddressTagsCSV(ctx context.Context) ([]byte, error) {
 	url := fmt.Sprintf("%s?module=nametag&action=exportaddresstags&format=csv&apikey=%s",
 		APIAshx, c.apiKey)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 
-	return string(body), nil
+	return body, nil
 }
 
 // GetLatestCSVBatchNumberOpts contains optional parameters for GetLatestCSVBatchNumber

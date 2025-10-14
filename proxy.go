@@ -2,7 +2,6 @@ package etherscan
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 )
 
@@ -125,10 +124,10 @@ type RpcEthBlockByNumberOpts struct {
 //   - Equivalent to eth_getBlockByNumber JSON-RPC method
 //   - Tag can be block number in hex or "latest", "earliest", "pending"
 //   - Boolean parameter controls transaction detail level
-func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, boolean bool, opts *RpcEthBlockByNumberOpts) (*RespEthBlockInfo, error) {
+func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, opts *RpcEthBlockByNumberOpts) (*RespEthBlockInfo, error) {
 	params := map[string]string{
 		"tag":     tag,
-		"boolean": fmt.Sprintf("%t", boolean),
+		"boolean": "false",
 	}
 
 	var onLimitExceeded *RateLimitBehavior
@@ -152,6 +151,66 @@ func (c *HTTPClient) RpcEthBlockByNumber(ctx context.Context, tag string, boolea
 	}
 
 	var result RespEthBlock
+	if err := unmarshalResponse(data, &result); err != nil {
+		return nil, err
+	}
+	return &result.Result, nil
+}
+
+// RpcEthBlockByNumber returns information about a block by block number
+//
+// This endpoint returns information about a block by block number.
+// The block can be specified by number in hex or by tag ("latest", "earliest", "pending").
+// This is equivalent to the eth_getBlockByNumber JSON-RPC method.
+//
+// Example usage:
+//
+//	// Get latest block with transaction hashes only
+//	block, err := client.RpcEthBlockByNumber(ctx, "latest", nil)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Block Number: %s\n", block.Number)
+//	fmt.Printf("Block Hash: %s\n", block.Hash)
+//	fmt.Printf("Transaction Count: %d\n", len(block.Transactions))
+//
+//	// Get specific block from Ethereum mainnet
+//	block, err := client.RpcEthBlockByNumber(ctx, "0x1B4", &RpcEthBlockByNumberOpts{
+//	    ChainID: &[]int64{1}[0],
+//	})
+//
+// Note:
+//   - Returns block information with transaction hashes (not full transaction objects)
+//   - For full transaction objects, use RpcEthBlockByNumberWithFullTxs instead
+//   - Block tag can be block number in hex or "latest", "earliest", "pending"
+
+func (c *HTTPClient) RpcEthBlockByNumberWithFullTxs(ctx context.Context, tag string, opts *RpcEthBlockByNumberOpts) (*RespEthBlockInfoWithFullTxs, error) {
+	params := map[string]string{
+		"tag":     tag,
+		"boolean": "true",
+	}
+
+	var onLimitExceeded *RateLimitBehavior
+	if opts != nil {
+		if opts.ChainID != nil {
+			params["chainid"] = strconv.FormatInt(*opts.ChainID, 10)
+		}
+		onLimitExceeded = opts.OnLimitExceeded
+	}
+
+	data, err := c.request(requestParams{
+		ctx:             ctx,
+		module:          "proxy",
+		action:          "eth_getBlockByNumber",
+		params:          params,
+		noFoundReturn:   RespEthBlockWithFullTxs{},
+		onLimitExceeded: onLimitExceeded,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var result RespEthBlockWithFullTxs
 	if err := unmarshalResponse(data, &result); err != nil {
 		return nil, err
 	}
@@ -291,7 +350,7 @@ func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, ta
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_getBlockTxCountByNumber",
+		action:          "eth_getBlockTransactionCountByNumber",
 		params:          params,
 		noFoundReturn:   RespEthBlockTxCount{},
 		onLimitExceeded: onLimitExceeded,
@@ -368,7 +427,7 @@ func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string,
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_getTxByHash",
+		action:          "eth_getTransactionByHash",
 		params:          params,
 		noFoundReturn:   RespEthTx{},
 		onLimitExceeded: onLimitExceeded,
@@ -446,7 +505,7 @@ func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context,
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_getTxByBlockNumberAndIndex",
+		action:          "eth_getTransactionByBlockNumberAndIndex",
 		params:          params,
 		noFoundReturn:   RespEthTx{},
 		onLimitExceeded: onLimitExceeded,
@@ -524,7 +583,7 @@ func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag st
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_getTxCount",
+		action:          "eth_getTransactionCount",
 		params:          params,
 		noFoundReturn:   RespEthTxCount{},
 		onLimitExceeded: onLimitExceeded,
@@ -597,7 +656,7 @@ func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, o
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_sendRawTx",
+		action:          "eth_sendRawTransaction",
 		params:          params,
 		method:          "POST",
 		noFoundReturn:   RespEthSendRawTx{},
@@ -675,7 +734,7 @@ func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txHash string
 	data, err := c.request(requestParams{
 		ctx:             ctx,
 		module:          "proxy",
-		action:          "eth_getTxReceipt",
+		action:          "eth_getTransactionReceipt",
 		params:          params,
 		noFoundReturn:   RespEthTxReceipt{},
 		onLimitExceeded: onLimitExceeded,
