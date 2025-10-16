@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-// GetNormalTransactionsOpts contains optional parameters for GetNormalTransactions
-type GetNormalTransactionsOpts struct {
+// GetNormalTxsOpts contains optional parameters for GetNormalTxs
+type GetNormalTxsOpts struct {
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
@@ -49,7 +49,7 @@ type GetNormalTransactionsOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetNormalTransactions returns list of 'Normal' transactions by address
+// GetNormalTxs returns list of 'Normal' transactions by address
 //
 // This endpoint returns a list of normal (external) transactions performed by an address.
 // Normal transactions are transactions that are sent from an externally owned account (EOA)
@@ -67,7 +67,7 @@ type GetNormalTransactionsOpts struct {
 // Example:
 //
 //	// Get recent transactions for an address
-//	txs, err := client.GetNormalTransactions(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
+//	txs, err := client.GetNormalTxs(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -81,7 +81,7 @@ type GetNormalTransactionsOpts struct {
 //	page := 1
 //	offset := 50
 //	sort := "desc"
-//	txs, err := client.GetNormalTransactions(ctx, address, &GetNormalTransactionsOpts{
+//	txs, err := client.GetNormalTxs(ctx, address, &GetNormalTxsOpts{
 //	    Page:   &page,
 //	    Offset: &offset,
 //	    Sort:   &sort,
@@ -90,7 +90,7 @@ type GetNormalTransactionsOpts struct {
 //	// Get transactions from a specific block range
 //	startBlock := 18000000
 //	endBlock := 18000100
-//	txs, err := client.GetNormalTransactions(ctx, address, &GetNormalTransactionsOpts{
+//	txs, err := client.GetNormalTxs(ctx, address, &GetNormalTxsOpts{
 //	    StartBlock: &startBlock,
 //	    EndBlock:   &endBlock,
 //	})
@@ -102,7 +102,7 @@ type GetNormalTransactionsOpts struct {
 //   - Transactions include both ETH transfers and contract interactions
 //   - Internal transactions (contract-to-contract) are not included (use GetInternalTransactionsByAddress)
 //   - All values are returned as strings in Wei
-func (c *HTTPClient) GetNormalTransactions(ctx context.Context, address string, opts *GetNormalTransactionsOpts) ([]RespNormalTx, error) {
+func (c *HTTPClient) GetNormalTxs(ctx context.Context, address string, opts *GetNormalTxsOpts) ([]RespNormalTx, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -137,8 +137,8 @@ func (c *HTTPClient) GetNormalTransactions(ctx context.Context, address string, 
 	return result, nil
 }
 
-// GetBridgeTransactionsOpts contains optional parameters for GetBridgeTransactions
-type GetBridgeTransactionsOpts struct {
+// GetBridgeTxsOpts contains optional parameters for GetBridgeTxs
+type GetBridgeTxsOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
@@ -164,7 +164,7 @@ type GetBridgeTransactionsOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetBridgeTransactions returns bridge transactions for an address
+// GetBridgeTxs returns bridge transactions for an address
 //
 // This endpoint returns bridge transactions that involve the specified address.
 // Bridge transactions are cross-chain transfers that move assets between different
@@ -182,7 +182,7 @@ type GetBridgeTransactionsOpts struct {
 // Example:
 //
 //	// Get bridge transactions for an address
-//	txs, err := client.GetBridgeTransactions(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
+//	txs, err := client.GetBridgeTxs(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -195,7 +195,7 @@ type GetBridgeTransactionsOpts struct {
 //	// With pagination
 //	page := 1
 //	offset := 50
-//	txs, err := client.GetBridgeTransactions(ctx, address, &GetBridgeTransactionsOpts{
+//	txs, err := client.GetBridgeTxs(ctx, address, &GetBridgeTxsOpts{
 //	    Page:   &page,
 //	    Offset: &offset,
 //	})
@@ -208,7 +208,7 @@ type GetBridgeTransactionsOpts struct {
 //   - Returns empty list for other networks
 //   - Bridge transactions show cross-chain asset movements
 //   - All amounts are returned as strings in the smallest unit of the token
-func (c *HTTPClient) GetBridgeTransactions(ctx context.Context, address string, opts *GetBridgeTransactionsOpts) ([]RespBridgeTx, error) {
+func (c *HTTPClient) GetBridgeTxs(ctx context.Context, address string, opts *GetBridgeTxsOpts) ([]RespBridgeTx, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -339,8 +339,8 @@ func (c *HTTPClient) GetContractExecutionStatus(ctx context.Context, txHash stri
 	return &result, nil
 }
 
-// GetTransactionReceiptStatusOpts contains optional parameters for GetTransactionReceiptStatus
-type GetTransactionReceiptStatusOpts struct {
+// GetTxReceiptStatusOpts contains optional parameters for GetTxReceiptStatus
+type GetTxReceiptStatusOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
@@ -355,7 +355,7 @@ type GetTransactionReceiptStatusOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetTransactionReceiptStatus returns the status code of a transaction execution
+// GetTxReceiptStatus returns the status code of a transaction execution
 //
 // This endpoint returns the receipt status of a transaction, indicating whether
 // the transaction was successful or failed. This is different from contract execution
@@ -374,7 +374,7 @@ type GetTransactionReceiptStatusOpts struct {
 // Example:
 //
 //	// Check transaction receipt status
-//	status, err := client.GetTransactionReceiptStatus(ctx, "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44", nil)
+//	status, err := client.GetTxReceiptStatus(ctx, "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -387,7 +387,7 @@ type GetTransactionReceiptStatusOpts struct {
 //
 //	// With custom chain
 //	chainID := etherscan.PolygonMainnet
-//	status, err := client.GetTransactionReceiptStatus(ctx, txHash, &GetTransactionReceiptStatusOpts{
+//	status, err := client.GetTxReceiptStatus(ctx, txHash, &GetTxReceiptStatusOpts{
 //	    ChainID: &chainID,
 //	})
 //
@@ -396,7 +396,7 @@ type GetTransactionReceiptStatusOpts struct {
 //   - Only applicable for post Byzantium Fork transactions (block 4,370,000 on Ethereum)
 //   - This endpoint works for all transaction types (ETH transfers, contract calls, etc.)
 //   - Pre-Byzantium transactions will not have receipt status information
-func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txHash string, opts *GetTransactionReceiptStatusOpts) (*RespCheckTxReceiptStatus, error) {
+func (c *HTTPClient) GetTxReceiptStatus(ctx context.Context, txHash string, opts *GetTxReceiptStatusOpts) (*RespCheckTxReceiptStatus, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -435,8 +435,8 @@ func (c *HTTPClient) GetTransactionReceiptStatus(ctx context.Context, txHash str
 // Account Module - Internal Transactions
 // ============================================================================
 
-// GetInternalTransactionsByAddressOpts contains optional parameters for GetInternalTransactionsByAddress
-type GetInternalTransactionsByAddressOpts struct {
+// GetInternalTxsByAddressOpts contains optional parameters for GetInternalTxsByAddress
+type GetInternalTxsByAddressOpts struct {
 	// StartBlock is the starting block number to search from
 	// Default: 0 (genesis block)
 	// Use this to limit the search range and improve performance
@@ -478,7 +478,7 @@ type GetInternalTransactionsByAddressOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetInternalTransactionsByAddress returns list of 'Internal' transactions by address
+// GetInternalTxsByAddress returns list of 'Internal' transactions by address
 //
 // This endpoint returns a list of internal transactions (also called trace transactions)
 // that involve the specified address. Internal transactions are transactions that occur
@@ -497,7 +497,7 @@ type GetInternalTransactionsByAddressOpts struct {
 // Example:
 //
 //	// Get internal transactions for an address
-//	txs, err := client.GetInternalTransactionsByAddress(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
+//	txs, err := client.GetInternalTxsByAddress(ctx, "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -511,7 +511,7 @@ type GetInternalTransactionsByAddressOpts struct {
 //	page := 1
 //	offset := 50
 //	sort := "desc"
-//	txs, err := client.GetInternalTransactionsByAddress(ctx, address, &GetInternalTransactionsByAddressOpts{
+//	txs, err := client.GetInternalTxsByAddress(ctx, address, &GetInternalTxsByAddressOpts{
 //	    Page:   &page,
 //	    Offset: &offset,
 //	    Sort:   &sort,
@@ -520,7 +520,7 @@ type GetInternalTransactionsByAddressOpts struct {
 //	// Get internal transactions from a specific block range
 //	startBlock := 18000000
 //	endBlock := 18000100
-//	txs, err := client.GetInternalTransactionsByAddress(ctx, address, &GetInternalTransactionsByAddressOpts{
+//	txs, err := client.GetInternalTxsByAddress(ctx, address, &GetInternalTxsByAddressOpts{
 //	    StartBlock: &startBlock,
 //	    EndBlock:   &endBlock,
 //	})
@@ -532,7 +532,7 @@ type GetInternalTransactionsByAddressOpts struct {
 //   - Different from normal transactions - these are trace-level transactions within contract execution
 //   - All values are returned as strings in Wei
 //   - Type field indicates the type of internal transaction (call, create, etc.)
-func (c *HTTPClient) GetInternalTransactionsByAddress(ctx context.Context, address string, opts *GetInternalTransactionsByAddressOpts) ([]RespInternalTxByAddress, error) {
+func (c *HTTPClient) GetInternalTxsByAddress(ctx context.Context, address string, opts *GetInternalTxsByAddressOpts) ([]RespInternalTxByAddress, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -567,8 +567,8 @@ func (c *HTTPClient) GetInternalTransactionsByAddress(ctx context.Context, addre
 	return result, nil
 }
 
-// GetInternalTransactionsByHashOpts contains optional parameters for GetInternalTransactionsByHash
-type GetInternalTransactionsByHashOpts struct {
+// GetInternalTxsByHashOpts contains optional parameters for GetInternalTxsByHash
+type GetInternalTxsByHashOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
@@ -583,7 +583,7 @@ type GetInternalTransactionsByHashOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetInternalTransactionsByHash returns list of internal transactions by transaction hash
+// GetInternalTxsByHash returns list of internal transactions by transaction hash
 //
 // This endpoint returns all internal transactions that occurred within a specific
 // transaction execution. When a transaction calls a smart contract, that contract
@@ -602,7 +602,7 @@ type GetInternalTransactionsByHashOpts struct {
 // Example:
 //
 //	// Get internal transactions for a specific transaction
-//	txs, err := client.GetInternalTransactionsByHash(ctx, "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44", nil)
+//	txs, err := client.GetInternalTxsByHash(ctx, "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -614,7 +614,7 @@ type GetInternalTransactionsByHashOpts struct {
 //
 //	// With custom chain
 //	chainID := etherscan.PolygonMainnet
-//	txs, err := client.GetInternalTransactionsByHash(ctx, txHash, &GetInternalTransactionsByHashOpts{
+//	txs, err := client.GetInternalTxsByHash(ctx, txHash, &GetInternalTxsByHashOpts{
 //	    ChainID: &chainID,
 //	})
 //
@@ -624,7 +624,7 @@ type GetInternalTransactionsByHashOpts struct {
 //   - For simple ETH transfers, this will return an empty list
 //   - Internal transactions show the complete execution trace of a transaction
 //   - All values are returned as strings in Wei
-func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txHash string, opts *GetInternalTransactionsByHashOpts) ([]RespInternalTxByHash, error) {
+func (c *HTTPClient) GetInternalTxsByHash(ctx context.Context, txHash string, opts *GetInternalTxsByHashOpts) ([]RespInternalTxByHash, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -659,8 +659,8 @@ func (c *HTTPClient) GetInternalTransactionsByHash(ctx context.Context, txHash s
 	return result, nil
 }
 
-// GetInternalTransactionsByBlockRangeOpts contains optional parameters for GetInternalTransactionsByBlockRange
-type GetInternalTransactionsByBlockRangeOpts struct {
+// GetInternalTxsByBlockRangeOpts contains optional parameters for GetInternalTxsByBlockRange
+type GetInternalTxsByBlockRangeOpts struct {
 	// Page number for pagination
 	// Default: 1
 	// Use this to navigate through multiple pages of results
@@ -692,7 +692,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetInternalTransactionsByBlockRange returns list of internal transactions within a block range
+// GetInternalTxsByBlockRange returns list of internal transactions within a block range
 //
 // This endpoint returns all internal transactions that occurred within a specified
 // range of blocks. This is useful for analyzing contract activity across multiple blocks
@@ -711,7 +711,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 // Example:
 //
 //	// Get internal transactions in a block range
-//	txs, err := client.GetInternalTransactionsByBlockRange(ctx, 18000000, 18000100, nil)
+//	txs, err := client.GetInternalTxsByBlockRange(ctx, 18000000, 18000100, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -725,7 +725,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //	page := 1
 //	offset := 50
 //	sort := "desc"
-//	txs, err := client.GetInternalTransactionsByBlockRange(ctx, startBlock, endBlock, &GetInternalTransactionsByBlockRangeOpts{
+//	txs, err := client.GetInternalTxsByBlockRange(ctx, startBlock, endBlock, &GetInternalTxsByBlockRangeOpts{
 //	    Page:   &page,
 //	    Offset: &offset,
 //	    Sort:   &sort,
@@ -738,7 +738,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 //   - Internal transactions include contract calls, contract creation, and self-destruct operations
 //   - All values are returned as strings in Wei
 //   - TraceID field helps identify which internal transactions belong to the same execution trace
-func (c *HTTPClient) GetInternalTransactionsByBlockRange(ctx context.Context, startBlock, endBlock int, opts *GetInternalTransactionsByBlockRangeOpts) ([]RespInternalTxByBlockRange, error) {
+func (c *HTTPClient) GetInternalTxsByBlockRange(ctx context.Context, startBlock, endBlock int, opts *GetInternalTxsByBlockRangeOpts) ([]RespInternalTxByBlockRange, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {

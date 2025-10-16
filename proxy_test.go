@@ -110,16 +110,16 @@ func TestRpcEthUncleByBlockNumberAndIndex(t *testing.T) {
 	}
 }
 
-func TestRpcEthBlockTransactionCountByNumber(t *testing.T) {
+func TestRpcEthBlockTxCountByNumber(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	count, err := config.Client.RpcEthBlockTransactionCountByNumber(ctx, "latest", &RpcEthBlockTransactionCountByNumberOpts{
+	count, err := config.Client.RpcEthBlockTxCountByNumber(ctx, "latest", &RpcEthBlockTxCountByNumberOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("RpcEthBlockTransactionCountByNumber failed: %v", err)
+		t.Fatalf("RpcEthBlockTxCountByNumber failed: %v", err)
 	}
 
 	if count == "" {
@@ -133,17 +133,17 @@ func TestRpcEthBlockTransactionCountByNumber(t *testing.T) {
 	}
 }
 
-func TestRpcEthTransactionByHash(t *testing.T) {
+func TestRpcEthTxByHash(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a known transaction hash
-	tx, err := config.Client.RpcEthTransactionByHash(ctx, TestTransactions.SampleTxHash, &RpcEthTransactionByHashOpts{
+	tx, err := config.Client.RpcEthTxByHash(ctx, TestTransactions.SampleTxHash, &RpcEthTxByHashOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("RpcEthTransactionByHash failed: %v", err)
+		t.Fatalf("RpcEthTxByHash failed: %v", err)
 	}
 
 	if tx == nil {
@@ -162,17 +162,17 @@ func TestRpcEthTransactionByHash(t *testing.T) {
 	}
 }
 
-func TestRpcEthTransactionByBlockNumberAndIndex(t *testing.T) {
+func TestRpcEthTxByBlockNumberAndIndex(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with latest block and first transaction
-	tx, err := config.Client.RpcEthTransactionByBlockNumberAndIndex(ctx, "latest", "0x0", &RpcEthTransactionByBlockNumberAndIndexOpts{
+	tx, err := config.Client.RpcEthTxByBlockNumberAndIndex(ctx, "latest", "0x0", &RpcEthTxByBlockNumberAndIndexOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("RpcEthTransactionByBlockNumberAndIndex failed: %v", err)
+		t.Fatalf("RpcEthTxByBlockNumberAndIndex failed: %v", err)
 	}
 
 	if tx == nil {
@@ -188,16 +188,16 @@ func TestRpcEthTransactionByBlockNumberAndIndex(t *testing.T) {
 	}
 }
 
-func TestRpcEthTransactionCount(t *testing.T) {
+func TestRpcEthTxCount(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	count, err := config.Client.RpcEthTransactionCount(ctx, TestAddresses.VitalikButerin, "latest", &RpcEthTransactionCountOpts{
+	count, err := config.Client.RpcEthTxCount(ctx, TestAddresses.VitalikButerin, "latest", &RpcEthTxCountOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("RpcEthTransactionCount failed: %v", err)
+		t.Fatalf("RpcEthTxCount failed: %v", err)
 	}
 
 	if count == "" {
@@ -211,17 +211,17 @@ func TestRpcEthTransactionCount(t *testing.T) {
 	}
 }
 
-func TestRpcEthTransactionReceipt(t *testing.T) {
+func TestRpcEthTxReceipt(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a known transaction hash
-	receipt, err := config.Client.RpcEthTransactionReceipt(ctx, TestTransactions.SampleTxHash, &RpcEthTransactionReceiptOpts{
+	receipt, err := config.Client.RpcEthTxReceipt(ctx, TestTransactions.SampleTxHash, &RpcEthTxReceiptOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("RpcEthTransactionReceipt failed: %v", err)
+		t.Fatalf("RpcEthTxReceipt failed: %v", err)
 	}
 
 	if receipt == nil {

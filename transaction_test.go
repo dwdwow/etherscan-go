@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func TestGetNormalTransactions(t *testing.T) {
+func TestGetNormalTxs(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with Vitalik's address
-	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
+	transactions, err := config.Client.GetNormalTxs(ctx, TestAddresses.VitalikButerin, &GetNormalTxsOpts{
 		StartBlock: 18000000, // Recent block
 		EndBlock:   18000100, // Small range
 		Page:       1,
@@ -21,7 +21,7 @@ func TestGetNormalTransactions(t *testing.T) {
 		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetNormalTransactions failed: %v", err)
+		t.Fatalf("GetNormalTxs failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -45,13 +45,13 @@ func TestGetNormalTransactions(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByAddress(t *testing.T) {
+func TestGetInternalTxsByAddress(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with Vitalik's address
-	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
+	transactions, err := config.Client.GetInternalTxsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTxsByAddressOpts{
 		StartBlock: 18000000, // Recent block
 		EndBlock:   18000100, // Small range
 		Page:       1,
@@ -60,7 +60,7 @@ func TestGetInternalTransactionsByAddress(t *testing.T) {
 		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByAddress failed: %v", err)
+		t.Fatalf("GetInternalTxsByAddress failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -84,17 +84,17 @@ func TestGetInternalTransactionsByAddress(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByHash(t *testing.T) {
+func TestGetInternalTxsByHash(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a known transaction hash
-	transactions, err := config.Client.GetInternalTransactionsByHash(ctx, TestTransactions.SampleTxHash, &GetInternalTransactionsByHashOpts{
+	transactions, err := config.Client.GetInternalTxsByHash(ctx, TestTransactions.SampleTxHash, &GetInternalTxsByHashOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByHash failed: %v", err)
+		t.Fatalf("GetInternalTxsByHash failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -115,20 +115,20 @@ func TestGetInternalTransactionsByHash(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByBlockRange(t *testing.T) {
+func TestGetInternalTxsByBlockRange(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a recent block range
-	transactions, err := config.Client.GetInternalTransactionsByBlockRange(ctx, int(TestBlocks.RecentBlock), int(TestBlocks.RecentBlock+10), &GetInternalTransactionsByBlockRangeOpts{
+	transactions, err := config.Client.GetInternalTxsByBlockRange(ctx, int(TestBlocks.RecentBlock), int(TestBlocks.RecentBlock+10), &GetInternalTxsByBlockRangeOpts{
 		Page:    1,
 		Offset:  10,
 		Sort:    "asc",
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByBlockRange failed: %v", err)
+		t.Fatalf("GetInternalTxsByBlockRange failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -175,17 +175,17 @@ func TestGetContractExecutionStatus(t *testing.T) {
 	}
 }
 
-func TestGetTransactionReceiptStatus(t *testing.T) {
+func TestGetTxReceiptStatus(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a known transaction hash
-	status, err := config.Client.GetTransactionReceiptStatus(ctx, TestTransactions.SampleTxHash, &GetTransactionReceiptStatusOpts{
+	status, err := config.Client.GetTxReceiptStatus(ctx, TestTransactions.SampleTxHash, &GetTxReceiptStatusOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetTransactionReceiptStatus failed: %v", err)
+		t.Fatalf("GetTxReceiptStatus failed: %v", err)
 	}
 
 	if status == nil {
@@ -198,15 +198,15 @@ func TestGetTransactionReceiptStatus(t *testing.T) {
 	}
 }
 
-func TestGetNormalTransactionsWithNilOpts(t *testing.T) {
+func TestGetNormalTxsWithNilOpts(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with nil opts (should use defaults)
-	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, nil)
+	transactions, err := config.Client.GetNormalTxs(ctx, TestAddresses.VitalikButerin, nil)
 	if err != nil {
-		t.Fatalf("GetNormalTransactions with nil opts failed: %v", err)
+		t.Fatalf("GetNormalTxs with nil opts failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -216,15 +216,15 @@ func TestGetNormalTransactionsWithNilOpts(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByAddressWithNilOpts(t *testing.T) {
+func TestGetInternalTxsByAddressWithNilOpts(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with nil opts (should use defaults)
-	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, nil)
+	transactions, err := config.Client.GetInternalTxsByAddress(ctx, TestAddresses.VitalikButerin, nil)
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByAddress with nil opts failed: %v", err)
+		t.Fatalf("GetInternalTxsByAddress with nil opts failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -234,15 +234,15 @@ func TestGetInternalTransactionsByAddressWithNilOpts(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByHashWithNilOpts(t *testing.T) {
+func TestGetInternalTxsByHashWithNilOpts(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with nil opts (should use defaults)
-	transactions, err := config.Client.GetInternalTransactionsByHash(ctx, TestTransactions.SampleTxHash, nil)
+	transactions, err := config.Client.GetInternalTxsByHash(ctx, TestTransactions.SampleTxHash, nil)
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByHash with nil opts failed: %v", err)
+		t.Fatalf("GetInternalTxsByHash with nil opts failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -270,15 +270,15 @@ func TestGetContractExecutionStatusWithNilOpts(t *testing.T) {
 	}
 }
 
-func TestGetTransactionReceiptStatusWithNilOpts(t *testing.T) {
+func TestGetTxReceiptStatusWithNilOpts(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with nil opts (should use defaults)
-	status, err := config.Client.GetTransactionReceiptStatus(ctx, TestTransactions.SampleTxHash, nil)
+	status, err := config.Client.GetTxReceiptStatus(ctx, TestTransactions.SampleTxHash, nil)
 	if err != nil {
-		t.Fatalf("GetTransactionReceiptStatus with nil opts failed: %v", err)
+		t.Fatalf("GetTxReceiptStatus with nil opts failed: %v", err)
 	}
 
 	if status == nil {
@@ -288,13 +288,13 @@ func TestGetTransactionReceiptStatusWithNilOpts(t *testing.T) {
 	}
 }
 
-func TestGetNormalTransactionsWithDifferentChain(t *testing.T) {
+func TestGetNormalTxsWithDifferentChain(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with Polygon mainnet
-	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
+	transactions, err := config.Client.GetNormalTxs(ctx, TestAddresses.VitalikButerin, &GetNormalTxsOpts{
 		StartBlock: 40000000, // Recent block on Polygon
 		EndBlock:   40000100, // Small range
 		Page:       1,
@@ -303,7 +303,7 @@ func TestGetNormalTransactionsWithDifferentChain(t *testing.T) {
 		ChainID:    137, // Polygon mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetNormalTransactions with Polygon failed: %v", err)
+		t.Fatalf("GetNormalTxs with Polygon failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -313,13 +313,13 @@ func TestGetNormalTransactionsWithDifferentChain(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByAddressWithDifferentChain(t *testing.T) {
+func TestGetInternalTxsByAddressWithDifferentChain(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with Polygon mainnet
-	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
+	transactions, err := config.Client.GetInternalTxsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTxsByAddressOpts{
 		StartBlock: 40000000, // Recent block on Polygon
 		EndBlock:   40000100, // Small range
 		Page:       1,
@@ -328,7 +328,7 @@ func TestGetInternalTransactionsByAddressWithDifferentChain(t *testing.T) {
 		ChainID:    137, // Polygon mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByAddress with Polygon failed: %v", err)
+		t.Fatalf("GetInternalTxsByAddress with Polygon failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -338,13 +338,13 @@ func TestGetInternalTransactionsByAddressWithDifferentChain(t *testing.T) {
 	}
 }
 
-func TestGetNormalTransactionsWithDescSort(t *testing.T) {
+func TestGetNormalTxsWithDescSort(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with descending sort
-	transactions, err := config.Client.GetNormalTransactions(ctx, TestAddresses.VitalikButerin, &GetNormalTransactionsOpts{
+	transactions, err := config.Client.GetNormalTxs(ctx, TestAddresses.VitalikButerin, &GetNormalTxsOpts{
 		StartBlock: 18000000, // Recent block
 		EndBlock:   18000100, // Small range
 		Page:       1,
@@ -353,7 +353,7 @@ func TestGetNormalTransactionsWithDescSort(t *testing.T) {
 		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetNormalTransactions with desc sort failed: %v", err)
+		t.Fatalf("GetNormalTxs with desc sort failed: %v", err)
 	}
 
 	if len(transactions) == 0 {
@@ -363,13 +363,13 @@ func TestGetNormalTransactionsWithDescSort(t *testing.T) {
 	}
 }
 
-func TestGetInternalTransactionsByAddressWithDescSort(t *testing.T) {
+func TestGetInternalTxsByAddressWithDescSort(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with descending sort
-	transactions, err := config.Client.GetInternalTransactionsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTransactionsByAddressOpts{
+	transactions, err := config.Client.GetInternalTxsByAddress(ctx, TestAddresses.VitalikButerin, &GetInternalTxsByAddressOpts{
 		StartBlock: 18000000, // Recent block
 		EndBlock:   18000100, // Small range
 		Page:       1,
@@ -378,7 +378,7 @@ func TestGetInternalTransactionsByAddressWithDescSort(t *testing.T) {
 		ChainID:    1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetInternalTransactionsByAddress with desc sort failed: %v", err)
+		t.Fatalf("GetInternalTxsByAddress with desc sort failed: %v", err)
 	}
 
 	if len(transactions) == 0 {

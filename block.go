@@ -101,8 +101,8 @@ func (c *HTTPClient) GetBlockAndUncleRewards(ctx context.Context, blockNo int64,
 	return &result, nil
 }
 
-// GetBlockTransactionsCountOpts contains optional parameters for GetBlockTransactionsCount
-type GetBlockTransactionsCountOpts struct {
+// GetBlockTxsCountOpts contains optional parameters for GetBlockTxsCount
+type GetBlockTxsCountOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID
 	// Note: Only supported on Ethereum mainnet (chainid=1)
@@ -152,7 +152,7 @@ type GetBlockTransactionsCountOpts struct {
 //   - Only supported on Ethereum mainnet (chainid=1)
 //   - Returns detailed breakdown of different transaction types
 //   - Useful for analyzing block activity and transaction volume
-func (c *HTTPClient) GetBlockTransactionsCount(ctx context.Context, blockNo int64, opts *GetBlockTransactionsCountOpts) (*RespBlockTxsCountByBlockNo, error) {
+func (c *HTTPClient) GetBlockTxsCount(ctx context.Context, blockNo int64, opts *GetBlockTxsCountOpts) (*RespBlockTxsCountByBlockNo, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {

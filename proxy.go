@@ -302,8 +302,8 @@ func (c *HTTPClient) RpcEthUncleByBlockNumberAndIndex(ctx context.Context, tag, 
 	return &result.Result, nil
 }
 
-// RpcEthBlockTransactionCountByNumberOpts contains optional parameters for RpcEthBlockTransactionCountByNumber
-type RpcEthBlockTransactionCountByNumberOpts struct {
+// RpcEthBlockTxCountByNumberOpts contains optional parameters for RpcEthBlockTxCountByNumber
+type RpcEthBlockTxCountByNumberOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -344,7 +344,7 @@ type RpcEthBlockTransactionCountByNumberOpts struct {
 // Note:
 //   - Equivalent to eth_getBlockTransactionCountByNumber JSON-RPC method
 //   - Returns count in hex format with "0x" prefix
-func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, tag string, opts *RpcEthBlockTransactionCountByNumberOpts) (string, error) {
+func (c *HTTPClient) RpcEthBlockTxCountByNumber(ctx context.Context, tag string, opts *RpcEthBlockTxCountByNumberOpts) (string, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -379,8 +379,8 @@ func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, ta
 	return result.Result, nil
 }
 
-// RpcEthTransactionByHashOpts contains optional parameters for RpcEthTransactionByHash
-type RpcEthTransactionByHashOpts struct {
+// RpcEthTxByHashOpts contains optional parameters for RpcEthTxByHash
+type RpcEthTxByHashOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -424,7 +424,7 @@ type RpcEthTransactionByHashOpts struct {
 //   - Equivalent to eth_getTransactionByHash JSON-RPC method
 //   - Returns nil if transaction not found
 //   - All values are in hex format
-func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string, opts *RpcEthTransactionByHashOpts) (*RespEthTxInfo, error) {
+func (c *HTTPClient) RpcEthTxByHash(ctx context.Context, txHash string, opts *RpcEthTxByHashOpts) (*RespEthTxInfo, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -459,8 +459,8 @@ func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string,
 	return &result.Result, nil
 }
 
-// RpcEthTransactionByBlockNumberAndIndexOpts contains optional parameters for RpcEthTransactionByBlockNumberAndIndex
-type RpcEthTransactionByBlockNumberAndIndexOpts struct {
+// RpcEthTxByBlockNumberAndIndexOpts contains optional parameters for RpcEthTxByBlockNumberAndIndex
+type RpcEthTxByBlockNumberAndIndexOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -504,7 +504,7 @@ type RpcEthTransactionByBlockNumberAndIndexOpts struct {
 //   - Equivalent to eth_getTransactionByBlockNumberAndIndex JSON-RPC method
 //   - Returns nil if transaction not found
 //   - Index must be within the block's transaction count
-func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context, tag, index string, opts *RpcEthTransactionByBlockNumberAndIndexOpts) (*RespEthTxInfo, error) {
+func (c *HTTPClient) RpcEthTxByBlockNumberAndIndex(ctx context.Context, tag, index string, opts *RpcEthTxByBlockNumberAndIndexOpts) (*RespEthTxInfo, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -540,8 +540,8 @@ func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context,
 	return &result.Result, nil
 }
 
-// RpcEthTransactionCountOpts contains optional parameters for RpcEthTransactionCount
-type RpcEthTransactionCountOpts struct {
+// RpcEthTxCountOpts contains optional parameters for RpcEthTxCount
+type RpcEthTxCountOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -585,7 +585,7 @@ type RpcEthTransactionCountOpts struct {
 //   - Equivalent to eth_getTransactionCount JSON-RPC method
 //   - Returns nonce in hex format with "0x" prefix
 //   - Nonce represents the number of transactions sent from this address
-func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag string, opts *RpcEthTransactionCountOpts) (string, error) {
+func (c *HTTPClient) RpcEthTxCount(ctx context.Context, address, tag string, opts *RpcEthTxCountOpts) (string, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -621,8 +621,8 @@ func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag st
 	return result.Result, nil
 }
 
-// RpcEthSendRawTransactionOpts contains optional parameters for RpcEthSendRawTransaction
-type RpcEthSendRawTransactionOpts struct {
+// RpcEthSendRawTxOpts contains optional parameters for RpcEthSendRawTx
+type RpcEthSendRawTxOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -662,7 +662,7 @@ type RpcEthSendRawTransactionOpts struct {
 //   - Transaction must be properly signed and serialized
 //   - For long hex strings, request is automatically sent as POST
 //   - Returns transaction hash if successful
-func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, opts *RpcEthSendRawTransactionOpts) (string, error) {
+func (c *HTTPClient) RpcEthSendRawTx(ctx context.Context, hex string, opts *RpcEthSendRawTxOpts) (string, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {
@@ -698,8 +698,8 @@ func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, o
 	return result.Result, nil
 }
 
-// RpcEthTransactionReceiptOpts contains optional parameters for RpcEthTransactionReceipt
-type RpcEthTransactionReceiptOpts struct {
+// RpcEthTxReceiptOpts contains optional parameters for RpcEthTxReceipt
+type RpcEthTxReceiptOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Default: empty (uses client default)
 	ChainID int64 `json:"chainid"`
@@ -743,7 +743,7 @@ type RpcEthTransactionReceiptOpts struct {
 //   - Returns nil if transaction not found
 //   - Status is "0x1" for success, "0x0" for failure
 //   - Only applicable for post Byzantium Fork transactions
-func (c *HTTPClient) RpcEthTransactionReceipt(ctx context.Context, txHash string, opts *RpcEthTransactionReceiptOpts) (*RespEthTxReceiptInfo, error) {
+func (c *HTTPClient) RpcEthTxReceipt(ctx context.Context, txHash string, opts *RpcEthTxReceiptOpts) (*RespEthTxReceiptInfo, error) {
 	// Apply defaults and extract API parameters
 	params, err := ApplyDefaultsAndExtractParams(opts)
 	if err != nil {

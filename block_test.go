@@ -33,17 +33,17 @@ func TestGetBlockAndUncleRewards(t *testing.T) {
 	}
 }
 
-func TestGetBlockTransactionsCount(t *testing.T) {
+func TestGetBlockTxsCount(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with a recent block number
-	count, err := config.Client.GetBlockTransactionsCount(ctx, TestBlocks.RecentBlock, &GetBlockTransactionsCountOpts{
+	count, err := config.Client.GetBlockTxsCount(ctx, TestBlocks.RecentBlock, &GetBlockTxsCountOpts{
 		ChainID: 1, // Ethereum mainnet
 	})
 	if err != nil {
-		t.Fatalf("GetBlockTransactionsCount failed: %v", err)
+		t.Fatalf("GetBlockTxsCount failed: %v", err)
 	}
 
 	if count == nil {
@@ -220,15 +220,15 @@ func TestGetBlockAndUncleRewardsWithNilOpts(t *testing.T) {
 	}
 }
 
-func TestGetBlockTransactionsCountWithNilOpts(t *testing.T) {
+func TestGetBlockTxsCountWithNilOpts(t *testing.T) {
 	config := GetTestConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Test with nil opts (should use defaults)
-	count, err := config.Client.GetBlockTransactionsCount(ctx, TestBlocks.RecentBlock, nil)
+	count, err := config.Client.GetBlockTxsCount(ctx, TestBlocks.RecentBlock, nil)
 	if err != nil {
-		t.Fatalf("GetBlockTransactionsCount with nil opts failed: %v", err)
+		t.Fatalf("GetBlockTxsCount with nil opts failed: %v", err)
 	}
 
 	if count == nil {

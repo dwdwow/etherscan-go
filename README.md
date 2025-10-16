@@ -272,7 +272,7 @@ page := 1
 offset := 10
 sort := "desc"
 
-txs, err := client.GetNormalTransactions(ctx, address, &etherscan.GetNormalTransactionsOpts{
+txs, err := client.GetNormalTxs(ctx, address, &etherscan.GetNormalTxsOpts{
     Page:   &page,
     Offset: &offset,
     Sort:   &sort,
