@@ -313,7 +313,7 @@ type RpcEthBlockTxCountByNumberOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthBlockTransactionCountByNumber returns the number of transactions in a block by block number
+// RpcEthBlockTxCountByNumber returns the number of transactions in a block by block number
 //
 // This endpoint returns the number of transactions in a block by block number in hex format.
 // This is equivalent to the eth_getBlockTransactionCountByNumber JSON-RPC method.
@@ -331,7 +331,7 @@ type RpcEthBlockTxCountByNumberOpts struct {
 //
 //	// Get transaction count for a specific block
 //	blockTag := "0x10FB78"
-//	count, err := client.RpcEthBlockTransactionCountByNumber(ctx, blockTag, nil)
+//	count, err := client.RpcEthBlockTxCountByNumber(ctx, blockTag, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -390,7 +390,7 @@ type RpcEthTxByHashOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthTransactionByHash returns information about a transaction by its hash
+// RpcEthTxByHash returns information about a transaction by its hash
 //
 // This endpoint returns information about a transaction by its hash. This is equivalent
 // to the eth_getTransactionByHash JSON-RPC method. Returns detailed transaction information
@@ -409,7 +409,7 @@ type RpcEthTxByHashOpts struct {
 //
 //	// Get transaction information by hash
 //	txHash := "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44"
-//	tx, err := client.RpcEthTransactionByHash(ctx, txHash, nil)
+//	tx, err := client.RpcEthTxByHash(ctx, txHash, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -470,7 +470,7 @@ type RpcEthTxByBlockNumberAndIndexOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthTransactionByBlockNumberAndIndex returns information about a transaction by block number and transaction index position
+// RpcEthTxByBlockNumberAndIndex returns information about a transaction by block number and transaction index position
 //
 // This endpoint returns information about a transaction by block number and transaction
 // index position. This is equivalent to the eth_getTransactionByBlockNumberAndIndex
@@ -491,7 +491,7 @@ type RpcEthTxByBlockNumberAndIndexOpts struct {
 //	// Get transaction by block number and index
 //	blockTag := "0x10FB78"
 //	txIndex := "0x0"
-//	tx, err := client.RpcEthTransactionByBlockNumberAndIndex(ctx, blockTag, txIndex, nil)
+//	tx, err := client.RpcEthTxByBlockNumberAndIndex(ctx, blockTag, txIndex, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -551,7 +551,7 @@ type RpcEthTxCountOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthTransactionCount returns the number of transactions performed by an address
+// RpcEthTxCount returns the number of transactions performed by an address
 //
 // This endpoint returns the number of transactions performed by an address (nonce) in hex format.
 // This is equivalent to the eth_getTransactionCount JSON-RPC method. The nonce represents
@@ -571,7 +571,7 @@ type RpcEthTxCountOpts struct {
 //
 //	// Get transaction count for an address
 //	addr := "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
-//	count, err := client.RpcEthTransactionCount(ctx, addr, "latest", nil)
+//	count, err := client.RpcEthTxCount(ctx, addr, "latest", nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -632,7 +632,7 @@ type RpcEthSendRawTxOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthSendRawTransaction submits a pre-signed transaction for broadcast to the Ethereum network
+// RpcEthSendRawTx submits a pre-signed transaction for broadcast to the Ethereum network
 //
 // This endpoint submits a pre-signed transaction for broadcast to the Ethereum network.
 // This is equivalent to the eth_sendRawTransaction JSON-RPC method. The transaction
@@ -651,7 +651,7 @@ type RpcEthSendRawTxOpts struct {
 //
 //	// Submit a raw transaction
 //	rawTx := "0xf86c808502540be400825208943535353535353535353535353535353535353535880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83"
-//	txHash, err := client.RpcEthSendRawTransaction(ctx, rawTx, nil)
+//	txHash, err := client.RpcEthSendRawTx(ctx, rawTx, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -709,7 +709,7 @@ type RpcEthTxReceiptOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// RpcEthTransactionReceipt returns the receipt of a transaction by transaction hash
+// RpcEthTxReceipt returns the receipt of a transaction by transaction hash
 //
 // This endpoint returns the receipt of a transaction by transaction hash. This is equivalent
 // to the eth_getTransactionReceipt JSON-RPC method. Returns detailed transaction receipt
@@ -728,7 +728,7 @@ type RpcEthTxReceiptOpts struct {
 //
 //	// Get transaction receipt
 //	txHash := "0xbc78ab8a9e9a0bca7d0321a27b2c03addeae08ba81ea98b03cd3dd237eabed44"
-//	receipt, err := client.RpcEthTransactionReceipt(ctx, txHash, nil)
+//	receipt, err := client.RpcEthTxReceipt(ctx, txHash, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}

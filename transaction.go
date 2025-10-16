@@ -100,7 +100,7 @@ type GetNormalTxsOpts struct {
 //   - Use StartBlock and EndBlock parameters to paginate through larger ranges
 //   - For free tier: max 1000 records, for paid tier: max 5000 records
 //   - Transactions include both ETH transfers and contract interactions
-//   - Internal transactions (contract-to-contract) are not included (use GetInternalTransactionsByAddress)
+//   - Internal transactions (contract-to-contract) are not included (use GetInternalTxsByAddress)
 //   - All values are returned as strings in Wei
 func (c *HTTPClient) GetNormalTxs(ctx context.Context, address string, opts *GetNormalTxsOpts) ([]RespNormalTx, error) {
 	// Apply defaults and extract API parameters

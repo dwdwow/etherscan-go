@@ -86,11 +86,11 @@ func main() {
 - `GetEthBalanceByBlockNumber` - 获取指定区块的历史余额
 
 #### 交易查询
-- `GetNormalTransactions` - 获取普通交易列表
-- `GetInternalTransactionsByAddress` - 获取内部交易 (按地址)
-- `GetInternalTransactionsByHash` - 获取内部交易 (按哈希)
-- `GetInternalTransactionsByBlockRange` - 获取内部交易 (按区块范围)
-- `GetBridgeTransactions` - 获取跨链桥交易
+- `GetNormalTxs` - 获取普通交易列表
+- `GetInternalTxsByAddress` - 获取内部交易 (按地址)
+- `GetInternalTxsByHash` - 获取内部交易 (按哈希)
+- `GetInternalTxsByBlockRange` - 获取内部交易 (按区块范围)
+- `GetBridgeTxs` - 获取跨链桥交易
 
 #### Token 转账
 - `GetERC20TokenTransfers` - 获取 ERC-20 代币转账记录
@@ -115,12 +115,12 @@ func main() {
 ### 3. Transaction Module (交易模块)
 
 - `GetContractExecutionStatus` - 获取合约执行状态
-- `GetTransactionReceiptStatus` - 获取交易收据状态
+- `GetTxReceiptStatus` - 获取交易收据状态
 
 ### 4. Block Module (区块模块)
 
 - `GetBlockAndUncleRewards` - 获取区块和叔块奖励
-- `GetBlockTransactionsCount` - 获取区块交易数量
+- `GetBlockTxsCount` - 获取区块交易数量
 - `GetBlockCountdownTime` - 获取区块倒计时
 - `GetBlockNumberByTimestamp` - 根据时间戳获取区块号
 - `GetDailyAvgBlockSizes` - 获取每日平均区块大小
@@ -141,16 +141,16 @@ func main() {
 - `RpcEthBlockNumber` - 获取最新区块号
 - `RpcEthBlockByNumber` - 根据区块号获取区块信息
 - `RpcEthUncleByBlockNumberAndIndex` - 获取叔块信息
-- `RpcEthBlockTransactionCountByNumber` - 获取区块交易数量
+- `RpcEthBlockTxCountByNumber` - 获取区块交易数量
 
 #### 交易查询
-- `RpcEthTransactionByHash` - 根据哈希获取交易
-- `RpcEthTransactionByBlockNumberAndIndex` - 根据区块号和索引获取交易
-- `RpcEthTransactionCount` - 获取地址交易数量
-- `RpcEthTransactionReceipt` - 获取交易收据
+- `RpcEthTxByHash` - 根据哈希获取交易
+- `RpcEthTxByBlockNumberAndIndex` - 根据区块号和索引获取交易
+- `RpcEthTxCount` - 获取地址交易数量
+- `RpcEthTxReceipt` - 获取交易收据
 
 #### 交易发送
-- `RpcEthSendRawTransaction` - 发送原始交易
+- `RpcEthSendRawTx` - 发送原始交易
 
 #### 合约调用
 - `RpcEthCall` - 执行合约调用

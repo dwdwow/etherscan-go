@@ -117,7 +117,7 @@ type GetBlockTxsCountOpts struct {
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
-// GetBlockTransactionsCount returns the number of transactions in a specified block
+// GetBlockTxsCount returns the number of transactions in a specified block
 //
 // This endpoint returns the number of transactions in a specified block, including
 // normal transactions, internal transactions, and various token transfers. This is
@@ -136,7 +136,7 @@ type GetBlockTxsCountOpts struct {
 //
 //	// Get transaction count for a specific block
 //	blockNumber := 18000000
-//	count, err := client.GetBlockTransactionsCount(ctx, blockNumber, nil)
+//	count, err := client.GetBlockTxsCount(ctx, blockNumber, nil)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
