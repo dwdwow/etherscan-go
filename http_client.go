@@ -263,7 +263,8 @@ func (c *HTTPClient) request(params requestParams) (any, error) {
 	if params.params == nil {
 		params.params = make(map[string]string)
 	}
-	if _, ok := params.params["chainid"]; !ok {
+	// Set default chain ID if not provided or if it's 0
+	if chainID, ok := params.params["chainid"]; !ok || chainID == "" || chainID == "0" {
 		params.params["chainid"] = strconv.Itoa(c.defaultChainID)
 	}
 

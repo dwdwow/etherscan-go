@@ -51,9 +51,9 @@ type GetERC20TokenTransfersOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -204,8 +204,8 @@ type GetERC721TokenTransfersOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -322,8 +322,8 @@ type GetERC1155TokenTransfersOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -417,9 +417,9 @@ func (c *HTTPClient) GetERC1155TokenTransfers(ctx context.Context, opts *GetERC1
 // GetAddressFundedByOpts contains optional parameters for GetAddressFundedBy
 type GetAddressFundedByOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -527,9 +527,9 @@ type GetBlocksValidatedByAddressOpts struct {
 	Offset int64 `default:"10" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -647,8 +647,8 @@ type GetBeaconChainWithdrawalsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -739,9 +739,9 @@ func (c *HTTPClient) GetBeaconChainWithdrawals(ctx context.Context, address stri
 // GetEthBalanceByBlockNumberOpts contains optional parameters for GetEthBalanceByBlockNumber
 type GetEthBalanceByBlockNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -834,9 +834,9 @@ func (c *HTTPClient) GetEthBalanceByBlockNumber(ctx context.Context, address str
 // GetContractCreatorAndCreationOpts contains optional parameters for GetContractCreatorAndCreation
 type GetContractCreatorAndCreationOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

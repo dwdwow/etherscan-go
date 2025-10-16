@@ -123,9 +123,7 @@ func TestGetERC20HolderCount(t *testing.T) {
 	defer cancel()
 
 	// Test with USDT contract
-	count, err := config.Client.GetERC20HolderCount(ctx, TestAddresses.USDTContract, &GetERC20HolderCountOpts{
-		ChainID: 1, // Ethereum mainnet
-	})
+	count, err := config.Client.GetERC20HolderCount(ctx, TestAddresses.USDTContract, &GetERC20HolderCountOpts{})
 	if err != nil {
 		t.Fatalf("GetERC20HolderCount failed: %v", err)
 	}

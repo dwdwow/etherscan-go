@@ -13,9 +13,9 @@ import (
 // GetContractABIOpts contains optional parameters for GetContractABI
 type GetContractABIOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -113,9 +113,9 @@ func (c *HTTPClient) GetContractABI(ctx context.Context, address string, opts *G
 // GetContractSourceCodeOpts contains optional parameters for GetContractSourceCode
 type GetContractSourceCodeOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -220,9 +220,9 @@ type VerifySourceCodeOpts struct {
 	ZksolcVersion string `default:"" json:"zksolcversion"`
 
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -338,9 +338,9 @@ type VerifyVyperSourceCodeOpts struct {
 	OptimizationUsed int64 `default:"0" json:"optimizationUsed"`
 
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -437,7 +437,7 @@ func (c *HTTPClient) VerifyVyperSourceCode(ctx context.Context, sourceCode, cont
 
 // VerifyStylusSourceCodeOpts contains optional parameters for Stylus source code verification
 type VerifyStylusSourceCodeOpts struct {
-	ChainID         int64             `default:"1" json:"chainid"`
+	ChainID         int64             `json:"chainid"`
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
@@ -496,9 +496,9 @@ func (c *HTTPClient) VerifyStylusSourceCode(ctx context.Context, sourceCode, con
 // CheckSourceCodeVerificationStatusOpts contains optional parameters for CheckSourceCodeVerificationStatus
 type CheckSourceCodeVerificationStatusOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)

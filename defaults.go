@@ -187,7 +187,8 @@ func ExtractAPIParams(opts any) (map[string]string, error) {
 		}
 
 		// Only include non-zero values (except for string fields where empty string is valid)
-		if value != "" || field.Kind() == reflect.String {
+		// Special case: always include chainid field so HTTP client can set default value
+		if value != "" || field.Kind() == reflect.String || paramName == "chainid" {
 			params[paramName] = value
 		}
 	}

@@ -15,9 +15,9 @@ import (
 // GetAddressTagOpts contains optional parameters for GetAddressTag
 type GetAddressTagOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -114,9 +114,9 @@ func (c *HTTPClient) GetAddressTag(ctx context.Context, addresses []string, opts
 // GetLabelMasterlistOpts contains optional parameters for GetLabelMasterlist
 type GetLabelMasterlistOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -349,9 +349,9 @@ func (c *HTTPClient) ExportAllAddressTagsCSV(ctx context.Context) ([]byte, error
 // GetLatestCSVBatchNumberOpts contains optional parameters for GetLatestCSVBatchNumber
 type GetLatestCSVBatchNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -429,9 +429,9 @@ func (c *HTTPClient) GetLatestCSVBatchNumber(ctx context.Context, opts *GetLates
 // CheckCreditUsageOpts contains optional parameters for CheckCreditUsage
 type CheckCreditUsageOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

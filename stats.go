@@ -21,7 +21,7 @@ type GetDailyBlockCountRewardsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -117,8 +117,8 @@ type GetDailyBlockRewardsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -193,8 +193,8 @@ type GetDailyAvgBlockTimeOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -270,8 +270,8 @@ type GetDailyUncleBlockCountAndRewardsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -345,7 +345,7 @@ func (c *HTTPClient) GetDailyUncleBlockCountAndRewards(ctx context.Context, star
 
 // GetTotalEthSupplyOpts contains optional parameters
 type GetTotalEthSupplyOpts struct {
-	ChainID         int64             `default:"1" json:"chainid"`
+	ChainID         int64             `json:"chainid"`
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
@@ -407,7 +407,7 @@ func (c *HTTPClient) GetTotalEthSupply(ctx context.Context, opts *GetTotalEthSup
 
 // GetTotalEth2SupplyOpts contains optional parameters
 type GetTotalEth2SupplyOpts struct {
-	ChainID         int64             `default:"1" json:"chainid"`
+	ChainID         int64             `json:"chainid"`
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
@@ -470,8 +470,8 @@ func (c *HTTPClient) GetTotalEth2Supply(ctx context.Context, opts *GetTotalEth2S
 // GetEthPriceOpts contains optional parameters for GetEthPrice
 type GetEthPriceOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -544,8 +544,8 @@ type GetEthHistoricalPricesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -619,7 +619,7 @@ func (c *HTTPClient) GetEthHistoricalPrices(ctx context.Context, startDate, endD
 
 // GetEthereumNodesSizeOpts contains optional parameters
 type GetEthereumNodesSizeOpts struct {
-	ChainID         int64             `default:"1" json:"chainid"`
+	ChainID         int64             `json:"chainid"`
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
@@ -697,8 +697,8 @@ func (c *HTTPClient) GetEthereumNodesSize(ctx context.Context, startDate, endDat
 // GetNodeCountOpts contains optional parameters for GetNodeCount
 type GetNodeCountOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -769,8 +769,8 @@ type GetDailyTxFeesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -845,8 +845,8 @@ type GetDailyNewAddressesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -921,8 +921,8 @@ type GetDailyNetworkUtilizationsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -997,8 +997,8 @@ type GetDailyAvgHashratesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -1073,8 +1073,8 @@ type GetDailyTxCountsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -1149,8 +1149,8 @@ type GetDailyAvgDifficultiesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

@@ -13,9 +13,9 @@ import (
 // GetConfirmationTimeEstimateOpts contains optional parameters for GetConfirmationTimeEstimate
 type GetConfirmationTimeEstimateOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -98,9 +98,9 @@ func (c *HTTPClient) GetConfirmationTimeEstimate(ctx context.Context, gasPrice i
 // GetGasOracleOpts contains optional parameters for GetGasOracle
 type GetGasOracleOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -185,9 +185,9 @@ type GetDailyAverageGasLimitOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -284,9 +284,9 @@ type GetDailyTotalGasUsedOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -383,9 +383,9 @@ type GetDailyAverageGasPriceOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

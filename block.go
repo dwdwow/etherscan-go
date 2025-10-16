@@ -13,9 +13,9 @@ import (
 // GetBlockAndUncleRewardsOpts contains optional parameters for GetBlockAndUncleRewards
 type GetBlockAndUncleRewardsOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If nil, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -104,9 +104,9 @@ func (c *HTTPClient) GetBlockAndUncleRewards(ctx context.Context, blockNo int64,
 // GetBlockTransactionsCountOpts contains optional parameters for GetBlockTransactionsCount
 type GetBlockTransactionsCountOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If nil, uses the client's default chain ID
 	// Note: Only supported on Ethereum mainnet (chainid=1)
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -194,9 +194,9 @@ func (c *HTTPClient) GetBlockTransactionsCount(ctx context.Context, blockNo int6
 // GetBlockCountdownTimeOpts contains optional parameters for GetBlockCountdownTime
 type GetBlockCountdownTimeOpts struct {
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
+	// If nil, uses the client's default chain ID
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)
@@ -283,7 +283,7 @@ func (c *HTTPClient) GetBlockCountdownTime(ctx context.Context, blockNo int64, o
 
 // GetBlockNumberByTimestampOpts contains optional parameters
 type GetBlockNumberByTimestampOpts struct {
-	ChainID         int64             `default:"1" json:"chainid"`
+	ChainID         int64             `json:"chainid"`
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
 }
 
@@ -372,8 +372,8 @@ type GetDailyAvgBlockSizesOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// If nil, uses the client's default chain ID (EthereumMainnet = 1)
-	ChainID int64 `default:"1" json:"chainid"`
+	// If nil, uses the client's default chain ID
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If nil, uses the client's default behavior (RateLimitBlock)

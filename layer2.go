@@ -21,9 +21,9 @@ type GetPlasmaDepositsOpts struct {
 	Offset int64 `default:"100" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
+	// If 0, uses the client's default chain ID
 	// Note: Only applicable to Polygon (chainid=137)
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -121,7 +121,7 @@ type GetDepositTxsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`
@@ -202,7 +202,7 @@ type GetWithdrawalTxsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// Note: Only applicable to Arbitrum Stack (42161, 42170, 33139, 660279) and
 	// Optimism Stack (10, 8453, 130, 252, 480, 5000, 81457)
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	OnLimitExceeded RateLimitBehavior `default:"" json:"on_limit_exceeded"`

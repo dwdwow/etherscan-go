@@ -17,9 +17,9 @@ type GetEthBalanceOpts struct {
 	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -116,9 +116,9 @@ type GetEthBalancesOpts struct {
 	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

@@ -36,9 +36,9 @@ type GetNormalTransactionsOpts struct {
 	Sort string `default:"asc" json:"sort"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -153,7 +153,7 @@ type GetBridgeTransactionsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Note: This endpoint is only applicable to specific chains
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -252,7 +252,7 @@ type GetContractExecutionStatusOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -344,7 +344,7 @@ type GetTransactionReceiptStatusOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -467,7 +467,7 @@ type GetInternalTransactionsByAddressOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -572,7 +572,7 @@ type GetInternalTransactionsByHashOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -681,7 +681,7 @@ type GetInternalTransactionsByBlockRangeOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)

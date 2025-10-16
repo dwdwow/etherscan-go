@@ -11,8 +11,8 @@ import (
 // RpcEthBlockNumberOpts contains optional parameters for RpcEthBlockNumber
 type RpcEthBlockNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -83,8 +83,8 @@ func (c *HTTPClient) RpcEthBlockNumber(ctx context.Context, opts *RpcEthBlockNum
 // RpcEthBlockByNumberOpts contains optional parameters for RpcEthBlockByNumber
 type RpcEthBlockByNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -227,8 +227,8 @@ func (c *HTTPClient) RpcEthBlockByNumberWithFullTxs(ctx context.Context, tag str
 // RpcEthUncleByBlockNumberAndIndexOpts contains optional parameters for RpcEthUncleByBlockNumberAndIndex
 type RpcEthUncleByBlockNumberAndIndexOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -305,8 +305,8 @@ func (c *HTTPClient) RpcEthUncleByBlockNumberAndIndex(ctx context.Context, tag, 
 // RpcEthBlockTransactionCountByNumberOpts contains optional parameters for RpcEthBlockTransactionCountByNumber
 type RpcEthBlockTransactionCountByNumberOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -382,8 +382,8 @@ func (c *HTTPClient) RpcEthBlockTransactionCountByNumber(ctx context.Context, ta
 // RpcEthTransactionByHashOpts contains optional parameters for RpcEthTransactionByHash
 type RpcEthTransactionByHashOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -462,8 +462,8 @@ func (c *HTTPClient) RpcEthTransactionByHash(ctx context.Context, txHash string,
 // RpcEthTransactionByBlockNumberAndIndexOpts contains optional parameters for RpcEthTransactionByBlockNumberAndIndex
 type RpcEthTransactionByBlockNumberAndIndexOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -543,8 +543,8 @@ func (c *HTTPClient) RpcEthTransactionByBlockNumberAndIndex(ctx context.Context,
 // RpcEthTransactionCountOpts contains optional parameters for RpcEthTransactionCount
 type RpcEthTransactionCountOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -624,8 +624,8 @@ func (c *HTTPClient) RpcEthTransactionCount(ctx context.Context, address, tag st
 // RpcEthSendRawTransactionOpts contains optional parameters for RpcEthSendRawTransaction
 type RpcEthSendRawTransactionOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -701,8 +701,8 @@ func (c *HTTPClient) RpcEthSendRawTransaction(ctx context.Context, hex string, o
 // RpcEthTransactionReceiptOpts contains optional parameters for RpcEthTransactionReceipt
 type RpcEthTransactionReceiptOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -786,8 +786,8 @@ type RpcEthCallOpts struct {
 	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -881,8 +881,8 @@ type RpcEthGetCodeOpts struct {
 	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -966,8 +966,8 @@ type RpcEthGetStorageAtOpts struct {
 	Tag string `default:"latest" json:"tag"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -1044,8 +1044,8 @@ func (c *HTTPClient) RpcEthGetStorageAt(ctx context.Context, address, position s
 // RpcEthGetGasPriceOpts contains optional parameters for RpcEthGetGasPrice
 type RpcEthGetGasPriceOpts struct {
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -1131,8 +1131,8 @@ type RpcEthEstimateGasOpts struct {
 	GasPrice string `default:"" json:"gasprice"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
-	ChainID int64 `default:"1" json:"chainid"`
+	// Default: empty (uses client default)
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)

@@ -32,9 +32,9 @@ type GetEventLogsByAddressOpts struct {
 	Offset int64 `default:"1000" json:"offset"`
 
 	// ChainID specifies which blockchain network to query
-	// Default: 1 (Ethereum mainnet)
+	// Default: empty (uses client default)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// Default: RateLimitBlock (wait until a token is available)
@@ -204,7 +204,7 @@ type GetEventLogsByTopicsOpts struct {
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID (EthereumMainnet = 1)
 	// Supported chains: EthereumMainnet, PolygonMainnet, ArbitrumOneMainnet, etc.
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior (RateLimitBlock)
@@ -360,7 +360,7 @@ type GetEventLogsByAddressFilteredByTopicsOpts struct {
 
 	// ChainID specifies which blockchain network to query
 	// If 0, uses the client's default chain ID
-	ChainID int64 `default:"1" json:"chainid"`
+	ChainID int64 `json:"chainid"`
 
 	// OnLimitExceeded specifies behavior when rate limit is exceeded
 	// If empty, uses the client's default behavior
