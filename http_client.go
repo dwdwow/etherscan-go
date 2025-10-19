@@ -327,7 +327,7 @@ func (c *HTTPClient) request(params requestParams) (any, error) {
 	// Execute request with retries
 	var resp *http.Response
 	retryTimes := 3
-	for i := 0; i < retryTimes; i++ {
+	for i := range retryTimes {
 		resp, err = c.httpClient.Do(req)
 		if err == nil {
 			break
